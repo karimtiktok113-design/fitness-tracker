@@ -338,6 +338,30 @@
       color: #ffffff;
     }
 
+    .sidebar-mobile-close {
+      display: none;
+    }
+
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(15, 23, 42, 0.65);
+      z-index: 104;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+    .sidebar-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .sidebar-nav {
       flex: 1;
       padding: 1rem 0.75rem;
@@ -1664,6 +1688,51 @@
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
     }
 
+    /* Analytics Interactive Macronutrient Widget */
+    .macro-chart-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .macro-chart-container {
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+      .macro-legend-wrapper {
+        width: 100% !important;
+      }
+    }
+
+    .macro-legend-item {
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface-subtle);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .macro-legend-item:hover, .macro-legend-item.active {
+      border-color: var(--accent);
+      background: var(--surface);
+      transform: translateX(3px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .macro-donut-slice {
+      cursor: pointer;
+      transition: stroke-width 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+    }
+
+    .macro-donut-slice:hover, .macro-donut-slice.active {
+      stroke-width: 26 !important;
+      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.25));
+    }
+
     /* Table Interactive Clickable Rows & Action Buttons */
     .table-clickable-row {
       cursor: pointer;
@@ -1698,22 +1767,44 @@
       font-size: 0.6875rem;
       font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--text-muted);
-      letter-spacing: 0.04em;
-      margin-bottom: 3px;
+      margin-bottom: 0.25rem;
     }
 
     .detail-item-value {
       font-size: 0.9375rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text);
     }
 
-    .badge-icon-wrap {
-      width: 38px;
-      height: 38px;
+    .detail-notes-box {
+      background-color: var(--surface-subtle);
+      border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      background-color: var(--accent-light);
+      padding: 0.875rem 1rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .detail-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      background-color: rgba(59, 130, 246, 0.1);
+      color: var(--accent);
+    }
+
+    .detail-type-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background-color: var(--accent-subtle);
       color: var(--accent);
       display: flex;
       align-items: center;
@@ -1721,26 +1812,67 @@
       flex-shrink: 0;
     }
 
-    /* Print Stylesheet for A4 Reports */
+    /* Print Stylesheet for Professional A4 Infographic Reports */
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm 10mm 12mm;
+    }
+
     @media print {
-      body {
+      html, body {
         background-color: #ffffff !important;
-        color: #000000 !important;
-        font-size: 10pt;
-      }
-
-      .sidebar, .top-header, .btn, .modal-overlay, .toast-container, .quick-action-bar {
-        display: none !important;
-      }
-
-      .main-wrapper {
-        margin-left: 0 !important;
-        background: transparent !important;
-      }
-
-      .content-container {
+        color: #0f172a !important;
+        font-size: 9.5pt !important;
+        line-height: 1.4 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
         padding: 0 !important;
-        max-width: 100% !important;
+        overflow: visible !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Strictly hide all non-report UI elements */
+      .sidebar,
+      .top-header,
+      .btn,
+      .btn-action-group,
+      .view-header,
+      .view-header-actions,
+      .modal-overlay,
+      .modal-container,
+      .toast-container,
+      .quick-action-bar,
+      .chart-tooltip,
+      #theme-selector,
+      #btn-theme-toggle,
+      #btn-mobile-menu,
+      #report-type-select,
+      #btn-print-report,
+      #quick-action-dropdown,
+      .report-controls-card {
+        display: none !important;
+        visibility: hidden !important;
+      }
+
+      .app-layout,
+      .main-wrapper,
+      .content-container,
+      #view-reports {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: auto !important;
+        height: auto !important;
+        width: 100% !important;
+        overflow: visible !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        background: #ffffff !important;
       }
 
       .view-pane {
@@ -1751,15 +1883,112 @@
         display: block !important;
       }
 
-      .card {
+      #printable-report-card {
         box-shadow: none !important;
-        border: 1px solid #cccccc !important;
-        page-break-inside: avoid;
-        margin-bottom: 12pt;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
 
-      .dashboard-row, .dashboard-col-3, .kpi-grid {
-        display: block !important;
+      /* Infographic multi-page layout rules */
+      .report-page-1 {
+        page-break-after: always !important;
+        break-after: page !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+      }
+
+      .report-page-2 {
+        page-break-before: always !important;
+        break-before: page !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        border-top: none !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+      }
+
+      .report-page {
+        page-break-after: always;
+        break-after: page;
+        margin-bottom: 0;
+        padding-bottom: 12mm;
+      }
+
+      .report-page:last-child {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+
+      .report-page-break {
+        page-break-before: always;
+        break-before: page;
+      }
+
+      .report-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-bottom: 10pt;
+      }
+
+      .report-kpi-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8pt !important;
+        margin-bottom: 10pt !important;
+      }
+
+      .report-kpi-box {
+        border: 1px solid #cbd5e1 !important;
+        background-color: #f8fafc !important;
+        border-radius: 6pt !important;
+        padding: 8pt !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .report-charts-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10pt !important;
+        margin-bottom: 10pt !important;
+      }
+
+      .report-chart-card {
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6pt !important;
+        padding: 8pt !important;
+        background: #ffffff !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .report-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 8.5pt !important;
+      }
+
+      .report-table th {
+        background-color: #f1f5f9 !important;
+        color: #334155 !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 5pt 6pt !important;
+        text-align: left !important;
+      }
+
+      .report-table td {
+        border: 1px solid #e2e8f0 !important;
+        padding: 4.5pt 6pt !important;
+      }
+
+      .report-table tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
       }
     }
 
@@ -1777,34 +2006,511 @@
     }
 
     @media (max-width: 768px) {
+      /* Universal Mobile Layout & Viewport Protection */
+      html, body {
+        overflow-x: hidden;
+        width: 100%;
+        -webkit-text-size-adjust: 100%;
+      }
+      .app-layout {
+        overflow-x: hidden;
+        width: 100%;
+      }
+      .main-wrapper {
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden;
+      }
+      .content-container {
+        padding: 0.85rem !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box;
+      }
+
+      /* Mobile Sidebar Drawer & Backdrop */
       .sidebar {
         transform: translateX(-100%);
+        box-shadow: var(--shadow-xl);
+        z-index: 105;
+        width: 280px !important;
+        max-width: 85vw !important;
       }
       .sidebar.mobile-open {
         transform: translateX(0);
       }
-      .main-wrapper {
-        margin-left: 0 !important;
+      .sidebar-collapse-btn {
+        display: none !important;
+      }
+      .sidebar-mobile-close {
+        display: flex !important;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: var(--sidebar-text);
+        width: 34px;
+        height: 34px;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+      }
+      .sidebar-backdrop {
+        display: block !important;
+      }
+
+      /* Mobile Header Structure */
+      .top-header {
+        height: 60px !important;
+        min-height: 60px !important;
+        padding: 0 0.75rem !important;
+        position: sticky;
+        top: 0;
+        z-index: 90;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 0.5rem !important;
       }
       .mobile-menu-toggle {
-        display: flex;
+        display: flex !important;
+        width: 36px !important;
+        height: 36px !important;
+        flex-shrink: 0;
       }
-      .header-user-text, .header-profile-chevron {
-        display: none;
+      .header-left {
+        gap: 0.5rem !important;
+        min-width: 0;
+        flex: 1 1 auto;
+        overflow: hidden;
+      }
+      .header-greeting-title {
+        font-size: 0.95rem !important;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 125px;
+        line-height: 1.2;
+      }
+      .header-date-badge {
+        font-size: 0.725rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
+      }
+      .header-right {
+        gap: 0.4rem !important;
+        flex-shrink: 0;
+      }
+      .header-quick-btn {
+        padding: 0.38rem 0.65rem !important;
+        font-size: 0.775rem !important;
+      }
+      .header-quick-btn span {
+        display: inline-block;
+      }
+      #btn-header-load-demo {
+        padding: 0.38rem !important;
+        width: 34px !important;
+        height: 34px !important;
+        justify-content: center !important;
+        border-radius: var(--radius-md) !important;
+      }
+      #btn-header-load-demo span {
+        display: none !important;
+      }
+      .theme-select {
+        max-width: 80px !important;
+        font-size: 0.75rem !important;
+        padding: 0.35rem 0.25rem !important;
+      }
+      .theme-toggle-btn {
+        width: 34px !important;
+        height: 34px !important;
       }
       .header-profile-badge {
-        padding: 0.2rem;
-        background-color: transparent;
-        border: none;
+        padding: 0.15rem !important;
+        background: transparent !important;
+        border: none !important;
       }
+      .header-user-text, .header-profile-chevron {
+        display: none !important;
+      }
+      .header-avatar {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 0.725rem !important;
+      }
+      .header-dropdown-menu {
+        position: fixed !important;
+        top: 64px !important;
+        right: 0.5rem !important;
+        left: auto !important;
+        max-width: calc(100vw - 1rem) !important;
+        width: 230px !important;
+        box-shadow: var(--shadow-xl);
+        z-index: 150;
+      }
+
+      /* View Headers across all screens */
+      .view-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.65rem !important;
+        margin-bottom: 1rem !important;
+      }
+      .view-header > div:first-child {
+        width: 100%;
+      }
+      .view-header-title {
+        font-size: 1.25rem !important;
+        line-height: 1.25;
+      }
+      .view-header-sub {
+        font-size: 0.8125rem;
+      }
+      .view-header-actions {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+      }
+      .view-header-actions .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 0.45rem 0.75rem;
+        font-size: 0.8125rem;
+      }
+
+      /* Universal Cards & Layout Grids */
       .kpi-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
       }
-      .top-header {
-        padding: 0 1rem;
+      .dashboard-row, .dashboard-col-3, .dashboard-col-2 {
+        grid-template-columns: 1fr !important;
+        gap: 0.85rem !important;
       }
-      .content-container {
-        padding: 1rem;
+      .card {
+        padding: 1rem !important;
+      }
+      .card-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      /* Dashboard Quick Actions Bar */
+      .quick-action-bar, .dashboard-quick-actions-card {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.65rem !important;
+        padding: 0.85rem !important;
+      }
+      .quick-actions-label {
+        margin-bottom: 0.15rem;
+      }
+      .dashboard-quick-pills {
+        gap: 0.45rem !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+      }
+      .dashboard-quick-pills .btn-quick, .btn-quick {
+        font-size: 0.775rem !important;
+        padding: 0.4rem 0.65rem !important;
+        flex: 1 1 calc(50% - 0.45rem) !important;
+        justify-content: center !important;
+      }
+
+      /* Dashboard Macro Split Card */
+      .dashboard-macro-split {
+        grid-template-columns: 1fr !important;
+        justify-items: center;
+        text-align: center;
+        gap: 1rem !important;
+      }
+      .dashboard-macro-split > div:last-child {
+        width: 100%;
+        text-align: left;
+      }
+
+      /* Daily Planner Mobile Adjustments */
+      .planner-filter-wrap {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.5rem !important;
+      }
+      .planner-filter-selects {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+      }
+      .planner-filter-selects .form-select {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+      .schedule-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.65rem !important;
+        padding: 0.85rem !important;
+      }
+      .schedule-item > div:first-child {
+        width: 100% !important;
+      }
+      .schedule-item .btn-action-group {
+        width: 100% !important;
+        justify-content: flex-end !important;
+        border-top: 1px solid var(--border);
+        padding-top: 0.45rem !important;
+        margin-top: 0.2rem;
+      }
+
+      /* Universal Responsive Tables */
+      .table-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: block !important;
+        border-radius: var(--radius-md);
+      }
+      .data-table {
+        min-width: 520px;
+      }
+      .data-table th, .data-table td {
+        white-space: nowrap !important;
+        padding: 0.6rem 0.75rem !important;
+        font-size: 0.8125rem !important;
+      }
+      .table-clickable-row {
+        touch-action: manipulation;
+      }
+
+      /* Master Calendar Matrix */
+      .calendar-grid {
+        gap: 1px;
+      }
+      .calendar-cell {
+        min-height: 50px !important;
+        padding: 2px !important;
+      }
+      .calendar-cell-date {
+        font-size: 0.75rem !important;
+      }
+      .calendar-events {
+        max-height: 38px;
+        overflow: hidden;
+      }
+
+      /* Specific Grids Across Views */
+      #exercise-grid, #journal-grid, #goals-grid, #grocery-categories-container {
+        grid-template-columns: 1fr !important;
+        gap: 0.85rem !important;
+      }
+      #achievements-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.65rem !important;
+      }
+      .nutrition-macro-grid, .macro-cards-row {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.65rem !important;
+      }
+      .wellness-metrics-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem !important;
+      }
+      .settings-layout-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Reports & Export Preview Responsive */
+      .report-page {
+        padding: 0.85rem !important;
+        box-sizing: border-box !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+      }
+      .report-kpi-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.5rem !important;
+      }
+      .report-charts-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+      }
+      #report-goals-container {
+        grid-template-columns: 1fr !important;
+      }
+      .report-toolbar, .report-controls-card > div {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.5rem !important;
+      }
+      .report-toolbar select, .report-toolbar button, .report-controls-card select, #report-type-select {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .report-section > div {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .report-table {
+        min-width: 480px;
+      }
+
+      /* Analytics Screen Controls & Macro Donut */
+      .analytics-time-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0.35rem;
+        padding-bottom: 2px;
+      }
+      .macro-chart-container {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 1.25rem !important;
+        padding: 0.5rem 0 !important;
+      }
+      .macro-donut-wrapper {
+        width: 180px !important;
+        height: 180px !important;
+        margin: 0 auto !important;
+      }
+      .macro-legend-wrapper {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      /* UNIVERSAL MODAL POPUP MOBILE OVERHAUL */
+      .modal-overlay {
+        padding: 0.5rem !important;
+        align-items: flex-end !important;
+        justify-content: center !important;
+      }
+      .modal-dialog {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 94vh !important;
+        border-radius: var(--radius-xl) var(--radius-xl) var(--radius-md) var(--radius-md) !important;
+        margin: 0 !important;
+        box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.4) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .modal-dialog[style*="display: none"] {
+        display: none !important;
+      }
+      .modal-dialog.modal-lg {
+        max-width: 100% !important;
+      }
+      .modal-header {
+        padding: 0.85rem 1rem !important;
+        flex-shrink: 0;
+      }
+      .modal-title {
+        font-size: 1.05rem !important;
+      }
+      .modal-close-btn {
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: var(--radius-sm);
+        font-size: 1.5rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .modal-body {
+        padding: 1rem !important;
+        max-height: calc(94vh - 125px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        flex: 1 1 auto;
+      }
+      .modal-footer {
+        padding: 0.75rem 1rem !important;
+        flex-direction: column-reverse !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        box-sizing: border-box;
+        flex-shrink: 0;
+      }
+      .modal-footer > div {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+      }
+      .modal-footer .btn, .modal-footer > div .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 44px !important;
+        font-size: 0.925rem !important;
+      }
+
+      /* Form Stacking in Modals on Mobile */
+      .form-row, .form-row-3 {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+      }
+      .form-input, .form-select, .form-textarea {
+        font-size: 16px !important; /* Strictly prevents iOS Safari auto-zooming */
+        min-height: 42px !important;
+      }
+
+      /* Toast Notification Mobile Positioning */
+      .toast-container {
+        bottom: 1rem !important;
+        left: 1rem !important;
+        right: 1rem !important;
+        width: auto !important;
+        align-items: center !important;
+      }
+      .toast {
+        width: 100% !important;
+        max-width: 400px !important;
+        box-sizing: border-box;
+      }
+    }
+
+    /* Extra Small Phones (<= 480px / 375px / 320px) */
+    @media (max-width: 480px) {
+      .header-greeting-title {
+        max-width: 95px !important;
+      }
+      .header-date-badge {
+        display: none !important;
+      }
+      .header-quick-btn span {
+        display: none !important;
+      }
+      .header-quick-btn svg:last-child {
+        display: none !important;
+      }
+      .header-quick-btn {
+        padding: 0.4rem !important;
+        width: 34px !important;
+        height: 34px !important;
+        justify-content: center !important;
+        border-radius: var(--radius-md) !important;
+      }
+      .nutrition-macro-grid, .macro-cards-row {
+        grid-template-columns: 1fr !important;
+      }
+      #achievements-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .report-kpi-grid {
+        grid-template-columns: 1fr !important;
       }
     }
   </style>
@@ -1833,6 +2539,9 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
+        </button>
+        <button class="sidebar-mobile-close" id="btn-sidebar-close" title="Close Menu" aria-label="Close Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
 
@@ -1979,6 +2688,9 @@
       </div>
     </aside>
 
+    <!-- Mobile Drawer Backdrop -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
     <!-- MAIN WRAPPER -->
     <div class="main-wrapper">
       <!-- TOP HEADER -->
@@ -2039,6 +2751,12 @@
               </button>
             </div>
           </div>
+
+          <!-- Load Demo Data Header Quick Button -->
+          <button class="btn btn-secondary btn-sm" id="btn-header-load-demo" title="Load Complete Demo Dataset" style="font-weight: 600; display: inline-flex; align-items: center; gap: 5px; border-color: var(--border); padding: 0.4rem 0.65rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <span>Demo Data</span>
+          </button>
 
           <!-- Theme Palette Selector -->
           <select class="theme-select" id="theme-selector" title="Select Theme Palette">
@@ -2176,7 +2894,7 @@
                 <span class="kpi-main-val" id="kpi-water-val">2,100</span>
                 <span class="kpi-unit">/ 2,500 ml</span>
               </div>
-              <div class="kpi-subtext">400 ml left to reach daily hydration</div>
+              <div class="kpi-subtext" id="kpi-water-sub">400 ml left to reach daily hydration</div>
               <div class="progress-track"><div class="progress-fill" id="kpi-water-progress" style="width: 84%;"></div></div>
             </div>
 
@@ -2218,7 +2936,7 @@
                 <span class="kpi-main-val" id="kpi-sleep-val">7h 45m</span>
                 <span class="kpi-unit">/ 8h 00m</span>
               </div>
-              <div class="kpi-subtext">Bed: 10:45 PM • Wake: 6:30 AM</div>
+              <div class="kpi-subtext" id="kpi-sleep-sub">Bed: 10:45 PM • Wake: 6:30 AM</div>
               <div class="progress-track"><div class="progress-fill success" id="kpi-sleep-progress" style="width: 96%;"></div></div>
             </div>
 
@@ -2232,7 +2950,7 @@
                 <span class="kpi-main-val" id="kpi-wellness-val">88</span>
                 <span class="kpi-unit">/ 100</span>
               </div>
-              <div class="kpi-subtext">Energy: 4/5 • Stress: Low • Mood: Great</div>
+              <div class="kpi-subtext" id="kpi-wellness-sub">Energy: 4/5 • Stress: Low • Mood: Great</div>
               <div class="progress-track"><div class="progress-fill success" id="kpi-wellness-progress" style="width: 88%;"></div></div>
             </div>
 
@@ -2246,7 +2964,7 @@
                 <span class="kpi-main-val" id="kpi-habits-val">83%</span>
                 <span class="kpi-unit">completed</span>
               </div>
-              <div class="kpi-subtext">1 habit remaining for today</div>
+              <div class="kpi-subtext" id="kpi-habits-sub">1 habit remaining for today</div>
               <div class="progress-track"><div class="progress-fill" id="kpi-habits-progress" style="width: 83%;"></div></div>
             </div>
 
@@ -2254,14 +2972,14 @@
             <div class="kpi-card" data-jump="achievements" id="widget-kpi-streaks" title="Click to view Streaks & Achievements">
               <div class="kpi-top">
                 <span class="kpi-label">Active Streak</span>
-                <span class="kpi-badge positive">🔥 Personal Best</span>
+                <span class="kpi-badge positive" id="kpi-streak-badge">🔥 Personal Best</span>
               </div>
               <div class="kpi-value-row">
                 <span class="kpi-main-val" id="kpi-streak-val">14</span>
                 <span class="kpi-unit">days</span>
               </div>
-              <div class="kpi-subtext">Consistent workout & habit logging</div>
-              <div class="progress-track"><div class="progress-fill" style="width: 100%;"></div></div>
+              <div class="kpi-subtext" id="kpi-streak-sub">Consistent workout & habit logging</div>
+              <div class="progress-track"><div class="progress-fill" id="kpi-streak-progress" style="width: 100%;"></div></div>
             </div>
           </div>
 
@@ -2330,7 +3048,7 @@
                 </div>
                 <button class="btn btn-sm btn-secondary" data-jump="nutrition">View Full Log</button>
               </div>
-              <div style="display: grid; grid-template-columns: 140px 1fr; gap: 1.5rem; align-items: center;">
+              <div class="dashboard-macro-split" style="display: grid; grid-template-columns: 140px 1fr; gap: 1.5rem; align-items: center;">
                 <div style="width: 140px; height: 140px; position: relative;">
                   <svg id="dashboard-macro-donut" viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);"></svg>
                   <div style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
@@ -2441,24 +3159,26 @@
           </div>
 
           <div class="card" style="margin-bottom: 1.25rem;">
-            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <div class="planner-filter-wrap" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
               <span style="font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Filter By:</span>
-              <select class="form-select" id="planner-category-filter" style="width: auto;">
-                <option value="ALL">All Categories</option>
-                <option value="Workout">Workouts</option>
-                <option value="Meal">Meals</option>
-                <option value="Water">Water Reminders</option>
-                <option value="Habit">Habits</option>
-                <option value="Wellness">Wellness</option>
-                <option value="Appointment">Appointments</option>
-                <option value="Personal">Personal</option>
-              </select>
-              <select class="form-select" id="planner-priority-filter" style="width: auto;">
-                <option value="ALL">All Priorities</option>
-                <option value="High">High Priority</option>
-                <option value="Medium">Medium Priority</option>
-                <option value="Low">Low Priority</option>
-              </select>
+              <div class="planner-filter-selects" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; flex: 1;">
+                <select class="form-select" id="planner-category-filter" style="width: auto; min-width: 140px;">
+                  <option value="ALL">All Categories</option>
+                  <option value="Workout">Workouts</option>
+                  <option value="Meal">Meals</option>
+                  <option value="Water">Water Reminders</option>
+                  <option value="Habit">Habits</option>
+                  <option value="Wellness">Wellness</option>
+                  <option value="Appointment">Appointments</option>
+                  <option value="Personal">Personal</option>
+                </select>
+                <select class="form-select" id="planner-priority-filter" style="width: auto; min-width: 140px;">
+                  <option value="ALL">All Priorities</option>
+                  <option value="High">High Priority</option>
+                  <option value="Medium">Medium Priority</option>
+                  <option value="Low">Low Priority</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -3081,10 +3801,11 @@
             </div>
           </div>
 
-          <!-- Body Circumference Table -->
+          <!-- Weigh-in History & Body Circumference Table -->
           <div class="card" style="margin-bottom: 1.25rem;">
             <div class="card-header">
-              <h2 class="card-title">Body Measurements (Circumference in cm / in)</h2>
+              <h2 class="card-title">Weigh-in History & Body Circumference Measurements</h2>
+              <span class="card-subtitle">Chronological record of daily weight progress, deltas, BMI, and body dimensions</span>
             </div>
             <div class="table-container">
               <table class="data-table">
@@ -3092,6 +3813,8 @@
                   <tr>
                     <th>Date</th>
                     <th>Weight</th>
+                    <th>Change</th>
+                    <th>BMI</th>
                     <th>Waist</th>
                     <th>Chest</th>
                     <th>Hips</th>
@@ -3133,7 +3856,7 @@
                 </div>
               </div>
 
-              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1.5rem;">
+              <div class="wellness-metrics-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1.5rem;">
                 <div style="background: var(--surface-subtle); padding: 0.75rem; border-radius: var(--radius-md);">
                   <div style="font-size: 0.75rem; color: var(--text-muted);">Energy</div>
                   <div style="font-size: 1.15rem; font-weight: 700;" id="wellness-energy-val">4 / 5</div>
@@ -3315,11 +4038,26 @@
             </div>
 
             <!-- Chart 3: Macronutrient Balance -->
-            <div class="card">
-              <div class="card-header">
-                <h2 class="card-title">Macronutrient Proportion (P / C / F)</h2>
+            <div class="card macro-analytics-card">
+              <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                  <h2 class="card-title">Macronutrient Proportion (P / C / F)</h2>
+                  <div class="card-subtitle" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Caloric Energy Split & Macronutrient Balance</div>
+                </div>
+                <div id="analytics-macro-ratio-badge" style="font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: rgba(59, 130, 246, 0.1); color: var(--accent);">— P • — C • — F</div>
               </div>
-              <div class="chart-box"><svg id="analytics-macros-svg"></svg></div>
+              <div class="macro-chart-container" id="analytics-macro-container" style="display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; min-height: 250px; padding: 0.75rem 0.25rem;">
+                <div class="macro-donut-wrapper" style="flex: 1; max-width: 220px; height: 220px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                  <svg id="analytics-macros-svg" viewBox="0 0 220 220" style="width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible;"></svg>
+                  <div id="analytics-macros-center" style="position: absolute; text-align: center; pointer-events: none; width: 120px;">
+                    <div id="analytics-macro-center-val" style="font-size: 1.5rem; font-weight: 800; color: var(--text); line-height: 1.1;">—</div>
+                    <div id="analytics-macro-center-lbl" style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px;">Total kcal</div>
+                  </div>
+                </div>
+                <div class="macro-legend-wrapper" id="analytics-macros-legend" style="flex: 1.3; display: flex; flex-direction: column; gap: 0.65rem; min-width: 190px;">
+                  <!-- Dynamically populated interactive macro cards -->
+                </div>
+              </div>
             </div>
 
             <!-- Chart 4: Steps & Activity -->
@@ -3396,7 +4134,7 @@
             </div>
           </div>
 
-          <div class="card" style="margin-bottom: 1.25rem;">
+          <div class="card report-controls-card" style="margin-bottom: 1.25rem;">
             <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
               <span style="font-weight: 700; font-size: 0.8125rem;">Select Report Period:</span>
               <select class="form-select" id="report-type-select" style="width: auto;">
@@ -3404,75 +4142,146 @@
                 <option value="weekly">Weekly Progress Report (Last 7 Days)</option>
                 <option value="monthly">Monthly Comprehensive Review (Last 30 Days)</option>
               </select>
+              <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: auto;">Formatted for standard A4 Portrait print & PDF export</span>
             </div>
           </div>
 
-          <!-- Printable Document Container -->
-          <div class="card" id="printable-report-card" style="padding: 2.5rem; background: #ffffff; color: #0f172a;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
-              <div>
-                <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">Comprehensive Wellness Performance Report</h2>
-                <div style="font-size: 0.875rem; color: #64748b;">Generated for <strong id="report-profile-name">Alex Morgan</strong> • <span id="report-generated-date">September 10, 2026</span></div>
+          <!-- Printable Document Container (A4 Infographic Multi-page) -->
+          <div class="card" id="printable-report-card" style="padding: 2.5rem; background: #ffffff; color: #0f172a; max-width: 900px; margin: 0 auto; box-shadow: var(--shadow-lg);">
+            
+            <!-- PAGE 1: Executive Overview & Visual Infographics -->
+            <div class="report-page report-page-1">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #e2e8f0; padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+                <div>
+                  <div style="display: inline-flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 6px;">
+                    <span>PULSEWELLNESS EXECUTIVE DOSSIER</span>
+                  </div>
+                  <h2 style="font-size: 1.6rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0; letter-spacing: -0.02em;">Comprehensive Wellness Performance Report</h2>
+                  <div style="font-size: 0.85rem; color: #64748b;">Member: <strong id="report-profile-name" style="color: #0f172a;">Alex Morgan</strong> • Generated on <span id="report-generated-date">September 10, 2026</span> • Age: <span id="report-profile-age">29</span> • Height: <span id="report-profile-height">172 cm</span></div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: #2563eb;">PulseWellness Pro</div>
+                  <div style="font-size: 0.75rem; color: #64748b;">Commercial Health Intelligence</div>
+                  <div style="font-size: 0.75rem; font-weight: 700; color: #059669; margin-top: 2px;">● A4 Certified Format</div>
+                </div>
               </div>
-              <div style="text-align: right;">
-                <div style="font-size: 1.15rem; font-weight: 800; color: var(--accent);">PulseWellness Pro</div>
-                <div style="font-size: 0.75rem; color: #64748b;">Self-Contained Health Intelligence</div>
+
+              <!-- Report KPI Highlights (4 Cards) -->
+              <div class="report-kpi-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
+                <div class="report-kpi-box" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+                  <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Current Weight</div>
+                  <div style="font-size: 1.4rem; font-weight: 800; color: #0f172a;" id="report-weight-val">69.2 kg</div>
+                  <div style="font-size: 0.72rem; color: #10b981; font-weight: 600;" id="report-weight-delta">↓ 5.3 kg from start</div>
+                </div>
+                <div class="report-kpi-box" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+                  <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Workouts Logged</div>
+                  <div style="font-size: 1.4rem; font-weight: 800; color: #0f172a;" id="report-workouts-val">42 Sessions</div>
+                  <div style="font-size: 0.72rem; color: #2563eb; font-weight: 600;" id="report-workouts-sub">91% Consistency</div>
+                </div>
+                <div class="report-kpi-box" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+                  <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Average Sleep</div>
+                  <div style="font-size: 1.4rem; font-weight: 800; color: #0f172a;" id="report-sleep-val">7h 32m</div>
+                  <div style="font-size: 0.72rem; color: #7c3aed; font-weight: 600;" id="report-sleep-sub">Optimal Recovery</div>
+                </div>
+                <div class="report-kpi-box" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+                  <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Vitality Score</div>
+                  <div style="font-size: 1.4rem; font-weight: 800; color: #0f172a;" id="report-vitality-val">88 / 100</div>
+                  <div style="font-size: 0.72rem; color: #10b981; font-weight: 600;" id="report-vitality-sub">High Vitality</div>
+                </div>
+              </div>
+
+              <!-- Report Summary Narrative -->
+              <div class="report-section" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem; background: #f8fafc;">
+                <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0 0 0.35rem 0; color: #0f172a;">Executive Health Summary</h3>
+                <p style="font-size: 0.825rem; line-height: 1.5; color: #334155; margin: 0;" id="report-narrative-text">
+                  The member demonstrates superior adherence across key wellness pillars over the observed period. Weight trajectory is progressing predictably toward the target threshold with active caloric pacing. Fluid consumption consistently supports cellular hydration and metabolic recovery. Workout frequency satisfies the weekly targets with balanced training volume.
+                </p>
+              </div>
+
+              <!-- Infographic Visual Charts Grid -->
+              <div class="report-charts-grid report-section" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                <div class="report-chart-card" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; background: #ffffff;">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem;">Weight Progress & Target Trajectory</div>
+                  <div style="font-size: 0.6875rem; color: #64748b; margin-bottom: 0.5rem;">Baseline vs Goal Target Line</div>
+                  <div style="height: 160px;"><svg id="report-weight-svg" style="width: 100%; height: 100%;"></svg></div>
+                </div>
+                <div class="report-chart-card" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; background: #ffffff;">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem;">Macronutrient & Caloric Intake</div>
+                  <div style="font-size: 0.6875rem; color: #64748b; margin-bottom: 0.5rem;">Proportion of Protein, Carbs, and Fats</div>
+                  <div style="height: 160px;"><svg id="report-macros-svg" style="width: 100%; height: 100%;"></svg></div>
+                </div>
+              </div>
+
+              <!-- Page 1 Footer -->
+              <div style="border-top: 1px solid #e2e8f0; padding-top: 0.75rem; font-size: 0.7rem; color: #64748b; display: flex; justify-content: space-between;">
+                <span>PulseWellness Pro Performance Report</span>
+                <span>Page 1 of 2 • Confidential Personal Health Record</span>
               </div>
             </div>
 
-            <!-- Report KPI Highlights -->
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
-              <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; background: #f8fafc;">
-                <div style="font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase;">Current Weight</div>
-                <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a;" id="report-weight-val">69.2 kg</div>
-                <div style="font-size: 0.75rem; color: #10b981;">↓ 5.3 kg from start</div>
+            <!-- PAGE 2: Detailed Performance & Body Measurements Log -->
+            <div class="report-page report-page-2 report-page-break" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px dashed #e2e8f0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
+                <div>
+                  <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">Performance Logs & Measurements History</h2>
+                  <div style="font-size: 0.75rem; color: #64748b;">Member: <span id="report-page2-name">Alex Morgan</span> • Detailed Health Intelligence Breakdown</div>
+                </div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #2563eb;">Page 2 of 2</div>
               </div>
-              <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; background: #f8fafc;">
-                <div style="font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase;">Workouts Logged</div>
-                <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a;" id="report-workouts-val">42 Sessions</div>
-                <div style="font-size: 0.75rem; color: #64748b;">91% Consistency</div>
-              </div>
-              <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; background: #f8fafc;">
-                <div style="font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase;">Average Sleep</div>
-                <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a;" id="report-sleep-val">7h 32m</div>
-                <div style="font-size: 0.75rem; color: #10b981;">Optimal Recovery</div>
-              </div>
-              <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; background: #f8fafc;">
-                <div style="font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase;">Vitality Score</div>
-                <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a;" id="report-vitality-val">88 / 100</div>
-                <div style="font-size: 0.75rem; color: #10b981;">High Vitality</div>
-              </div>
-            </div>
 
-            <!-- Report Summary Narrative -->
-            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; margin-bottom: 2rem; background: #f8fafc;">
-              <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Executive Health Summary</h3>
-              <p style="font-size: 0.875rem; line-height: 1.6; color: #334155;" id="report-narrative-text">
-                The member demonstrates superior adherence across key wellness pillars over the observed period. Weight trajectory is progressing predictably toward the target threshold of 65.0 kg with active caloric pacing. Fluid consumption consistently exceeds 80% of daily targets, supporting optimal cellular hydration and metabolic recovery. Workout frequency satisfies the target of 5 sessions per week with balanced volume distribution.
-              </p>
-            </div>
+              <!-- Report Workouts Table -->
+              <div class="report-section" style="margin-bottom: 1.25rem;">
+                <h3 style="font-size: 0.875rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em;">Recent Key Workouts & Activity Log</h3>
+                <div style="border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden;">
+                  <table class="report-table" style="width: 100%; border-collapse: collapse; font-size: 0.75rem;">
+                    <thead>
+                      <tr style="background: #f1f5f9;">
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Date</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Activity</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Category</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Duration</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Performance Load</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Burn</th>
+                      </tr>
+                    </thead>
+                    <tbody id="report-workout-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
 
-            <!-- Report Tables -->
-            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;">Recent Key Workouts & Performance</h3>
-            <div class="table-container" style="margin-bottom: 2rem;">
-              <table class="data-table" id="report-workout-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Activity</th>
-                    <th>Category</th>
-                    <th>Duration</th>
-                    <th>Performance</th>
-                    <th>Calories</th>
-                  </tr>
-                </thead>
-                <tbody id="report-workout-tbody"></tbody>
-              </table>
-            </div>
+              <!-- Report Body Measurements Table -->
+              <div class="report-section" style="margin-bottom: 1.25rem;">
+                <h3 style="font-size: 0.875rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em;">Weigh-in Progression & Circumference Log</h3>
+                <div style="border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden;">
+                  <table class="report-table" style="width: 100%; border-collapse: collapse; font-size: 0.75rem;">
+                    <thead>
+                      <tr style="background: #f1f5f9;">
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Date</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Weight</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">BMI</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Waist</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Chest</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Hips</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Arms</th>
+                        <th style="padding: 6px 8px; border-bottom: 1px solid #cbd5e1; text-align: left;">Thighs</th>
+                      </tr>
+                    </thead>
+                    <tbody id="report-weight-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
 
-            <div style="border-top: 1px solid #e2e8f0; padding-top: 1rem; font-size: 0.75rem; color: #64748b; display: flex; justify-content: space-between;">
-              <span>Report Generated by PulseWellness Standalone Suite</span>
-              <span>Confidential Personal Health Record</span>
+              <!-- Report Goals & Habit Consistency Section -->
+              <div class="report-section" style="margin-bottom: 1.25rem;">
+                <h3 style="font-size: 0.875rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em;">Active SMART Goals & Habit Streaks</h3>
+                <div id="report-goals-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;"></div>
+              </div>
+
+              <!-- Page 2 Footer -->
+              <div style="border-top: 1px solid #e2e8f0; padding-top: 0.75rem; font-size: 0.7rem; color: #64748b; display: flex; justify-content: space-between;">
+                <span>PulseWellness Pro • 100% Offline Standalone Health System</span>
+                <span>Page 2 of 2 • End of Confidential Report</span>
+              </div>
             </div>
           </div>
         </section>
@@ -3620,6 +4429,10 @@
                   </label>
                   <button class="btn btn-secondary" id="btn-export-csv">Export All Data (CSV)</button>
                   <button class="btn btn-secondary" id="btn-export-excel">Export Excel Workbook (.xls)</button>
+                  <button class="btn btn-secondary" id="btn-load-demo-data" style="color: var(--accent); font-weight: 700;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    Load Demo Dataset
+                  </button>
                 </div>
 
                 <div style="border-top: 1px solid var(--border); padding-top: 1.25rem; margin-top: 0.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
@@ -4743,6 +5556,88 @@
         });
       }
 
+      // Blank application state for clean slate / delete all data
+      function getBlankData() {
+        return {
+          version: "1.0.0",
+          lastSaved: new Date().toISOString(),
+          profile: {
+            name: "Member",
+            age: 30,
+            gender: "Other",
+            height: 170,
+            startWeight: 70.0,
+            currentWeight: 70.0,
+            goalWeight: 70.0,
+            units: "metric",
+            activityLevel: "Moderately Active",
+            avatar: "MB",
+            bmi: 24.2,
+            weightProgressPct: 0
+          },
+          settings: {
+            theme: "wellness-blue",
+            darkMode: false,
+            sidebarCollapsed: false,
+            dailyTargets: {
+              calories: 2000,
+              protein: 120,
+              carbs: 200,
+              fat: 60,
+              water: 2500,
+              steps: 10000,
+              sleep: 8.0,
+              weeklyWorkouts: 4
+            },
+            dashboardWidgets: {
+              weight: true, calories: true, water: true, steps: true,
+              workouts: true, sleep: true, wellness: true, habits: true, streaks: true
+            }
+          },
+          dailyStats: {
+            calories: 0,
+            protein: 0,
+            carbs: 0,
+            fat: 0,
+            water: 0,
+            steps: 0,
+            habitPct: 0,
+            habitsCompleted: 0
+          },
+          workouts: [],
+          exercises: [],
+          meals: [],
+          mealPlans: [],
+          waterLogs: [],
+          stepsLogs: [],
+          sleepLogs: [],
+          weightLogs: [],
+          bodyMeasurements: [],
+          wellnessLogs: [],
+          moodJournal: [],
+          habits: [],
+          goals: [],
+          groceryList: [],
+          plannerTasks: [],
+          calendarEvents: [],
+          achievements: []
+        };
+      }
+
+      // Load full demo dataset on demand
+      function loadDemoData() {
+        appData = getDefaultData();
+        window.appData = appData;
+        seedHabitLogs(appData);
+        saveAppData();
+        applyTheme(appData.settings?.theme || 'wellness-blue');
+        recalculateMetrics();
+        renderActiveView();
+        renderDashboardKPIs();
+        renderHeaderUserInfo();
+        showToast('Full demo dataset loaded successfully!', 'success');
+      }
+
       // Central Application State Variable
       let appData = null;
 
@@ -4857,6 +5752,7 @@
         if (typeof updater === 'function') {
           updater(appData);
         }
+        window.appData = appData;
         recalculateMetrics();
         saveAppData();
         renderActiveView();
@@ -4870,17 +5766,17 @@
         const todayStr = new Date().toISOString().split('T')[0];
 
         // 1. BMI & Weight Progress
-        const heightMeters = (appData.profile.height || 172) / 100;
-        const currWeight = appData.profile.currentWeight || 69.2;
-        const startWeight = appData.profile.startWeight || 74.5;
-        const goalWeight = appData.profile.goalWeight || 65.0;
-        const bmi = +(currWeight / (heightMeters * heightMeters)).toFixed(1);
-        appData.profile.bmi = bmi;
+        const heightMeters = ((appData.profile && appData.profile.height) || 172) / 100;
+        const currWeight = (appData.profile && appData.profile.currentWeight) || (appData.weightLogs && appData.weightLogs.length ? appData.weightLogs[appData.weightLogs.length - 1].weight : 0);
+        const startWeight = (appData.profile && appData.profile.startWeight) || 0;
+        const goalWeight = (appData.profile && appData.profile.goalWeight) || 0;
+        const bmi = (currWeight > 0 && heightMeters > 0) ? +(currWeight / (heightMeters * heightMeters)).toFixed(1) : 0;
+        if (appData.profile) appData.profile.bmi = bmi;
 
-        const totalLost = +(startWeight - currWeight).toFixed(1);
-        const totalTargetLost = +(startWeight - goalWeight).toFixed(1);
-        const weightPct = totalTargetLost > 0 ? Math.min(100, Math.max(0, Math.round((totalLost / totalTargetLost) * 100))) : 100;
-        appData.profile.weightProgressPct = weightPct;
+        const totalLost = (startWeight > 0 && currWeight > 0) ? +(startWeight - currWeight).toFixed(1) : 0;
+        const totalTargetLost = (startWeight > 0 && goalWeight > 0) ? +(startWeight - goalWeight).toFixed(1) : 0;
+        const weightPct = totalTargetLost > 0 ? Math.min(100, Math.max(0, Math.round((totalLost / totalTargetLost) * 100))) : 0;
+        if (appData.profile) appData.profile.weightProgressPct = weightPct;
 
         // Auto-update Weight SMART Goal if present
         const weightGoal = appData.goals.find(g => g.category === 'Weight');
@@ -4911,7 +5807,7 @@
 
         // 4. Today's Steps
         const todayStepLog = appData.stepsLogs.find(s => s.date === todayStr);
-        appData.dailyStats.steps = todayStepLog ? todayStepLog.steps : 8450;
+        appData.dailyStats.steps = todayStepLog ? todayStepLog.steps : 0;
 
         // 5. Habits Completion
         let habitsCompletedToday = 0;
@@ -5231,46 +6127,37 @@
             notesText = item.notes || '';
             break;
           }
-          case 'weight': {
-            item = appData.weightLogs.find(x => x.id === id);
-            if (!item) return;
-            iconSvg = '⚖️';
-            title = `${item.weight} ${unit} Weigh-in`;
-            subtitle = `Recorded on ${item.date}`;
-            const goalW = appData.profile ? appData.profile.goalWeight : 65;
-            const diff = (item.weight - goalW).toFixed(1);
-            badgesHtml = `
-              <span class="kpi-badge neutral">⚖️ ${item.weight} ${unit}</span>
-              <span class="kpi-badge positive">${diff > 0 ? `${diff} ${unit} above goal` : 'Goal reached!'}</span>
-            `;
-            gridItems = [
-              { label: 'Date', val: item.date },
-              { label: 'Weight', val: `${item.weight} ${unit}` },
-              { label: 'Goal Target', val: `${goalW} ${unit}` },
-              { label: 'Variance to Goal', val: `${diff} ${unit}` }
-            ];
-            notesText = item.notes || '';
-            break;
-          }
+          case 'weight':
           case 'measurement': {
-            item = appData.bodyMeasurements.find(x => x.id === id);
-            if (!item) return;
-            iconSvg = '📏';
-            title = `Body Circumference Check-in`;
-            subtitle = `Recorded on ${item.date}`;
+            const entry = (appData.bodyMeasurements && appData.bodyMeasurements.find(x => x.id === id)) ||
+                          (appData.weightLogs && appData.weightLogs.find(x => x.id === id));
+            if (!entry) return;
+            const wDate = entry.date;
+            const wtLog = appData.weightLogs && appData.weightLogs.find(x => x.date === wDate || x.id === id);
+            const bmLog = appData.bodyMeasurements && appData.bodyMeasurements.find(x => x.date === wDate || x.id === id);
+            const wVal = entry.weight || (wtLog ? wtLog.weight : (bmLog ? bmLog.weight : null));
+
+            iconSvg = '⚖️';
+            title = wVal ? `${wVal} ${unit} Weigh-in & Measurements` : 'Body Circumference Check-in';
+            subtitle = `Recorded on ${wDate}`;
+            const goalW = appData.profile ? appData.profile.goalWeight : 65;
+            const diff = wVal ? (wVal - goalW).toFixed(1) : null;
             badgesHtml = `
-              <span class="kpi-badge neutral">Weight: ${item.weight} ${unit}</span>
+              ${wVal ? `<span class="kpi-badge neutral">⚖️ ${wVal} ${unit}</span>` : ''}
+              ${diff !== null ? `<span class="kpi-badge ${Number(diff) <= 0 ? 'positive' : 'neutral'}">${Number(diff) > 0 ? `${diff} ${unit} to goal` : 'Goal achieved!'}</span>` : ''}
             `;
             gridItems = [
-              { label: 'Date', val: item.date },
-              { label: 'Weight', val: `${item.weight} ${unit}` },
-              { label: 'Waist', val: item.waist ? `${item.waist} cm` : '—' },
-              { label: 'Chest', val: item.chest ? `${item.chest} cm` : '—' },
-              { label: 'Hips', val: item.hips ? `${item.hips} cm` : '—' },
-              { label: 'Arms', val: item.arms ? `${item.arms} cm` : '—' },
-              { label: 'Thighs', val: item.thighs ? `${item.thighs} cm` : '—' },
-              { label: 'Neck', val: item.neck ? `${item.neck} cm` : '—' }
+              { label: 'Date', val: wDate },
+              { label: 'Recorded Weight', val: wVal ? `${wVal} ${unit}` : '—' },
+              { label: 'Goal Target', val: `${goalW} ${unit}` },
+              { label: 'Waist Circumference', val: (bmLog && bmLog.waist) ? `${bmLog.waist} cm` : '—' },
+              { label: 'Chest Circumference', val: (bmLog && bmLog.chest) ? `${bmLog.chest} cm` : '—' },
+              { label: 'Hips Circumference', val: (bmLog && bmLog.hips) ? `${bmLog.hips} cm` : '—' },
+              { label: 'Arms Circumference', val: (bmLog && bmLog.arms) ? `${bmLog.arms} cm` : '—' },
+              { label: 'Thighs Circumference', val: (bmLog && bmLog.thighs) ? `${bmLog.thighs} cm` : '—' },
+              { label: 'Neck Circumference', val: (bmLog && bmLog.neck) ? `${bmLog.neck} cm` : '—' }
             ];
+            notesText = (wtLog && wtLog.notes) || '';
             break;
           }
           case 'wellness': {
@@ -5596,47 +6483,40 @@
             openModal('modal-sleep');
             break;
           }
-          case 'weight': {
-            const wt = appData.weightLogs.find(x => x.id === id);
-            if (!wt) return;
-            const editId = document.getElementById('weight-edit-id');
-            if (editId) editId.value = id;
-            const title = document.getElementById('modal-weight-title');
-            if (title) title.textContent = 'Edit Weigh-in Record';
-
-            if (document.getElementById('weight-date')) document.getElementById('weight-date').value = wt.date;
-            if (document.getElementById('weight-val')) document.getElementById('weight-val').value = wt.weight;
-            if (document.getElementById('weight-notes')) document.getElementById('weight-notes').value = wt.notes || '';
-
-            const bm = appData.bodyMeasurements.find(x => x.date === wt.date);
-            if (bm) {
-              if (document.getElementById('meas-waist')) document.getElementById('meas-waist').value = bm.waist || '';
-              if (document.getElementById('meas-chest')) document.getElementById('meas-chest').value = bm.chest || '';
-              if (document.getElementById('meas-hips')) document.getElementById('meas-hips').value = bm.hips || '';
-              if (document.getElementById('meas-arms')) document.getElementById('meas-arms').value = bm.arms || '';
-              if (document.getElementById('meas-thighs')) document.getElementById('meas-thighs').value = bm.thighs || '';
-              if (document.getElementById('meas-neck')) document.getElementById('meas-neck').value = bm.neck || '';
-            }
-
-            openModal('modal-weight');
-            break;
-          }
+          case 'weight':
           case 'measurement': {
-            const bm = appData.bodyMeasurements.find(x => x.id === id);
-            if (!bm) return;
+            const entry = (appData.weightLogs && appData.weightLogs.find(x => x.id === id)) ||
+                          (appData.bodyMeasurements && appData.bodyMeasurements.find(x => x.id === id));
+            if (!entry) return;
             const editId = document.getElementById('weight-edit-id');
             if (editId) editId.value = id;
             const title = document.getElementById('modal-weight-title');
-            if (title) title.textContent = 'Edit Circumference Measurements';
+            if (title) title.textContent = 'Edit Weigh-in & Measurements';
 
-            if (document.getElementById('weight-date')) document.getElementById('weight-date').value = bm.date;
-            if (document.getElementById('weight-val')) document.getElementById('weight-val').value = bm.weight;
-            if (document.getElementById('meas-waist')) document.getElementById('meas-waist').value = bm.waist || '';
-            if (document.getElementById('meas-chest')) document.getElementById('meas-chest').value = bm.chest || '';
-            if (document.getElementById('meas-hips')) document.getElementById('meas-hips').value = bm.hips || '';
-            if (document.getElementById('meas-arms')) document.getElementById('meas-arms').value = bm.arms || '';
-            if (document.getElementById('meas-thighs')) document.getElementById('meas-thighs').value = bm.thighs || '';
-            if (document.getElementById('meas-neck')) document.getElementById('meas-neck').value = bm.neck || '';
+            const wDate = entry.date;
+            const wtLog = appData.weightLogs && appData.weightLogs.find(x => x.date === wDate || x.id === id);
+            const bmLog = appData.bodyMeasurements && appData.bodyMeasurements.find(x => x.date === wDate || x.id === id);
+            const wVal = entry.weight || (wtLog ? wtLog.weight : (bmLog ? bmLog.weight : ''));
+
+            if (document.getElementById('weight-date')) document.getElementById('weight-date').value = wDate;
+            if (document.getElementById('weight-val')) document.getElementById('weight-val').value = wVal;
+            if (document.getElementById('weight-notes')) document.getElementById('weight-notes').value = (wtLog && wtLog.notes) || '';
+
+            if (bmLog) {
+              if (document.getElementById('meas-waist')) document.getElementById('meas-waist').value = bmLog.waist || '';
+              if (document.getElementById('meas-chest')) document.getElementById('meas-chest').value = bmLog.chest || '';
+              if (document.getElementById('meas-hips')) document.getElementById('meas-hips').value = bmLog.hips || '';
+              if (document.getElementById('meas-arms')) document.getElementById('meas-arms').value = bmLog.arms || '';
+              if (document.getElementById('meas-thighs')) document.getElementById('meas-thighs').value = bmLog.thighs || '';
+              if (document.getElementById('meas-neck')) document.getElementById('meas-neck').value = bmLog.neck || '';
+            } else {
+              if (document.getElementById('meas-waist')) document.getElementById('meas-waist').value = '';
+              if (document.getElementById('meas-chest')) document.getElementById('meas-chest').value = '';
+              if (document.getElementById('meas-hips')) document.getElementById('meas-hips').value = '';
+              if (document.getElementById('meas-arms')) document.getElementById('meas-arms').value = '';
+              if (document.getElementById('meas-thighs')) document.getElementById('meas-thighs').value = '';
+              if (document.getElementById('meas-neck')) document.getElementById('meas-neck').value = '';
+            }
 
             openModal('modal-weight');
             break;
@@ -5777,8 +6657,13 @@
             case 'water': d.waterLogs = d.waterLogs.filter(x => x.id !== id); break;
             case 'step': d.stepsLogs = d.stepsLogs.filter(x => x.id !== id); break;
             case 'sleep': d.sleepLogs = d.sleepLogs.filter(x => x.id !== id); break;
-            case 'weight': d.weightLogs = d.weightLogs.filter(x => x.id !== id); break;
-            case 'measurement': d.bodyMeasurements = d.bodyMeasurements.filter(x => x.id !== id); break;
+            case 'weight':
+            case 'measurement': {
+              const targetDate = (d.weightLogs.find(x => x.id === id) || d.bodyMeasurements.find(x => x.id === id))?.date;
+              d.weightLogs = d.weightLogs.filter(x => x.id !== id && (!targetDate || x.date !== targetDate));
+              d.bodyMeasurements = d.bodyMeasurements.filter(x => x.id !== id && (!targetDate || x.date !== targetDate));
+              break;
+            }
             case 'wellness': d.wellnessLogs = d.wellnessLogs.filter(x => x.id !== id); break;
             case 'journal': d.moodJournal = d.moodJournal.filter(x => x.id !== id); break;
             case 'habit': d.habits = d.habits.filter(x => x.id !== id); break;
@@ -6022,6 +6907,9 @@
         // Close mobile drawer if open
         const sidebar = document.getElementById('app-sidebar');
         if (sidebar) sidebar.classList.remove('mobile-open');
+        const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+        if (sidebarBackdrop) sidebarBackdrop.classList.remove('active');
+        document.body.style.overflow = '';
 
         renderActiveView();
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6098,28 +6986,29 @@
       // --- DASHBOARD RENDERER ---
       function renderDashboardKPIs() {
         if (!appData) return;
-        const currW = appData.profile.currentWeight || 69.2;
-        const startW = appData.profile.startWeight || 74.5;
-        const goalW = appData.profile.goalWeight || 65.0;
-        const unit = appData.profile.units === 'imperial' ? 'lb' : 'kg';
-        const wPct = appData.profile.weightProgressPct || 56;
-        const diffW = (startW - currW).toFixed(1);
+        const profile = appData.profile || {};
+        const currW = profile.currentWeight || (appData.weightLogs && appData.weightLogs.length ? appData.weightLogs[appData.weightLogs.length - 1].weight : 0);
+        const startW = profile.startWeight || 0;
+        const goalW = profile.goalWeight || 0;
+        const unit = profile.units === 'imperial' ? 'lb' : 'kg';
+        const wPct = profile.weightProgressPct || 0;
+        const diffW = (startW > 0 && currW > 0) ? (startW - currW).toFixed(1) : '0.0';
 
         // 1. Weight KPI
         const wVal = document.getElementById('kpi-weight-val');
-        if (wVal) wVal.textContent = currW;
+        if (wVal) wVal.textContent = currW || '—';
         const wUnit = document.getElementById('kpi-weight-unit');
         if (wUnit) wUnit.textContent = unit;
         const wBadge = document.getElementById('kpi-weight-badge');
-        if (wBadge) wBadge.textContent = `↓ ${diffW} ${unit}`;
+        if (wBadge) wBadge.textContent = Number(diffW) > 0 ? `↓ ${diffW} ${unit}` : `${diffW} ${unit}`;
         const wSub = document.getElementById('kpi-weight-sub');
-        if (wSub) wSub.textContent = `Goal: ${goalW} ${unit} (${wPct}% achieved)`;
+        if (wSub) wSub.textContent = goalW > 0 ? `Goal: ${goalW} ${unit} (${wPct}% achieved)` : `Set your goal weight in Settings`;
         const wProg = document.getElementById('kpi-weight-progress');
-        if (wProg) wProg.style.width = `${wPct}%`;
+        if (wProg) wProg.style.width = `${Math.min(100, wPct)}%`;
 
         // 2. Calories KPI
-        const cal = appData.dailyStats ? appData.dailyStats.calories : 1420;
-        const targetCal = appData.settings.dailyTargets.calories || 2100;
+        const cal = appData.dailyStats ? (appData.dailyStats.calories || 0) : 0;
+        const targetCal = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.calories) || 2100;
         const remCal = Math.max(0, targetCal - cal);
         const calPct = Math.min(100, Math.round((cal / targetCal) * 100));
 
@@ -6129,62 +7018,131 @@
         if (calBadge) calBadge.textContent = `Remaining ${remCal}`;
         const calSub = document.getElementById('kpi-calories-sub');
         if (calSub) {
-          const p = appData.dailyStats ? appData.dailyStats.protein : 95;
-          const c = appData.dailyStats ? appData.dailyStats.carbs : 145;
-          const f = appData.dailyStats ? appData.dailyStats.fat : 42;
+          const p = appData.dailyStats ? (appData.dailyStats.protein || 0) : 0;
+          const c = appData.dailyStats ? (appData.dailyStats.carbs || 0) : 0;
+          const f = appData.dailyStats ? (appData.dailyStats.fat || 0) : 0;
           calSub.textContent = `P: ${p}g • C: ${c}g • F: ${f}g`;
         }
         const calProg = document.getElementById('kpi-calories-progress');
         if (calProg) calProg.style.width = `${calPct}%`;
 
         // 3. Water KPI
-        const water = appData.dailyStats ? appData.dailyStats.water : 2100;
-        const targetWater = appData.settings.dailyTargets.water || 2500;
+        const water = appData.dailyStats ? (appData.dailyStats.water || 0) : 0;
+        const targetWater = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.water) || 2500;
         const waterPct = Math.min(100, Math.round((water / targetWater) * 100));
         const waterVal = document.getElementById('kpi-water-val');
         if (waterVal) waterVal.textContent = water.toLocaleString();
         const waterBadge = document.getElementById('kpi-water-badge');
         if (waterBadge) waterBadge.textContent = `${waterPct}% Goal`;
+        const waterSub = document.getElementById('kpi-water-sub');
+        if (waterSub) {
+          const remWater = Math.max(0, targetWater - water);
+          waterSub.textContent = remWater > 0 ? `${remWater.toLocaleString()} ml left to reach daily hydration` : `Daily hydration goal achieved!`;
+        }
         const waterProg = document.getElementById('kpi-water-progress');
         if (waterProg) waterProg.style.width = `${waterPct}%`;
 
         // 4. Steps KPI
-        const steps = appData.dailyStats ? appData.dailyStats.steps : 8450;
-        const targetSteps = appData.settings.dailyTargets.steps || 10000;
+        const steps = appData.dailyStats ? (appData.dailyStats.steps || 0) : 0;
+        const targetSteps = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.steps) || 10000;
         const stepsPct = Math.min(100, Math.round((steps / targetSteps) * 100));
         const sVal = document.getElementById('kpi-steps-val');
         if (sVal) sVal.textContent = steps.toLocaleString();
         const sBadge = document.getElementById('kpi-steps-badge');
         if (sBadge) sBadge.textContent = `${steps.toLocaleString()} / ${(targetSteps/1000)}k`;
+        const sSub = document.getElementById('kpi-steps-sub');
+        if (sSub) {
+          const dist = (steps * 0.00075).toFixed(1);
+          const calBurn = Math.round(steps * 0.04);
+          sSub.textContent = `${dist} km • ${calBurn} kcal burned`;
+        }
         const sProg = document.getElementById('kpi-steps-progress');
         if (sProg) sProg.style.width = `${stepsPct}%`;
 
         // 5. Workouts KPI
-        const weeklyWorkouts = appData.workouts.filter(w => {
+        const weeklyWorkouts = (appData.workouts || []).filter(w => {
           const diffDays = (new Date() - new Date(w.date)) / (1000 * 60 * 60 * 24);
-          return diffDays <= 7;
-        }).length || 4;
-        const targetWorkouts = appData.settings.dailyTargets.weeklyWorkouts || 5;
+          return diffDays <= 7 && diffDays >= 0;
+        }).length;
+        const targetWorkouts = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.weeklyWorkouts) || 5;
         const woVal = document.getElementById('kpi-workout-val');
         if (woVal) woVal.textContent = weeklyWorkouts;
         const woBadge = document.getElementById('kpi-workout-badge');
         if (woBadge) woBadge.textContent = `${weeklyWorkouts} / ${targetWorkouts} Done`;
+        const woSub = document.getElementById('kpi-workout-sub');
+        if (woSub) {
+          const totalMins = (appData.workouts || []).filter(w => {
+            const diffDays = (new Date() - new Date(w.date)) / (1000 * 60 * 60 * 24);
+            return diffDays <= 7 && diffDays >= 0;
+          }).reduce((sum, w) => sum + (Number(w.duration) || 0), 0);
+          woSub.textContent = `${totalMins} total active minutes this week`;
+        }
         const woProg = document.getElementById('kpi-workout-progress');
         if (woProg) woProg.style.width = `${Math.min(100, Math.round((weeklyWorkouts / targetWorkouts) * 100))}%`;
 
         // 6. Sleep KPI
+        const todayStr = new Date().toISOString().split('T')[0];
+        const todaySleep = (appData.sleepLogs || []).find(s => s.date === todayStr) || (appData.sleepLogs && appData.sleepLogs[0]);
+        const sleepHours = todaySleep ? (todaySleep.durationHours || 0) : 0;
+        const targetSleep = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.sleep) || 8;
+        const sleepPct = Math.min(100, Math.round((sleepHours / targetSleep) * 100));
+        const sLogVal = document.getElementById('kpi-sleep-val');
+        if (sLogVal) sLogVal.textContent = sleepHours > 0 ? `${Math.floor(sleepHours)}h ${Math.round((sleepHours % 1)*60)}m` : '0h 0m';
+        const sLogBadge = document.getElementById('kpi-sleep-badge');
+        if (sLogBadge) sLogBadge.textContent = todaySleep ? `★ ${todaySleep.quality || 0}` : 'No Log';
+        const sLogSub = document.getElementById('kpi-sleep-sub');
+        if (sLogSub) {
+          if (todaySleep && (todaySleep.bedtime || todaySleep.wakeTime)) {
+            sLogSub.textContent = `Bed: ${todaySleep.bedtime || '—'} • Wake: ${todaySleep.wakeTime || '—'}`;
+          } else {
+            sLogSub.textContent = sleepHours > 0 ? `${sleepHours}h logged` : `No sleep logged today`;
+          }
+        }
         const sleepProg = document.getElementById('kpi-sleep-progress');
-        if (sleepProg) sleepProg.style.width = '96%';
+        if (sleepProg) sleepProg.style.width = `${sleepPct}%`;
 
-        // 7. Habits KPI
-        const habitPct = appData.dailyStats ? appData.dailyStats.habitPct : 83;
-        const habitsCompleted = appData.dailyStats ? appData.dailyStats.habitsCompleted : 5;
+        // 7. Wellness Score KPI
+        const latestWel = (appData.wellnessLogs && appData.wellnessLogs.length) ? appData.wellnessLogs[0] : null;
+        const welScore = latestWel ? Math.round(((latestWel.energy + (6 - latestWel.stress) + latestWel.mood) / 15) * 100) : 0;
+        const welVal = document.getElementById('kpi-wellness-val');
+        if (welVal) welVal.textContent = welScore > 0 ? welScore : '—';
+        const welBadge = document.getElementById('kpi-wellness-badge');
+        if (welBadge) {
+          welBadge.textContent = welScore >= 80 ? 'High Vitality' : welScore >= 50 ? 'Moderate' : welScore > 0 ? 'Needs Care' : 'No Data';
+        }
+        const welSub = document.getElementById('kpi-wellness-sub');
+        if (welSub) {
+          welSub.textContent = latestWel ? `Energy: ${latestWel.energy}/5 • Stress: ${latestWel.stress}/5 • Mood: ${latestWel.mood}/5` : 'No check-in logged today';
+        }
+        const welProg = document.getElementById('kpi-wellness-progress');
+        if (welProg) welProg.style.width = `${welScore}%`;
+
+        // 8. Habits KPI
+        const habitPct = appData.dailyStats ? (appData.dailyStats.habitPct || 0) : 0;
+        const habitsCompleted = appData.dailyStats ? (appData.dailyStats.habitsCompleted || 0) : 0;
         const hVal = document.getElementById('kpi-habits-val');
         if (hVal) hVal.textContent = `${habitPct}%`;
         const hBadge = document.getElementById('kpi-habits-badge');
-        if (hBadge) hBadge.textContent = `${habitsCompleted} of ${appData.habits.length} Done`;
+        if (hBadge) hBadge.textContent = `${habitsCompleted} of ${(appData.habits || []).length} Done`;
+        const hSub = document.getElementById('kpi-habits-sub');
+        if (hSub) {
+          const totalH = (appData.habits || []).length;
+          const remH = Math.max(0, totalH - habitsCompleted);
+          hSub.textContent = remH === 0 && totalH > 0 ? `All habits completed!` : `${remH} habit${remH === 1 ? '' : 's'} remaining for today`;
+        }
         const hProg = document.getElementById('kpi-habits-progress');
         if (hProg) hProg.style.width = `${habitPct}%`;
+
+        // 9. Streaks KPI
+        const activeStreak = (appData.profile && appData.profile.streakDays) || 0;
+        const strVal = document.getElementById('kpi-streak-val');
+        if (strVal) strVal.textContent = activeStreak;
+        const strBadge = document.getElementById('kpi-streak-badge');
+        if (strBadge) strBadge.textContent = activeStreak > 0 ? `🔥 Active Streak` : `Start Today`;
+        const strSub = document.getElementById('kpi-streak-sub');
+        if (strSub) strSub.textContent = activeStreak > 0 ? `Consistent workout & habit logging` : `Log today to build your streak`;
+        const strProg = document.getElementById('kpi-streak-progress');
+        if (strProg) strProg.style.width = `${Math.min(100, (activeStreak / 30) * 100)}%`;
       }
 
       function renderDashboard() {
@@ -6194,7 +7152,7 @@
         // 1. Today's Schedule list
         const scheduleList = document.getElementById('dashboard-schedule-list');
         if (scheduleList) {
-          const tasks = appData.plannerTasks.filter(t => t.date === todayStr);
+          const tasks = (appData.plannerTasks || []).filter(t => t.date === todayStr);
           if (tasks.length === 0) {
             scheduleList.innerHTML = `
               <div style="text-align: center; padding: 1.5rem; color: var(--text-muted);">
@@ -6230,8 +7188,8 @@
         }
 
         // 2. Water Bottle Fill
-        const water = appData.dailyStats ? appData.dailyStats.water : 2100;
-        const targetWater = appData.settings.dailyTargets.water || 2500;
+        const water = appData.dailyStats ? (appData.dailyStats.water || 0) : 0;
+        const targetWater = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.water) || 2500;
         const waterPct = Math.min(100, Math.round((water / targetWater) * 100));
         const waterFluid = document.getElementById('dashboard-water-fluid');
         if (waterFluid) waterFluid.style.height = `${waterPct}%`;
@@ -6239,19 +7197,23 @@
         if (waterSub) waterSub.textContent = `${water.toLocaleString()} / ${targetWater.toLocaleString()} ml`;
 
         // 3. Macro Donut Chart
-        const p = appData.dailyStats ? appData.dailyStats.protein : 95;
-        const c = appData.dailyStats ? appData.dailyStats.carbs : 145;
-        const f = appData.dailyStats ? appData.dailyStats.fat : 42;
+        const p = appData.dailyStats ? (appData.dailyStats.protein || 0) : 0;
+        const c = appData.dailyStats ? (appData.dailyStats.carbs || 0) : 0;
+        const f = appData.dailyStats ? (appData.dailyStats.fat || 0) : 0;
         const donutSvg = document.getElementById('dashboard-macro-donut');
         if (donutSvg) {
-          renderDonutChart(donutSvg, [
-            { label: 'Protein', val: p * 4, color: '#2563eb' },
-            { label: 'Carbs', val: c * 4, color: '#10b981' },
-            { label: 'Fat', val: f * 9, color: '#f59e0b' }
-          ]);
+          if (p === 0 && c === 0 && f === 0) {
+            renderDonutChart(donutSvg, []);
+          } else {
+            renderDonutChart(donutSvg, [
+              { label: 'Protein', val: p * 4, color: '#2563eb' },
+              { label: 'Carbs', val: c * 4, color: '#10b981' },
+              { label: 'Fat', val: f * 9, color: '#f59e0b' }
+            ]);
+          }
         }
         const donutCalVal = document.getElementById('donut-cal-val');
-        if (donutCalVal) donutCalVal.textContent = (appData.dailyStats ? appData.dailyStats.calories : 1420).toLocaleString();
+        if (donutCalVal) donutCalVal.textContent = (appData.dailyStats ? (appData.dailyStats.calories || 0) : 0).toLocaleString();
 
         // Macro Bars
         const pText = document.getElementById('macro-protein-text');
@@ -6272,58 +7234,68 @@
         // 4. Habits Checklist
         const habitsContainer = document.getElementById('dashboard-habits-checklist');
         if (habitsContainer) {
-          habitsContainer.innerHTML = appData.habits.slice(0, 4).map(h => {
-            const isDone = h.logs && h.logs[todayStr];
-            return `
-              <div class="schedule-item ${isDone ? 'completed' : ''}">
-                <input type="checkbox" ${isDone ? 'checked' : ''} class="habit-dash-check" data-habit-id="${h.id}" style="cursor: pointer; width: 18px; height: 18px;">
-                <div class="schedule-details">
-                  <div class="schedule-title">${h.name}</div>
-                  <div class="schedule-meta"><span>🔥 Streak: ${h.streak} days</span></div>
+          const habits = (appData.habits || []).slice(0, 4);
+          if (habits.length === 0) {
+            habitsContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 1rem;">No habits tracked yet. Click "+ Add Habit" to start!</div>';
+          } else {
+            habitsContainer.innerHTML = habits.map(h => {
+              const isDone = h.logs && h.logs[todayStr];
+              return `
+                <div class="schedule-item ${isDone ? 'completed' : ''}">
+                  <input type="checkbox" ${isDone ? 'checked' : ''} class="habit-dash-check" data-habit-id="${h.id}" style="cursor: pointer; width: 18px; height: 18px;">
+                  <div class="schedule-details">
+                    <div class="schedule-title">${h.name}</div>
+                    <div class="schedule-meta"><span>🔥 Streak: ${h.streak || 0} days</span></div>
+                  </div>
                 </div>
-              </div>
-            `;
-          }).join('');
+              `;
+            }).join('');
 
-          habitsContainer.querySelectorAll('.habit-dash-check').forEach(chk => {
-            chk.addEventListener('change', (e) => {
-              const hid = e.target.getAttribute('data-habit-id');
-              updateState(d => {
-                const habit = d.habits.find(x => x.id === hid);
-                if (habit) {
-                  habit.logs = habit.logs || {};
-                  habit.logs[todayStr] = e.target.checked;
-                  if (e.target.checked) habit.streak = (habit.streak || 0) + 1;
-                  else habit.streak = Math.max(0, (habit.streak || 1) - 1);
-                }
+            habitsContainer.querySelectorAll('.habit-dash-check').forEach(chk => {
+              chk.addEventListener('change', (e) => {
+                const hid = e.target.getAttribute('data-habit-id');
+                updateState(d => {
+                  const habit = d.habits.find(x => x.id === hid);
+                  if (habit) {
+                    habit.logs = habit.logs || {};
+                    habit.logs[todayStr] = e.target.checked;
+                    if (e.target.checked) habit.streak = (habit.streak || 0) + 1;
+                    else habit.streak = Math.max(0, (habit.streak || 1) - 1);
+                  }
+                });
               });
             });
-          });
+          }
         }
 
-        // 5. Weight Snapshot Chart
+        // 5. Weight Snapshot Chart (Sorted Ascending: Left to Right)
         const weightSvg = document.getElementById('dashboard-weight-svg');
         if (weightSvg) {
-          const weightPoints = appData.weightLogs.map(w => ({
-            label: w.date.substring(5),
-            val: w.weight
-          }));
+          const weightPoints = [...(appData.weightLogs || [])]
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .map(w => ({
+              label: w.date.substring(5),
+              val: w.weight
+            }));
           renderLineChart(weightSvg, weightPoints, {
             id: 'dash-weight',
-            targetVal: appData.profile.goalWeight || 65.0,
+            targetVal: (appData.profile && appData.profile.goalWeight) || 65.0,
             color: 'var(--accent)'
           });
         }
 
-        // 6. Steps Snapshot Chart
+        // 6. Steps Snapshot Chart (Sorted Ascending: Left to Right)
         const stepsSvg = document.getElementById('dashboard-steps-svg');
         if (stepsSvg) {
-          const stepBars = appData.stepsLogs.slice(-7).map(s => ({
-            label: s.date.substring(5),
-            val: s.steps
-          }));
+          const stepBars = [...(appData.stepsLogs || [])]
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .slice(-7)
+            .map(s => ({
+              label: s.date.substring(5),
+              val: s.steps
+            }));
           renderBarChart(stepsSvg, stepBars, {
-            targetVal: appData.settings.dailyTargets.steps || 10000,
+            targetVal: (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.steps) || 10000,
             hitColor: 'var(--accent)',
             missColor: 'var(--accent-2)'
           });
@@ -6346,9 +7318,10 @@
         const list = document.getElementById('planner-items-list');
         if (!list) return;
 
-        let filtered = appData.plannerTasks.filter(t => t.date === plannerSelectedDate);
+        let filtered = (appData.plannerTasks || []).filter(t => t.date === plannerSelectedDate);
         if (catFilter !== 'ALL') filtered = filtered.filter(t => t.category === catFilter);
         if (prioFilter !== 'ALL') filtered = filtered.filter(t => t.priority === prioFilter);
+        filtered.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
 
         if (filtered.length === 0) {
           list.innerHTML = `
@@ -6358,7 +7331,7 @@
               </div>
               <div class="empty-title">No Planner Items for this Day</div>
               <div class="empty-desc">Schedule your workouts, meals, water goals, and wellness rituals.</div>
-              <button class="btn btn-primary btn-sm" data-action="open-modal" data-target="modal-task">+ Add Task</button>
+              <button class="btn btn-primary btn-sm" id="btn-empty-planner-add-task" data-action="open-modal" data-target="modal-task">+ Add Task</button>
             </div>
           `;
           return;
@@ -6533,7 +7506,7 @@
         const sTotal = document.getElementById('workout-stat-total');
         if (sTotal) sTotal.textContent = total;
         const sVol = document.getElementById('workout-stat-volume');
-        if (sVol) sVol.textContent = totalVolume > 0 ? totalVolume.toLocaleString() : '18,450';
+        if (sVol) sVol.textContent = totalVolume.toLocaleString();
         const sDist = document.getElementById('workout-stat-distance');
         if (sDist) sDist.textContent = totalDistance.toFixed(1);
         const sCal = document.getElementById('workout-stat-calories');
@@ -6958,9 +7931,9 @@
       // --- WATER TRACKER RENDERER ---
       function renderWater() {
         const todayStr = new Date().toISOString().split('T')[0];
-        const todayLogs = appData.waterLogs.filter(w => w.date === todayStr);
+        const todayLogs = (appData.waterLogs || []).filter(w => w.date === todayStr).sort((a, b) => (b.time || '').localeCompare(a.time || ''));
         const totalWater = todayLogs.reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
-        const goalWater = appData.settings.dailyTargets.water || 2500;
+        const goalWater = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.water) || 2500;
         const pct = Math.min(100, Math.round((totalWater / goalWater) * 100));
 
         const fluid = document.getElementById('water-page-fluid');
@@ -6972,7 +7945,7 @@
         const goalText = document.getElementById('water-page-goal-text');
         if (goalText) goalText.textContent = `${totalWater.toLocaleString()} ml consumed of ${goalWater.toLocaleString()} ml target (${pct}%)`;
 
-        // 7-day Bar Chart
+        // 7-day Bar Chart (Sorted Ascending: Left to Right)
         const chartSvg = document.getElementById('water-history-svg');
         if (chartSvg) {
           const past7 = [];
@@ -6980,7 +7953,7 @@
             const d = new Date();
             d.setDate(d.getDate() - i);
             const ds = d.toISOString().split('T')[0];
-            const logs = appData.waterLogs.filter(w => w.date === ds);
+            const logs = (appData.waterLogs || []).filter(w => w.date === ds);
             const sum = logs.reduce((acc, l) => acc + (Number(l.amount) || 0), 0);
             past7.push({ label: ds.substring(5), val: sum });
           }
@@ -6991,11 +7964,11 @@
           });
         }
 
-        // Today's Logs Table
+        // Today's Logs Table (Sorted Descending: Top to Bottom)
         const tbody = document.getElementById('water-logs-tbody');
         if (tbody) {
           if (todayLogs.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:1rem;">No water logs recorded yet today.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:1rem;">No water logs recorded yet today. Click quick-add buttons above!</td></tr>`;
           } else {
             tbody.innerHTML = todayLogs.map(l => `
               <tr class="table-clickable-row water-row" data-id="${l.id}">
@@ -7048,29 +8021,32 @@
       // --- STEPS & ACTIVITY RENDERER ---
       function renderSteps() {
         const todayStr = new Date().toISOString().split('T')[0];
-        const log = appData.stepsLogs.find(s => s.date === todayStr) || { steps: 8450, distance: 6.1, activeMinutes: 52, calories: 420 };
-        const goalSteps = appData.settings.dailyTargets.steps || 10000;
-        const pct = Math.min(100, Math.round((log.steps / goalSteps) * 100));
+        const log = (appData.stepsLogs || []).find(s => s.date === todayStr) || { steps: 0, distance: 0, activeMinutes: 0, calories: 0 };
+        const goalSteps = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.steps) || 10000;
+        const pct = Math.min(100, Math.round(((log.steps || 0) / goalSteps) * 100));
 
         const sVal = document.getElementById('steps-page-val');
-        if (sVal) sVal.textContent = log.steps.toLocaleString();
+        if (sVal) sVal.textContent = (log.steps || 0).toLocaleString();
         const sBar = document.getElementById('steps-page-bar');
         if (sBar) sBar.style.width = `${pct}%`;
 
         const dVal = document.getElementById('steps-distance-val');
-        if (dVal) dVal.textContent = log.distance || (log.steps * 0.00075).toFixed(1);
+        if (dVal) dVal.textContent = log.distance !== undefined && log.distance !== null ? log.distance : ((log.steps || 0) * 0.00075).toFixed(1);
         const aVal = document.getElementById('steps-active-val');
-        if (aVal) aVal.textContent = log.activeMinutes || Math.round(log.steps / 160);
+        if (aVal) aVal.textContent = log.activeMinutes !== undefined && log.activeMinutes !== null ? log.activeMinutes : Math.round((log.steps || 0) / 160);
         const bVal = document.getElementById('steps-burn-val');
-        if (bVal) bVal.textContent = log.calories || Math.round(log.steps * 0.045);
+        if (bVal) bVal.textContent = log.calories !== undefined && log.calories !== null ? log.calories : Math.round((log.steps || 0) * 0.045);
 
-        // 14-day Steps Chart
+        // 14-day Steps Chart (Sorted Ascending: Left to Right)
         const chartSvg = document.getElementById('steps-history-svg');
         if (chartSvg) {
-          const bars = appData.stepsLogs.slice(-14).map(s => ({
-            label: s.date.substring(5),
-            val: s.steps
-          }));
+          const bars = [...(appData.stepsLogs || [])]
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .slice(-14)
+            .map(s => ({
+              label: s.date.substring(5),
+              val: s.steps
+            }));
           renderBarChart(chartSvg, bars, {
             targetVal: goalSteps,
             hitColor: 'var(--accent)',
@@ -7078,80 +8054,88 @@
           });
         }
 
-        // Table
+        // Table (Sorted Descending: Top to Bottom)
         const tbody = document.getElementById('steps-history-tbody');
         if (tbody) {
-          tbody.innerHTML = appData.stepsLogs.slice(-10).reverse().map(s => `
-            <tr class="table-clickable-row step-row" data-id="${s.id}">
-              <td style="font-weight: 600;">${s.date}</td>
-              <td><strong>${s.steps.toLocaleString()}</strong></td>
-              <td>${s.distance} km</td>
-              <td>${s.activeMinutes} mins</td>
-              <td>🔥 ${s.calories} kcal</td>
-              <td style="text-align: right;" onclick="event.stopPropagation()">
-                <div class="btn-action-group">
-                  <button class="btn-icon-only btn-view-step" data-id="${s.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
-                  <button class="btn-icon-only btn-edit-step" data-id="${s.id}" title="Edit Step Log" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
-                  <button class="btn-icon-only btn-delete-step" data-id="${s.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
-                </div>
-              </td>
-            </tr>
-          `).join('');
+          const sortedSteps = [...(appData.stepsLogs || [])].sort((a, b) => b.date.localeCompare(a.date));
+          if (sortedSteps.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No activity or steps recorded yet. Click "+ Log Daily Steps" to add one!</td></tr>`;
+          } else {
+            tbody.innerHTML = sortedSteps.map(s => `
+              <tr class="table-clickable-row step-row" data-id="${s.id}">
+                <td style="font-weight: 600;">${s.date}</td>
+                <td><strong>${s.steps.toLocaleString()}</strong></td>
+                <td>${s.distance} km</td>
+                <td>${s.activeMinutes} mins</td>
+                <td>🔥 ${s.calories} kcal</td>
+                <td style="text-align: right;" onclick="event.stopPropagation()">
+                  <div class="btn-action-group">
+                    <button class="btn-icon-only btn-view-step" data-id="${s.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
+                    <button class="btn-icon-only btn-edit-step" data-id="${s.id}" title="Edit Step Log" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
+                    <button class="btn-icon-only btn-delete-step" data-id="${s.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('');
 
-          tbody.querySelectorAll('.step-row').forEach(row => {
-            row.addEventListener('click', () => {
-              const id = row.getAttribute('data-id');
-              showEntryDetails('step', id);
+            tbody.querySelectorAll('.step-row').forEach(row => {
+              row.addEventListener('click', () => {
+                const id = row.getAttribute('data-id');
+                showEntryDetails('step', id);
+              });
             });
-          });
 
-          tbody.querySelectorAll('.btn-view-step').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              showEntryDetails('step', id);
+            tbody.querySelectorAll('.btn-view-step').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                showEntryDetails('step', id);
+              });
             });
-          });
 
-          tbody.querySelectorAll('.btn-edit-step').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              editEntry('step', id);
+            tbody.querySelectorAll('.btn-edit-step').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                editEntry('step', id);
+              });
             });
-          });
 
-          tbody.querySelectorAll('.btn-delete-step').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              deleteEntry('step', id);
+            tbody.querySelectorAll('.btn-delete-step').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                deleteEntry('step', id);
+              });
             });
-          });
+          }
         }
       }
 
       // --- SLEEP TRACKER RENDERER ---
       function renderSleep() {
         const todayStr = new Date().toISOString().split('T')[0];
-        const log = appData.sleepLogs.find(s => s.date === todayStr) || appData.sleepLogs[0] || { bedtime: '22:45', wakeTime: '06:30', durationHours: 7.75, quality: 4.5 };
+        const log = (appData.sleepLogs || []).find(s => s.date === todayStr) || (appData.sleepLogs && appData.sleepLogs[0]);
         
-        const durHours = Math.floor(log.durationHours || 7.75);
-        const durMins = Math.round(((log.durationHours || 7.75) % 1) * 60);
+        const durHours = log ? Math.floor(log.durationHours || 0) : 0;
+        const durMins = log ? Math.round(((log.durationHours || 0) % 1) * 60) : 0;
 
         const durEl = document.getElementById('sleep-page-duration');
-        if (durEl) durEl.textContent = `${durHours}h ${durMins}m`;
+        if (durEl) durEl.textContent = log ? `${durHours}h ${durMins}m` : '0h 0m';
 
         const qEl = document.getElementById('sleep-page-quality');
-        if (qEl) qEl.textContent = `★ ${log.quality || 4.5}`;
+        if (qEl) qEl.textContent = log ? `★ ${log.quality || 0}` : '★ 0';
 
-        // 7-day Sleep Chart
+        // 7-day Sleep Chart (Sorted Ascending: Left to Right)
         const chartSvg = document.getElementById('sleep-history-svg');
         if (chartSvg) {
-          const points = appData.sleepLogs.slice(-7).map(s => ({
-            label: s.date.substring(5),
-            val: s.durationHours || 7.5
-          }));
+          const points = [...(appData.sleepLogs || [])]
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .slice(-7)
+            .map(s => ({
+              label: s.date.substring(5),
+              val: s.durationHours || 0
+            }));
           renderLineChart(chartSvg, points, {
             id: 'sleep-history',
             targetVal: 8.0,
@@ -7159,90 +8143,99 @@
           });
         }
 
-        // Sleep Table
+        // Sleep Table (Sorted Descending: Top to Bottom)
         const tbody = document.getElementById('sleep-history-tbody');
         if (tbody) {
-          tbody.innerHTML = appData.sleepLogs.map(s => `
-            <tr class="table-clickable-row sleep-row" data-id="${s.id}">
-              <td style="font-weight: 600;">${s.date}</td>
-              <td>${s.bedtime}</td>
-              <td>${s.wakeTime}</td>
-              <td><strong>${Math.floor(s.durationHours)}h ${Math.round((s.durationHours % 1)*60)}m</strong></td>
-              <td>★ ${s.quality}</td>
-              <td>${s.interruptions || 0}</td>
-              <td style="font-size: 0.8125rem; color: var(--text-muted);">${s.notes || '—'}</td>
-              <td style="text-align: right;" onclick="event.stopPropagation()">
-                <div class="btn-action-group">
-                  <button class="btn-icon-only btn-view-sleep" data-id="${s.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
-                  <button class="btn-icon-only btn-edit-sleep" data-id="${s.id}" title="Edit Sleep Log" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
-                  <button class="btn-icon-only btn-delete-sleep" data-id="${s.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
-                </div>
-              </td>
-            </tr>
-          `).join('');
+          const sortedSleep = [...(appData.sleepLogs || [])].sort((a, b) => b.date.localeCompare(a.date));
+          if (sortedSleep.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No sleep records logged yet. Click "+ Log Sleep" to add one!</td></tr>`;
+          } else {
+            tbody.innerHTML = sortedSleep.map(s => `
+              <tr class="table-clickable-row sleep-row" data-id="${s.id}">
+                <td style="font-weight: 600;">${s.date}</td>
+                <td>${s.bedtime}</td>
+                <td>${s.wakeTime}</td>
+                <td><strong>${Math.floor(s.durationHours)}h ${Math.round((s.durationHours % 1)*60)}m</strong></td>
+                <td>★ ${s.quality}</td>
+                <td>${s.interruptions || 0}</td>
+                <td style="font-size: 0.8125rem; color: var(--text-muted);">${s.notes || '—'}</td>
+                <td style="text-align: right;" onclick="event.stopPropagation()">
+                  <div class="btn-action-group">
+                    <button class="btn-icon-only btn-view-sleep" data-id="${s.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
+                    <button class="btn-icon-only btn-edit-sleep" data-id="${s.id}" title="Edit Sleep Log" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
+                    <button class="btn-icon-only btn-delete-sleep" data-id="${s.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('');
 
-          tbody.querySelectorAll('.step-row, .sleep-row').forEach(row => {
-            row.addEventListener('click', () => {
-              const id = row.getAttribute('data-id');
-              showEntryDetails('sleep', id);
+            tbody.querySelectorAll('.sleep-row').forEach(row => {
+              row.addEventListener('click', () => {
+                const id = row.getAttribute('data-id');
+                showEntryDetails('sleep', id);
+              });
             });
-          });
 
-          tbody.querySelectorAll('.btn-view-sleep').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              showEntryDetails('sleep', id);
+            tbody.querySelectorAll('.btn-view-sleep').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                showEntryDetails('sleep', id);
+              });
             });
-          });
 
-          tbody.querySelectorAll('.btn-edit-sleep').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              editEntry('sleep', id);
+            tbody.querySelectorAll('.btn-edit-sleep').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                editEntry('sleep', id);
+              });
             });
-          });
 
-          tbody.querySelectorAll('.btn-delete-sleep').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              deleteEntry('sleep', id);
+            tbody.querySelectorAll('.btn-delete-sleep').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                deleteEntry('sleep', id);
+              });
             });
-          });
+          }
         }
       }
 
       // --- WEIGHT & BODY TRACKER RENDERER ---
       function renderWeight() {
-        const curr = appData.profile.currentWeight || 69.2;
-        const start = appData.profile.startWeight || 74.5;
-        const goal = appData.profile.goalWeight || 65.0;
-        const unit = appData.profile.units === 'imperial' ? 'lb' : 'kg';
-        const bmi = appData.profile.bmi || 23.4;
-        const pct = appData.profile.weightProgressPct || 56;
+        const profile = appData.profile || {};
+        const curr = profile.currentWeight || (appData.weightLogs && appData.weightLogs.length ? appData.weightLogs[appData.weightLogs.length - 1].weight : 0);
+        const start = profile.startWeight || 0;
+        const goal = profile.goalWeight || 0;
+        const unit = (profile.units === 'imperial') ? 'lb' : 'kg';
+        const heightM = ((profile.height) || 172) / 100;
+        const bmi = (curr > 0 && heightM > 0) ? (curr / (heightM * heightM)).toFixed(1) : '—';
+        const pct = (start > goal && start > curr) ? Math.min(100, Math.round(((start - curr) / (start - goal)) * 100)) : 0;
 
         const currEl = document.getElementById('weight-page-current');
-        if (currEl) currEl.textContent = curr;
+        if (currEl) currEl.textContent = curr || '—';
         const goalEl = document.getElementById('weight-page-goal');
-        if (goalEl) goalEl.textContent = goal;
+        if (goalEl) goalEl.textContent = goal || '—';
         const bmiEl = document.getElementById('weight-page-bmi');
         if (bmiEl) bmiEl.textContent = bmi;
         const barEl = document.getElementById('weight-page-bar');
         if (barEl) barEl.style.width = `${pct}%`;
         const remEl = document.getElementById('weight-page-remaining');
-        if (remEl) remEl.textContent = `${(curr - goal).toFixed(1)} ${unit} to goal`;
+        if (remEl) remEl.textContent = (curr > 0 && goal > 0) ? `${(curr - goal).toFixed(1)} ${unit} to goal` : 'Goal pending';
         const changeEl = document.getElementById('weight-page-change');
-        if (changeEl) changeEl.textContent = `↓ ${(start - curr).toFixed(1)} ${unit} since start (${start} ${unit})`;
+        if (changeEl) changeEl.textContent = (start > 0 && curr > 0) ? `${start >= curr ? '↓' : '↑'} ${Math.abs(start - curr).toFixed(1)} ${unit} since start (${start} ${unit})` : 'Start weight pending';
 
-        // Weight Line Chart
+        // Weight Line Chart (Sorted Ascending: Left to Right)
         const chartSvg = document.getElementById('weight-full-svg');
         if (chartSvg) {
-          const points = appData.weightLogs.map(w => ({
-            label: w.date.substring(5),
-            val: w.weight
-          }));
+          const points = [...(appData.weightLogs || [])]
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .map(w => ({
+              label: w.date.substring(5),
+              val: w.weight
+            }));
           renderLineChart(chartSvg, points, {
             id: 'weight-full',
             targetVal: goal,
@@ -7250,87 +8243,136 @@
           });
         }
 
-        // Body Circumference Table
+        // Unified Body Circumference & Weigh-in Table (Sorted Descending: Top to Bottom)
         const tbody = document.getElementById('measurements-tbody');
         if (tbody) {
-          tbody.innerHTML = appData.bodyMeasurements.map(m => `
-            <tr class="table-clickable-row meas-row" data-id="${m.id}">
-              <td style="font-weight: 600;">${m.date}</td>
-              <td><strong>${m.weight} ${unit}</strong></td>
-              <td>${m.waist || '—'}</td>
-              <td>${m.chest || '—'}</td>
-              <td>${m.hips || '—'}</td>
-              <td>${m.arms || '—'}</td>
-              <td>${m.thighs || '—'}</td>
-              <td>${m.neck || '—'}</td>
-              <td style="text-align: right;" onclick="event.stopPropagation()">
-                <div class="btn-action-group">
-                  <button class="btn-icon-only btn-view-meas" data-id="${m.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
-                  <button class="btn-icon-only btn-edit-meas" data-id="${m.id}" title="Edit Weigh-in & Measurements" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
-                  <button class="btn-icon-only btn-delete-meas" data-id="${m.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
-                </div>
-              </td>
-            </tr>
-          `).join('');
-
-          tbody.querySelectorAll('.meas-row').forEach(row => {
-            row.addEventListener('click', () => {
-              const id = row.getAttribute('data-id');
-              showEntryDetails('measurement', id);
+          const mapByDate = new Map();
+          (appData.weightLogs || []).forEach(w => {
+            mapByDate.set(w.date, {
+              id: w.id,
+              date: w.date,
+              weight: w.weight,
+              notes: w.notes || '',
+              waist: null, chest: null, hips: null, arms: null, thighs: null, neck: null
             });
           });
-
-          tbody.querySelectorAll('.btn-view-meas').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              showEntryDetails('measurement', id);
-            });
+          (appData.bodyMeasurements || []).forEach(m => {
+            if (mapByDate.has(m.date)) {
+              const item = mapByDate.get(m.date);
+              if (m.weight) item.weight = m.weight;
+              if (m.waist) item.waist = m.waist;
+              if (m.chest) item.chest = m.chest;
+              if (m.hips) item.hips = m.hips;
+              if (m.arms) item.arms = m.arms;
+              if (m.thighs) item.thighs = m.thighs;
+              if (m.neck) item.neck = m.neck;
+            } else {
+              mapByDate.set(m.date, {
+                id: m.id,
+                date: m.date,
+                weight: m.weight,
+                notes: '',
+                waist: m.waist, chest: m.chest, hips: m.hips, arms: m.arms, thighs: m.thighs, neck: m.neck
+              });
+            }
           });
 
-          tbody.querySelectorAll('.btn-edit-meas').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              editEntry('weight', id);
-            });
-          });
+          const allEntries = [...mapByDate.values()].sort((a, b) => b.date.localeCompare(a.date));
+          const heightM = ((appData.profile && appData.profile.height) || 172) / 100;
 
-          tbody.querySelectorAll('.btn-delete-meas').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const id = btn.getAttribute('data-id');
-              deleteEntry('weight', id);
+          if (allEntries.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 2rem; color: var(--text-muted);">No weigh-in or body measurement entries found. Click "+ Log Weigh-in" above to add your first record!</td></tr>`;
+          } else {
+            tbody.innerHTML = allEntries.map(m => {
+              const diffVal = m.weight ? (m.weight - start).toFixed(1) : null;
+              const diffHtml = diffVal !== null ? `<span class="kpi-badge ${Number(diffVal) <= 0 ? 'positive' : 'neutral'}">${Number(diffVal) > 0 ? '+' : ''}${diffVal} ${unit}</span>` : '—';
+              const bmiVal = (m.weight && heightM > 0) ? (m.weight / (heightM * heightM)).toFixed(1) : '—';
+              return `
+                <tr class="table-clickable-row meas-row" data-id="${m.id}">
+                  <td style="font-weight: 600;">${m.date}</td>
+                  <td><strong>${m.weight ? `${m.weight} ${unit}` : '—'}</strong></td>
+                  <td>${diffHtml}</td>
+                  <td><span style="font-weight: 600; color: var(--text);">${bmiVal}</span></td>
+                  <td>${m.waist ? `${m.waist} cm` : '—'}</td>
+                  <td>${m.chest ? `${m.chest} cm` : '—'}</td>
+                  <td>${m.hips ? `${m.hips} cm` : '—'}</td>
+                  <td>${m.arms ? `${m.arms} cm` : '—'}</td>
+                  <td>${m.thighs ? `${m.thighs} cm` : '—'}</td>
+                  <td>${m.neck ? `${m.neck} cm` : '—'}</td>
+                  <td style="text-align: right;" onclick="event.stopPropagation()">
+                    <div class="btn-action-group">
+                      <button class="btn-icon-only btn-view-meas" data-id="${m.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
+                      <button class="btn-icon-only btn-edit-meas" data-id="${m.id}" title="Edit Weigh-in & Measurements" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
+                      <button class="btn-icon-only btn-delete-meas" data-id="${m.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+
+            tbody.querySelectorAll('.meas-row').forEach(row => {
+              row.addEventListener('click', () => {
+                const id = row.getAttribute('data-id');
+                showEntryDetails('measurement', id);
+              });
             });
-          });
+
+            tbody.querySelectorAll('.btn-view-meas').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                showEntryDetails('measurement', id);
+              });
+            });
+
+            tbody.querySelectorAll('.btn-edit-meas').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                editEntry('weight', id);
+              });
+            });
+
+            tbody.querySelectorAll('.btn-delete-meas').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                deleteEntry('weight', id);
+              });
+            });
+          }
         }
       }
 
       // --- WELLNESS CHECK-IN RENDERER ---
       function renderWellness() {
         const todayStr = new Date().toISOString().split('T')[0];
-        const log = appData.wellnessLogs.find(w => w.date === todayStr) || appData.wellnessLogs[0] || { overallScore: 88, energy: 4, stress: 2, motivation: 5 };
+        const log = (appData.wellnessLogs || []).find(w => w.date === todayStr) || (appData.wellnessLogs && appData.wellnessLogs[0]);
+        const score = log ? (log.overallScore || 0) : 0;
 
         const scoreEl = document.getElementById('wellness-score-number');
-        if (scoreEl) scoreEl.textContent = log.overallScore || 88;
+        if (scoreEl) scoreEl.textContent = score;
 
         const gaugeSvg = document.getElementById('wellness-gauge-svg');
-        if (gaugeSvg) renderGauge(gaugeSvg, log.overallScore || 88, 100);
+        if (gaugeSvg) renderGauge(gaugeSvg, score, 100);
 
         const eVal = document.getElementById('wellness-energy-val');
-        if (eVal) eVal.textContent = `${log.energy || 4} / 5`;
+        if (eVal) eVal.textContent = log ? `${log.energy || 0} / 5` : '0 / 5';
         const sVal = document.getElementById('wellness-stress-val');
-        if (sVal) sVal.textContent = log.stress <= 2 ? `Low (${log.stress}/5)` : log.stress <= 3 ? `Moderate (${log.stress}/5)` : `Elevated (${log.stress}/5)`;
+        if (sVal) sVal.textContent = log ? (log.stress <= 2 ? `Low (${log.stress}/5)` : log.stress <= 3 ? `Moderate (${log.stress}/5)` : `Elevated (${log.stress}/5)`) : 'None (0/5)';
         const mVal = document.getElementById('wellness-motivation-val');
-        if (mVal) mVal.textContent = `${log.motivation || 5} / 5`;
+        if (mVal) mVal.textContent = log ? `${log.motivation || 0} / 5` : '0 / 5';
 
-        // 30-day Wellness Chart
+        // 30-day Wellness Chart (Sorted Ascending: Left to Right)
         const chartSvg = document.getElementById('wellness-trend-svg');
         if (chartSvg) {
-          const points = appData.wellnessLogs.slice(-10).map(w => ({
-            label: w.date.substring(5),
-            val: w.overallScore
-          }));
+          const points = [...(appData.wellnessLogs || [])]
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .slice(-10)
+            .map(w => ({
+              label: w.date.substring(5),
+              val: w.overallScore || 0
+            }));
           renderLineChart(chartSvg, points, {
             id: 'wellness-trend',
             targetVal: 85,
@@ -7339,12 +8381,18 @@
         }
 
         const vBtn = document.getElementById('btn-view-wellness-today');
-        if (vBtn && log) {
-          vBtn.onclick = () => showEntryDetails('wellness', log.id);
+        if (vBtn) {
+          vBtn.onclick = () => {
+            if (log) showEntryDetails('wellness', log.id);
+            else showToast('No wellness entry logged today yet.');
+          };
         }
         const eBtn = document.getElementById('btn-edit-wellness-today');
-        if (eBtn && log) {
-          eBtn.onclick = () => editEntry('wellness', log.id);
+        if (eBtn) {
+          eBtn.onclick = () => {
+            if (log) editEntry('wellness', log.id);
+            else openModal('modal-wellness');
+          };
         }
       }
 
@@ -7356,7 +8404,7 @@
         const grid = document.getElementById('journal-grid');
         if (!grid) return;
 
-        let list = appData.moodJournal;
+        let list = [...(appData.moodJournal || [])].sort((a, b) => b.date.localeCompare(a.date));
         if (mood !== 'ALL') list = list.filter(j => j.emoji === mood);
         if (search) list = list.filter(j => j.title.toLowerCase().includes(search) || j.text.toLowerCase().includes(search) || (j.tags && j.tags.toLowerCase().includes(search)));
 
@@ -7617,63 +8665,290 @@
       }
 
       // --- ANALYTICS RENDERER ---
+      let analyticsSelectedRange = '7d';
+
       function renderAnalytics() {
-        // Chart 1: Weight
+        const now = new Date();
+        const days = analyticsSelectedRange === '7d' ? 7 :
+                     analyticsSelectedRange === '30d' ? 30 :
+                     analyticsSelectedRange === '90d' ? 90 :
+                     analyticsSelectedRange === '1y' ? 365 : Infinity;
+
+        function isInRange(dateStr) {
+          if (!dateStr) return false;
+          if (days === Infinity) return true;
+          const target = new Date(dateStr + 'T00:00:00');
+          const diffDays = (now - target) / (1000 * 60 * 60 * 24);
+          return diffDays >= -0.5 && diffDays <= days;
+        }
+
+        // Chart 1: Weight Progression (Sorted Ascending: Left to Right)
         const wSvg = document.getElementById('analytics-weight-svg');
         if (wSvg) {
-          const pts = appData.weightLogs.map(w => ({ label: w.date.substring(5), val: w.weight }));
-          renderLineChart(wSvg, pts, { id: 'an-weight', targetVal: appData.profile.goalWeight || 65.0, color: 'var(--accent)' });
+          const rawPts = (appData.weightLogs || []).filter(w => isInRange(w.date));
+          const sortedPts = [...rawPts].sort((a, b) => a.date.localeCompare(b.date));
+          const pts = sortedPts.map(w => ({
+            label: w.date.substring(5),
+            val: w.weight
+          }));
+          renderLineChart(wSvg, pts, {
+            id: 'an-weight',
+            targetVal: appData.profile.goalWeight || 65.0,
+            color: 'var(--accent)'
+          });
         }
 
-        // Chart 2: Calories
+        // Chart 2: Daily Caloric Intake vs Target (Sorted Ascending: Left to Right)
         const cSvg = document.getElementById('analytics-calories-svg');
         if (cSvg) {
-          const bars = [
-            { label: 'Mon', val: 1950 },
-            { label: 'Tue', val: 2100 },
-            { label: 'Wed', val: 2050 },
-            { label: 'Thu', val: 1880 },
-            { label: 'Fri', val: 2150 },
-            { label: 'Sat', val: 2200 },
-            { label: 'Sun', val: 1420 }
-          ];
-          renderBarChart(cSvg, bars, { targetVal: 2100, hitColor: '#10b981', missColor: '#2563eb' });
+          const calByDate = new Map();
+          (appData.meals || []).filter(m => isInRange(m.date)).forEach(m => {
+            calByDate.set(m.date, (calByDate.get(m.date) || 0) + (Number(m.calories) || 0));
+          });
+
+          let bars = [];
+          if (analyticsSelectedRange === '7d') {
+            for (let i = 6; i >= 0; i--) {
+              const d = new Date();
+              d.setDate(d.getDate() - i);
+              const ds = d.toISOString().split('T')[0];
+              const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+              const dayName = daysOfWeek[d.getDay()];
+              bars.push({
+                label: `${dayName} ${ds.substring(5)}`,
+                val: calByDate.get(ds) || 0
+              });
+            }
+          } else {
+            const sortedDates = [...calByDate.keys()].sort((a, b) => a.localeCompare(b));
+            bars = sortedDates.slice(-14).map(dt => ({
+              label: dt.substring(5),
+              val: calByDate.get(dt)
+            }));
+          }
+
+          const targetCal = appData.settings.dailyTargets.calories || 2100;
+          renderBarChart(cSvg, bars, {
+            targetVal: targetCal,
+            hitColor: '#10b981',
+            missColor: '#2563eb'
+          });
         }
 
-        // Chart 3: Macros Donut
+        // Chart 3: Macronutrient Proportion (P / C / F Donut & Interactive Metrics)
         const mSvg = document.getElementById('analytics-macros-svg');
+        const mLegend = document.getElementById('analytics-macros-legend');
+        const mBadge = document.getElementById('analytics-macro-ratio-badge');
+        const mCenterVal = document.getElementById('analytics-macro-center-val');
+        const mCenterLbl = document.getElementById('analytics-macro-center-lbl');
+
         if (mSvg) {
-          renderDonutChart(mSvg, [
-            { label: 'Protein', val: 95 * 4, color: '#2563eb' },
-            { label: 'Carbs', val: 145 * 4, color: '#10b981' },
-            { label: 'Fat', val: 42 * 9, color: '#f59e0b' }
-          ]);
+          const mealsInRange = (appData.meals || []).filter(m => isInRange(m.date));
+          let totalP = 0, totalC = 0, totalF = 0;
+          mealsInRange.forEach(m => {
+            totalP += Number(m.protein) || 0;
+            totalC += Number(m.carbs) || 0;
+            totalF += Number(m.fat) || 0;
+          });
+
+          const pCal = totalP * 4;
+          const cCal = totalC * 4;
+          const fCal = totalF * 9;
+          const totalCal = pCal + cCal + fCal;
+
+          if (totalCal === 0) {
+            if (mBadge) mBadge.textContent = 'No Meal Data';
+            if (mCenterVal) mCenterVal.textContent = '0';
+            if (mCenterLbl) mCenterLbl.textContent = 'Total kcal';
+            mSvg.setAttribute('viewBox', '0 0 220 220');
+            mSvg.innerHTML = `
+              <circle cx="110" cy="110" r="80" fill="transparent" stroke="var(--border)" stroke-width="22" stroke-dasharray="8 6" opacity="0.6"/>
+            `;
+            if (mLegend) {
+              mLegend.innerHTML = `
+                <div style="text-align: center; padding: 1.5rem 1rem; color: var(--text-muted); font-size: 0.8125rem;">
+                  <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);">No Meal Logs in Selected Period</div>
+                  <div>Log meals in Nutrition Tracker to view your macronutrient proportions.</div>
+                </div>
+              `;
+            }
+          } else {
+            const pPct = Math.round((pCal / totalCal) * 100);
+            const cPct = Math.round((cCal / totalCal) * 100);
+            const fPct = Math.max(0, 100 - pPct - cPct);
+
+            if (mBadge) mBadge.textContent = `${pPct}% P • ${cPct}% C • ${fPct}% F`;
+            if (mCenterVal) mCenterVal.textContent = Math.round(totalCal).toLocaleString();
+            if (mCenterLbl) mCenterLbl.textContent = 'Total kcal';
+
+            const macros = [
+              { key: 'protein', name: 'Protein', grams: Math.round(totalP), cal: Math.round(pCal), pct: pPct, color: '#3b82f6', targetPct: 30, calPerG: 4 },
+              { key: 'carbs', name: 'Carbs', grams: Math.round(totalC), cal: Math.round(cCal), pct: cPct, color: '#10b981', targetPct: 45, calPerG: 4 },
+              { key: 'fat', name: 'Fat', grams: Math.round(totalF), cal: Math.round(fCal), pct: fPct, color: '#f59e0b', targetPct: 25, calPerG: 9 }
+            ];
+
+            const C = 2 * Math.PI * 80; // ~502.65
+            let cumulative = 0;
+            let slicesHtml = '';
+
+            macros.forEach(m => {
+              const dashLength = (m.pct / 100) * C;
+              const gapLength = C - dashLength;
+              const dashOffset = -cumulative;
+              cumulative += dashLength;
+
+              slicesHtml += `
+                <circle cx="110" cy="110" r="80" fill="transparent"
+                        stroke="${m.color}" stroke-width="22"
+                        stroke-dasharray="${dashLength.toFixed(2)} ${gapLength.toFixed(2)}"
+                        stroke-dashoffset="${dashOffset.toFixed(2)}"
+                        class="macro-donut-slice" data-macro="${m.key}"
+                        style="transition: stroke-width 0.2s ease, filter 0.2s ease; cursor: pointer;">
+                  <title>${m.name}: ${m.grams}g (${m.cal.toLocaleString()} kcal) • ${m.pct}% of energy</title>
+                </circle>
+              `;
+            });
+
+            mSvg.setAttribute('viewBox', '0 0 220 220');
+            mSvg.innerHTML = `
+              <circle cx="110" cy="110" r="80" fill="transparent" stroke="var(--surface-subtle)" stroke-width="22"/>
+              ${slicesHtml}
+            `;
+
+            // Render interactive legend items
+            if (mLegend) {
+              mLegend.innerHTML = macros.map(m => `
+                <div class="macro-legend-item" data-macro="${m.key}">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="width: 10px; height: 10px; border-radius: 50%; background: ${m.color}; display: inline-block;"></span>
+                      <span style="font-weight: 700; font-size: 0.8125rem;">${m.name}</span>
+                    </div>
+                    <span style="font-size: 0.8125rem; font-weight: 700; color: ${m.color};">${m.grams}g (${m.pct}%)</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 4px;">
+                    <span>${m.cal.toLocaleString()} kcal • ${m.calPerG} kcal/g</span>
+                    <span>Target: ~${m.targetPct}%</span>
+                  </div>
+                  <div style="height: 5px; background: rgba(0,0,0,0.06); border-radius: 3px; overflow: hidden;">
+                    <div style="width: ${Math.min(100, m.pct)}%; height: 100%; background: ${m.color}; border-radius: 3px;"></div>
+                  </div>
+                </div>
+              `).join('');
+            }
+
+            // Wire up bidirectional interactive hover highlighting
+            const slices = mSvg.querySelectorAll('.macro-donut-slice');
+            const legendItems = mLegend ? mLegend.querySelectorAll('.macro-legend-item') : [];
+
+            const highlight = (macroKey) => {
+              const item = macros.find(m => m.key === macroKey);
+              if (!item) return;
+              if (mCenterVal) mCenterVal.textContent = `${item.grams}g`;
+              if (mCenterLbl) mCenterLbl.textContent = `${item.name} (${item.pct}%)`;
+
+              slices.forEach(s => {
+                if (s.getAttribute('data-macro') === macroKey) {
+                  s.classList.add('active');
+                } else {
+                  s.classList.remove('active');
+                }
+              });
+
+              legendItems.forEach(l => {
+                if (l.getAttribute('data-macro') === macroKey) {
+                  l.classList.add('active');
+                } else {
+                  l.classList.remove('active');
+                }
+              });
+            };
+
+            const reset = () => {
+              if (mCenterVal) mCenterVal.textContent = Math.round(totalCal).toLocaleString();
+              if (mCenterLbl) mCenterLbl.textContent = 'Total kcal';
+              slices.forEach(s => s.classList.remove('active'));
+              legendItems.forEach(l => l.classList.remove('active'));
+            };
+
+            slices.forEach(s => {
+              const key = s.getAttribute('data-macro');
+              s.addEventListener('mouseenter', () => highlight(key));
+              s.addEventListener('mouseleave', reset);
+            });
+
+            legendItems.forEach(l => {
+              const key = l.getAttribute('data-macro');
+              l.addEventListener('mouseenter', () => highlight(key));
+              l.addEventListener('mouseleave', reset);
+            });
+          }
         }
 
-        // Chart 4: Steps
+        // Chart 4: Daily Steps & Activity (Sorted Ascending: Left to Right)
         const sSvg = document.getElementById('analytics-steps-svg');
         if (sSvg) {
-          const bars = appData.stepsLogs.slice(-7).map(s => ({ label: s.date.substring(5), val: s.steps }));
-          renderBarChart(sSvg, bars, { targetVal: 10000 });
+          const rawSteps = (appData.stepsLogs || []).filter(s => isInRange(s.date));
+          const sortedSteps = [...rawSteps].sort((a, b) => a.date.localeCompare(b.date));
+          const count = analyticsSelectedRange === '7d' ? 7 : 14;
+          const bars = sortedSteps.slice(-count).map(s => ({
+            label: s.date.substring(5),
+            val: s.steps
+          }));
+          renderBarChart(sSvg, bars, {
+            targetVal: appData.settings.dailyTargets.steps || 10000,
+            hitColor: 'var(--accent)',
+            missColor: 'var(--accent-2)'
+          });
         }
 
-        // Chart 5: Sleep
+        // Chart 5: Sleep Duration & Quality (Sorted Ascending: Left to Right)
         const slSvg = document.getElementById('analytics-sleep-svg');
         if (slSvg) {
-          const pts = appData.sleepLogs.slice(-7).map(s => ({ label: s.date.substring(5), val: s.durationHours }));
-          renderLineChart(slSvg, pts, { id: 'an-sleep', targetVal: 8.0, color: '#7c3aed' });
+          const rawSleep = (appData.sleepLogs || []).filter(s => isInRange(s.date));
+          const sortedSleep = [...rawSleep].sort((a, b) => a.date.localeCompare(b.date));
+          const count = analyticsSelectedRange === '7d' ? 7 : 14;
+          const pts = sortedSleep.slice(-count).map(s => ({
+            label: s.date.substring(5),
+            val: s.durationHours
+          }));
+          renderLineChart(slSvg, pts, {
+            id: 'an-sleep',
+            targetVal: appData.settings.dailyTargets.sleep || 8.0,
+            color: '#7c3aed'
+          });
         }
 
-        // Chart 6: Workouts
+        // Chart 6: Workout Volume & Weekly Consistency (Sorted Ascending: Left to Right)
         const woSvg = document.getElementById('analytics-workout-svg');
         if (woSvg) {
-          const bars = [
-            { label: 'Wk 1', val: 4 },
-            { label: 'Wk 2', val: 5 },
-            { label: 'Wk 3', val: 5 },
-            { label: 'Wk 4', val: 4 }
+          const nowMs = Date.now();
+          const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
+          const weeks = [
+            { label: '3 Wks Ago', count: 0 },
+            { label: '2 Wks Ago', count: 0 },
+            { label: 'Last Wk', count: 0 },
+            { label: 'This Wk', count: 0 }
           ];
-          renderBarChart(woSvg, bars, { targetVal: 5 });
+
+          (appData.workouts || []).forEach(w => {
+            const wMs = new Date(w.date + 'T00:00:00').getTime();
+            const diffWeeks = Math.floor((nowMs - wMs) / oneWeekMs);
+            if (diffWeeks === 0) weeks[3].count++;
+            else if (diffWeeks === 1) weeks[2].count++;
+            else if (diffWeeks === 2) weeks[1].count++;
+            else if (diffWeeks === 3) weeks[0].count++;
+          });
+
+          const bars = weeks.map(w => ({
+            label: w.label,
+            val: w.count
+          }));
+          renderBarChart(woSvg, bars, {
+            targetVal: appData.settings.dailyTargets.weeklyWorkouts || 5,
+            hitColor: '#10b981',
+            missColor: '#2563eb'
+          });
         }
       }
 
@@ -7776,32 +9051,253 @@
         });
       }
 
-      // --- REPORTS RENDERER ---
+      // --- REPORTS RENDERER (A4 INFOGRAPHIC MULTI-PAGE) ---
       function renderReports() {
-        const nameEl = document.getElementById('report-profile-name');
-        if (nameEl) nameEl.textContent = appData.profile.name || 'Alex Morgan';
+        const profile = appData.profile || {};
+        const currW = profile.currentWeight || 70.0;
+        const startW = profile.startWeight || 70.0;
+        const unit = profile.units === 'imperial' ? 'lb' : 'kg';
+        const heightM = (profile.height || 172) / 100;
 
+        // Page 1 Header Metadata
+        const nameEl = document.getElementById('report-profile-name');
+        if (nameEl) nameEl.textContent = profile.name || 'Member';
+        const page2Name = document.getElementById('report-page2-name');
+        if (page2Name) page2Name.textContent = profile.name || 'Member';
+        const ageEl = document.getElementById('report-profile-age');
+        if (ageEl) ageEl.textContent = profile.age || 29;
+        const heightEl = document.getElementById('report-profile-height');
+        if (heightEl) heightEl.textContent = `${profile.height || 172} cm`;
         const genDate = document.getElementById('report-generated-date');
         if (genDate) genDate.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
+        // 4 KPI Highlights
         const rW = document.getElementById('report-weight-val');
-        if (rW) rW.textContent = `${appData.profile.currentWeight || 69.2} kg`;
+        if (rW) rW.textContent = `${currW} ${unit}`;
+        const rWDelta = document.getElementById('report-weight-delta');
+        if (rWDelta) {
+          const diff = (startW - currW).toFixed(1);
+          rWDelta.textContent = `${diff >= 0 ? '↓' : '↑'} ${Math.abs(diff)} ${unit} from start (${startW} ${unit})`;
+        }
 
         const rWo = document.getElementById('report-workouts-val');
         if (rWo) rWo.textContent = `${appData.workouts.length} Sessions`;
+        const rWoSub = document.getElementById('report-workouts-sub');
+        if (rWoSub) {
+          const totalVol = appData.workouts.reduce((sum, w) => sum + ((w.sets||0)*(w.reps||0)*(w.weight||0)), 0);
+          rWoSub.textContent = totalVol > 0 ? `${totalVol.toLocaleString()} kg total volume` : `${appData.workouts.length} logged`;
+        }
 
-        const tbody = document.getElementById('report-workout-tbody');
-        if (tbody) {
-          tbody.innerHTML = appData.workouts.slice(0, 5).map(w => `
-            <tr>
-              <td>${w.date}</td>
-              <td><strong>${w.name}</strong></td>
-              <td>${w.category}</td>
-              <td>${w.duration} mins</td>
-              <td>${w.weight > 0 ? `${w.sets}x${w.reps} @ ${w.weight}kg` : w.distance > 0 ? `${w.distance} km` : 'Bodyweight'}</td>
-              <td>${w.calories} kcal</td>
-            </tr>
-          `).join('');
+        const rSleep = document.getElementById('report-sleep-val');
+        const rSleepSub = document.getElementById('report-sleep-sub');
+        const sleepLogs = appData.sleepLogs || [];
+        if (sleepLogs.length > 0) {
+          const avgDur = sleepLogs.reduce((acc, s) => acc + (s.durationHours || 0), 0) / sleepLogs.length;
+          const avgQ = sleepLogs.reduce((acc, s) => acc + (s.quality || 0), 0) / sleepLogs.length;
+          if (rSleep) rSleep.textContent = `${Math.floor(avgDur)}h ${Math.round((avgDur % 1) * 60)}m`;
+          if (rSleepSub) rSleepSub.textContent = `★ ${avgQ.toFixed(1)}/5 Quality Avg`;
+        } else {
+          if (rSleep) rSleep.textContent = '—';
+          if (rSleepSub) rSleepSub.textContent = 'No logs recorded';
+        }
+
+        const rVit = document.getElementById('report-vitality-val');
+        const rVitSub = document.getElementById('report-vitality-sub');
+        const wellnessLogs = appData.wellnessLogs || [];
+        if (wellnessLogs.length > 0) {
+          const avgScore = Math.round(wellnessLogs.reduce((acc, w) => acc + (w.overallScore || 80), 0) / wellnessLogs.length);
+          if (rVit) rVit.textContent = `${avgScore} / 100`;
+          if (rVitSub) rVitSub.textContent = avgScore >= 80 ? 'Optimal Vitality' : 'Fair Recovery';
+        } else {
+          if (rVit) rVit.textContent = '—';
+          if (rVitSub) rVitSub.textContent = 'No check-ins recorded';
+        }
+
+        // Dynamic Narrative Summary
+        const narrativeEl = document.getElementById('report-narrative-text');
+        if (narrativeEl) {
+          const totalLost = (startW - currW).toFixed(1);
+          const weightStatus = totalLost > 0 ? `achieved a net reduction of ${totalLost} ${unit}` : `maintained steady body mass near baseline`;
+          narrativeEl.textContent = `
+            ${profile.name || 'The member'} has recorded ${appData.workouts.length} total workout sessions to date, with an active routine emphasizing physical consistency. Weigh-in monitoring reflects that the member has ${weightStatus}. Nutritional compliance across tracked meals exhibits consistent dietary adherence, supporting metabolic efficiency and steady recovery.
+          `.trim();
+        }
+
+        // Infographic Visual SVG Charts:
+        // Chart 1: Weight Chart (Ascending: Left to Right)
+        const wSvg = document.getElementById('report-weight-svg');
+        if (wSvg) {
+          const sortedWeights = [...(appData.weightLogs || [])].sort((a, b) => a.date.localeCompare(b.date));
+          const pts = sortedWeights.map(w => ({
+            label: w.date.substring(5),
+            val: w.weight
+          }));
+          renderLineChart(wSvg, pts, {
+            id: 'rep-weight',
+            targetVal: profile.goalWeight || 65.0,
+            color: '#2563eb'
+          });
+        }
+
+        // Chart 2: Macronutrient & Caloric Intake (High-Resolution Vector Infographic)
+        const mSvg = document.getElementById('report-macros-svg');
+        if (mSvg) {
+          let totalP = 0, totalC = 0, totalF = 0;
+          (appData.meals || []).forEach(m => {
+            totalP += Number(m.protein) || 0;
+            totalC += Number(m.carbs) || 0;
+            totalF += Number(m.fat) || 0;
+          });
+          const pCal = totalP * 4;
+          const cCal = totalC * 4;
+          const fCal = totalF * 9;
+          const totalCal = pCal + cCal + fCal;
+
+          mSvg.setAttribute('viewBox', '0 0 320 160');
+          mSvg.style.width = '100%';
+          mSvg.style.height = '100%';
+
+          if (totalCal === 0) {
+            mSvg.innerHTML = `
+              <circle cx="80" cy="80" r="50" fill="transparent" stroke="#e2e8f0" stroke-width="16" stroke-dasharray="6 4"/>
+              <text x="80" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#94a3b8">0</text>
+              <text x="80" y="93" text-anchor="middle" font-size="8.5" font-weight="700" fill="#94a3b8">KCAL</text>
+              <text x="220" y="85" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">No meal logs recorded</text>
+            `;
+          } else {
+            const pPct = Math.round((pCal / totalCal) * 100);
+            const cPct = Math.round((cCal / totalCal) * 100);
+            const fPct = Math.max(0, 100 - pPct - cPct);
+
+            const C = 2 * Math.PI * 50; // ~314.16
+            const pDash = (pPct / 100) * C;
+            const cDash = (cPct / 100) * C;
+            const fDash = (fPct / 100) * C;
+
+            const offset1 = 0;
+            const offset2 = -pDash;
+            const offset3 = -(pDash + cDash);
+
+            mSvg.innerHTML = `
+              <g transform="rotate(-90 80 80)">
+                <circle cx="80" cy="80" r="50" fill="transparent" stroke="#f1f5f9" stroke-width="16"/>
+                <circle cx="80" cy="80" r="50" fill="transparent" stroke="#2563eb" stroke-width="16"
+                        stroke-dasharray="${pDash.toFixed(1)} ${(C - pDash).toFixed(1)}" stroke-dashoffset="${offset1.toFixed(1)}"/>
+                <circle cx="80" cy="80" r="50" fill="transparent" stroke="#10b981" stroke-width="16"
+                        stroke-dasharray="${cDash.toFixed(1)} ${(C - cDash).toFixed(1)}" stroke-dashoffset="${offset2.toFixed(1)}"/>
+                <circle cx="80" cy="80" r="50" fill="transparent" stroke="#f59e0b" stroke-width="16"
+                        stroke-dasharray="${fDash.toFixed(1)} ${(C - fDash).toFixed(1)}" stroke-dashoffset="${offset3.toFixed(1)}"/>
+              </g>
+              <text x="80" y="76" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">${Math.round(totalCal).toLocaleString()}</text>
+              <text x="80" y="91" text-anchor="middle" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.5">TOTAL KCAL</text>
+              
+              <g transform="translate(155, 24)">
+                <!-- Protein -->
+                <circle cx="8" cy="18" r="4.5" fill="#2563eb"/>
+                <text x="18" y="22" font-size="10.5" font-weight="700" fill="#0f172a">Protein: ${Math.round(totalP)}g (${pPct}%)</text>
+                <text x="18" y="35" font-size="9" fill="#64748b">${Math.round(pCal).toLocaleString()} kcal • 4 kcal/g</text>
+
+                <!-- Carbs -->
+                <circle cx="8" cy="56" r="4.5" fill="#10b981"/>
+                <text x="18" y="60" font-size="10.5" font-weight="700" fill="#0f172a">Carbs: ${Math.round(totalC)}g (${cPct}%)</text>
+                <text x="18" y="73" font-size="9" fill="#64748b">${Math.round(cCal).toLocaleString()} kcal • 4 kcal/g</text>
+
+                <!-- Fat -->
+                <circle cx="8" cy="94" r="4.5" fill="#f59e0b"/>
+                <text x="18" y="98" font-size="10.5" font-weight="700" fill="#0f172a">Fat: ${Math.round(totalF)}g (${fPct}%)</text>
+                <text x="18" y="111" font-size="9" fill="#64748b">${Math.round(fCal).toLocaleString()} kcal • 9 kcal/g</text>
+              </g>
+            `;
+          }
+        }
+
+        // PAGE 2: Workouts Table (Sorted Descending: Top to Bottom)
+        const wTbody = document.getElementById('report-workout-tbody');
+        if (wTbody) {
+          const sortedWorkouts = [...(appData.workouts || [])].sort((a, b) => b.date.localeCompare(a.date));
+          if (sortedWorkouts.length === 0) {
+            wTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 1rem; color: #64748b;">No workout sessions recorded.</td></tr>`;
+          } else {
+            wTbody.innerHTML = sortedWorkouts.slice(0, 10).map(w => `
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 5px 8px; font-weight: 600;">${w.date}</td>
+                <td style="padding: 5px 8px;"><strong>${w.name}</strong></td>
+                <td style="padding: 5px 8px;">${w.category}</td>
+                <td style="padding: 5px 8px;">${w.duration} mins</td>
+                <td style="padding: 5px 8px;">${w.weight > 0 ? `${w.sets}x${w.reps} @ ${w.weight}kg` : w.distance > 0 ? `${w.distance} km` : 'Bodyweight'}</td>
+                <td style="padding: 5px 8px;">🔥 ${w.calories} kcal</td>
+              </tr>
+            `).join('');
+          }
+        }
+
+        // PAGE 2: Weigh-in Progression & Circumference Table (Sorted Descending: Top to Bottom)
+        const repWeightTbody = document.getElementById('report-weight-tbody');
+        if (repWeightTbody) {
+          const mapByDate = new Map();
+          (appData.weightLogs || []).forEach(w => {
+            mapByDate.set(w.date, { date: w.date, weight: w.weight, waist: null, chest: null, hips: null, arms: null, thighs: null });
+          });
+          (appData.bodyMeasurements || []).forEach(m => {
+            if (mapByDate.has(m.date)) {
+              const item = mapByDate.get(m.date);
+              if (m.weight) item.weight = m.weight;
+              if (m.waist) item.waist = m.waist;
+              if (m.chest) item.chest = m.chest;
+              if (m.hips) item.hips = m.hips;
+              if (m.arms) item.arms = m.arms;
+              if (m.thighs) item.thighs = m.thighs;
+            } else {
+              mapByDate.set(m.date, { date: m.date, weight: m.weight, waist: m.waist, chest: m.chest, hips: m.hips, arms: m.arms, thighs: m.thighs });
+            }
+          });
+
+          const sortedRows = [...mapByDate.values()].sort((a, b) => b.date.localeCompare(a.date));
+          if (sortedRows.length === 0) {
+            repWeightTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 1rem; color: #64748b;">No weigh-in or body measurement records.</td></tr>`;
+          } else {
+            repWeightTbody.innerHTML = sortedRows.slice(0, 8).map(m => {
+              const bmiVal = (m.weight && heightM > 0) ? (m.weight / (heightM * heightM)).toFixed(1) : '—';
+              return `
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 5px 8px; font-weight: 600;">${m.date}</td>
+                  <td style="padding: 5px 8px;"><strong>${m.weight ? `${m.weight} ${unit}` : '—'}</strong></td>
+                  <td style="padding: 5px 8px;">${bmiVal}</td>
+                  <td style="padding: 5px 8px;">${m.waist ? `${m.waist} cm` : '—'}</td>
+                  <td style="padding: 5px 8px;">${m.chest ? `${m.chest} cm` : '—'}</td>
+                  <td style="padding: 5px 8px;">${m.hips ? `${m.hips} cm` : '—'}</td>
+                  <td style="padding: 5px 8px;">${m.arms ? `${m.arms} cm` : '—'}</td>
+                  <td style="padding: 5px 8px;">${m.thighs ? `${m.thighs} cm` : '—'}</td>
+                </tr>
+              `;
+            }).join('');
+          }
+        }
+
+        // PAGE 2: SMART Goals Container
+        const goalsCont = document.getElementById('report-goals-container');
+        if (goalsCont) {
+          const goals = appData.goals || [];
+          if (goals.length === 0) {
+            goalsCont.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #64748b; font-size: 0.8125rem; padding: 1rem;">No SMART goals currently defined.</div>`;
+          } else {
+            goalsCont.innerHTML = goals.slice(0, 6).map(g => {
+              const isDone = g.progress >= 100;
+              return `
+                <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; background: #f8fafc;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                    <span style="font-size: 0.65rem; font-weight: 700; color: #475569; text-transform: uppercase;">${g.category}</span>
+                    <span style="font-size: 0.65rem; font-weight: 700; color: ${isDone ? '#059669' : '#2563eb'};">${isDone ? 'Achieved' : g.progress + '%'}</span>
+                  </div>
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">${g.title}</div>
+                  <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 0.5rem;">Target: ${g.targetValue} ${g.unit} • Current: ${g.currentValue} ${g.unit}</div>
+                  <div style="background: #e2e8f0; border-radius: 4px; height: 6px; overflow: hidden;">
+                    <div style="background: ${isDone ? '#10b981' : '#2563eb'}; height: 100%; width: ${Math.min(100, g.progress)}%;"></div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
         }
       }
 
@@ -8001,14 +9497,23 @@
         const headerUserBtn = document.getElementById('header-user-btn');
         if (headerUserBtn) headerUserBtn.addEventListener('click', () => switchView('settings'));
 
-        // Mobile Menu Toggle
+        // Mobile Menu Toggle & Backdrop
         const mobileBtn = document.getElementById('btn-mobile-menu');
         const sidebar = document.getElementById('app-sidebar');
-        if (mobileBtn && sidebar) {
-          mobileBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('mobile-open');
-          });
+        const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+        const closeMobileBtn = document.getElementById('btn-sidebar-close');
+
+        function toggleMobileSidebar(open) {
+          if (!sidebar) return;
+          const shouldOpen = typeof open === 'boolean' ? open : !sidebar.classList.contains('mobile-open');
+          sidebar.classList.toggle('mobile-open', shouldOpen);
+          if (sidebarBackdrop) sidebarBackdrop.classList.toggle('active', shouldOpen);
+          document.body.style.overflow = shouldOpen ? 'hidden' : '';
         }
+
+        if (mobileBtn) mobileBtn.addEventListener('click', () => toggleMobileSidebar());
+        if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', () => toggleMobileSidebar(false));
+        if (closeMobileBtn) closeMobileBtn.addEventListener('click', () => toggleMobileSidebar(false));
 
         // Desktop Sidebar Collapse
         const collapseBtn = document.getElementById('btn-toggle-sidebar');
@@ -8064,35 +9569,50 @@
           });
         }
 
-        // Modal Open Buttons
-        document.querySelectorAll('[data-action="open-modal"]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const target = btn.getAttribute('data-target');
-            resetModalForCreation(target);
-            // Default dates to today
-            const todayStr = new Date().toISOString().split('T')[0];
-            const dateInputs = document.querySelectorAll('#modal-container input[type="date"]');
-            dateInputs.forEach(i => { if (!i.value) i.value = todayStr; });
-            openModal(target);
+        // Universal Delegated Modal Open Buttons (Handles both static & dynamically inserted buttons)
+        document.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-action="open-modal"]');
+          if (!btn) return;
+          e.preventDefault();
+          const target = btn.getAttribute('data-target');
+          resetModalForCreation(target);
+          
+          // Default dates appropriately
+          const todayStr = new Date().toISOString().split('T')[0];
+          const dateInputs = document.querySelectorAll('#modal-container input[type="date"]');
+          dateInputs.forEach(i => {
+            if (!i.value) i.value = (target === 'modal-task' && typeof plannerSelectedDate !== 'undefined' && plannerSelectedDate) ? plannerSelectedDate : todayStr;
           });
+          if (target === 'modal-task') {
+            const taskDate = document.getElementById('task-date');
+            if (taskDate && typeof plannerSelectedDate !== 'undefined' && plannerSelectedDate) {
+              taskDate.value = plannerSelectedDate;
+            }
+          }
+          openModal(target);
         });
 
-        // Open Modal with specific slot
-        document.querySelectorAll('[data-action="open-modal-slot"]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const slot = btn.getAttribute('data-slot');
-            resetModalForCreation('modal-meal');
-            const select = document.getElementById('meal-slot');
-            if (select) select.value = slot;
-            const dateInput = document.getElementById('meal-date');
-            if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
-            openModal('modal-meal');
-          });
+        // Universal Delegated Open Modal with specific slot
+        document.addEventListener('click', (e) => {
+          const slotBtn = e.target.closest('[data-action="open-modal-slot"]');
+          if (!slotBtn) return;
+          e.preventDefault();
+          const slot = slotBtn.getAttribute('data-slot');
+          resetModalForCreation('modal-meal');
+          const select = document.getElementById('meal-slot');
+          if (select) select.value = slot;
+          const dateInput = document.getElementById('meal-date');
+          if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+          openModal('modal-meal');
         });
 
-        // Modal Close Buttons
-        document.querySelectorAll('[data-action="close-modal"]').forEach(btn => {
-          btn.addEventListener('click', closeModal);
+        // Universal Delegated Modal Close Buttons
+        document.addEventListener('click', (e) => {
+          const closeBtn = e.target.closest('[data-action="close-modal"]');
+          if (closeBtn) {
+            e.preventDefault();
+            closeModal();
+          }
         });
 
         const modalContainer = document.getElementById('modal-container');
@@ -8259,6 +9779,17 @@
         const gCat = document.getElementById('goals-category-filter');
         if (gCat) gCat.addEventListener('change', renderGoals);
 
+        // Analytics Range Filter Buttons
+        const analyticsRangeBtns = document.querySelectorAll('#view-analytics [data-range]');
+        analyticsRangeBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            analyticsRangeBtns.forEach(b => b.classList.remove('active-filter-btn'));
+            btn.classList.add('active-filter-btn');
+            analyticsSelectedRange = btn.getAttribute('data-range') || '7d';
+            renderAnalytics();
+          });
+        });
+
         // Grocery Buttons
         const copyGroc = document.getElementById('btn-copy-grocery');
         if (copyGroc) {
@@ -8280,13 +9811,17 @@
           });
         }
 
-        // Print Report
+        // Print Report & PDF Export
         const printBtn = document.getElementById('btn-print-report');
         if (printBtn) {
           printBtn.addEventListener('click', () => {
+            renderReports();
             window.print();
           });
         }
+        window.addEventListener('beforeprint', () => {
+          renderReports();
+        });
 
         // Backup & Data Export Buttons
         const exportJsonBtn = document.getElementById('btn-export-json');
@@ -8323,7 +9858,7 @@
         const finalDeleteBtn = document.getElementById('btn-final-delete-confirm');
         if (confirmInput && finalDeleteBtn) {
           confirmInput.addEventListener('input', (e) => {
-            finalDeleteBtn.disabled = (e.target.value.trim() !== 'DELETE');
+            finalDeleteBtn.disabled = (e.target.value.trim().toUpperCase() !== 'DELETE');
           });
         }
 
@@ -8331,18 +9866,33 @@
           finalDeleteBtn.addEventListener('click', () => {
             localStorage.clear();
             if (window.indexedDB) {
-              window.indexedDB.deleteDatabase(DB_NAME);
+              try { window.indexedDB.deleteDatabase(DB_NAME); } catch (e) { console.warn(e); }
             }
             closeModal();
-            appData = getDefaultData();
-            seedHabitLogs(appData);
+            appData = getBlankData();
+            window.appData = appData;
             saveAppData();
             applyTheme('wellness-blue');
             recalculateMetrics();
             renderActiveView();
             renderDashboardKPIs();
             renderHeaderUserInfo();
-            showToast('All data erased. System reset to fresh state.', 'danger');
+            showToast('All data erased. System reset to blank slate.', 'danger');
+          });
+        }
+
+        // Load Demo Data Action Listeners (Header & Settings)
+        const headerDemoBtn = document.getElementById('btn-header-load-demo');
+        if (headerDemoBtn) {
+          headerDemoBtn.addEventListener('click', () => {
+            loadDemoData();
+          });
+        }
+
+        const settingsDemoBtn = document.getElementById('btn-load-demo-data');
+        if (settingsDemoBtn) {
+          settingsDemoBtn.addEventListener('click', () => {
+            loadDemoData();
           });
         }
 
@@ -8529,13 +10079,20 @@
             if (editId) {
               updateState(d => {
                 d.profile.currentWeight = wVal;
-                const wtItem = d.weightLogs.find(x => x.id === editId || x.date === wDate);
+                let wtItem = d.weightLogs.find(x => x.id === editId || x.date === wDate);
                 if (wtItem) {
                   wtItem.weight = wVal;
                   wtItem.date = wDate;
                   wtItem.notes = wNotes;
+                } else {
+                  d.weightLogs.push({
+                    id: editId.startsWith('wt-') ? editId : 'wt-' + Date.now(),
+                    date: wDate,
+                    weight: wVal,
+                    notes: wNotes
+                  });
                 }
-                const bmItem = d.bodyMeasurements.find(x => x.id === editId || x.date === wDate);
+                let bmItem = d.bodyMeasurements.find(x => x.id === editId || x.date === wDate);
                 if (bmItem) {
                   bmItem.weight = wVal;
                   bmItem.date = wDate;
@@ -8545,9 +10102,9 @@
                   bmItem.arms = arms;
                   bmItem.thighs = thighs;
                   bmItem.neck = neck;
-                } else if (waist || chest || hips) {
+                } else {
                   d.bodyMeasurements.push({
-                    id: 'bm-' + Date.now(),
+                    id: editId.startsWith('bm-') ? editId : 'bm-' + Date.now(),
                     date: wDate,
                     weight: wVal,
                     waist, chest, hips, arms, thighs, neck
@@ -8559,17 +10116,17 @@
               if (title) title.textContent = 'Log Weigh-in & Measurements';
               showToast(`Weigh-in updated (${wVal} kg)!`, 'success');
             } else {
+              const timestamp = Date.now();
               updateState(d => {
                 d.profile.currentWeight = wVal;
-                d.weightLogs.push({ id: 'wt-' + Date.now(), date: wDate, weight: wVal, notes: wNotes });
-                if (waist || chest || hips) {
-                  d.bodyMeasurements.push({
-                    id: 'bm-' + Date.now(),
-                    date: wDate,
-                    weight: wVal,
-                    waist, chest, hips, arms, thighs, neck
-                  });
-                }
+                d.weightLogs.push({ id: 'wt-' + timestamp, date: wDate, weight: wVal, notes: wNotes });
+                // Always create a corresponding measurement record so table row displays reliably
+                d.bodyMeasurements.push({
+                  id: 'bm-' + timestamp,
+                  date: wDate,
+                  weight: wVal,
+                  waist, chest, hips, arms, thighs, neck
+                });
               });
               showToast(`Weigh-in recorded (${wVal} kg)!`, 'success');
             }
@@ -8953,7 +10510,6 @@
         switchView('dashboard');
         showToast('PulseWellness ready • 100% Offline Mode Active', 'success');
 
-        // Expose API globally for accessibility and scripting
         window.appData = appData;
         window.showEntryDetails = showEntryDetails;
         window.editEntry = editEntry;
@@ -8963,6 +10519,15 @@
         window.closeModal = closeModal;
         window.recalculateMetrics = recalculateMetrics;
         window.updateState = updateState;
+        window.loadDemoData = loadDemoData;
+        window.getBlankData = getBlankData;
+        window.renderActiveView = renderActiveView;
+        window.renderReports = renderReports;
+        window.renderAnalytics = renderAnalytics;
+        window.renderWeight = renderWeight;
+        window.renderDashboardKPIs = renderDashboardKPIs;
+        window.getPlannerSelectedDate = () => plannerSelectedDate;
+        window.setPlannerSelectedDate = (d) => { plannerSelectedDate = d; renderPlanner(); };
       }
 
       if (document.readyState === 'loading') {
