@@ -1355,18 +1355,14 @@
       bottom: 0;
       background-color: rgba(15, 23, 42, 0.65);
       z-index: 200;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       padding: 1.25rem;
-      opacity: 0;
-      visibility: hidden;
-      transition: var(--transition);
     }
 
     .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
+      display: flex;
     }
 
     .modal-dialog {
@@ -1378,12 +1374,12 @@
       max-width: 560px;
       max-height: 90vh;
       overflow-y: auto;
-      transform: scale(0.96) translateY(8px);
-      transition: var(--transition);
+      animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .modal-overlay.active .modal-dialog {
-      transform: scale(1) translateY(0);
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .modal-dialog.modal-lg {
@@ -1616,6 +1612,113 @@
       width: 100%;
       height: 100%;
       overflow: visible;
+    }
+
+    /* Floating Interactive Chart Tooltip */
+    .chart-tooltip {
+      position: fixed;
+      pointer-events: none;
+      background-color: var(--sidebar-bg);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      z-index: 99999;
+      display: none;
+      white-space: nowrap;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+      transform: translate(-50%, -130%);
+    }
+
+    .chart-point {
+      cursor: pointer;
+      transition: r 0.2s ease, stroke-width 0.2s ease;
+    }
+
+    .chart-point:hover {
+      r: 7px;
+      stroke-width: 4px;
+    }
+
+    .chart-bar {
+      cursor: pointer;
+      transition: opacity 0.2s ease, filter 0.2s ease;
+    }
+
+    .chart-bar:hover {
+      opacity: 1 !important;
+      filter: brightness(1.15);
+    }
+
+    .donut-slice {
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform-origin: center;
+    }
+
+    .donut-slice:hover {
+      opacity: 0.88;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    }
+
+    /* Table Interactive Clickable Rows & Action Buttons */
+    .table-clickable-row {
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .table-clickable-row:hover {
+      background-color: var(--surface-subtle) !important;
+    }
+
+    .btn-action-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Universal Entry Details Popup Styling */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .detail-item {
+      background-color: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+    }
+
+    .detail-item-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 3px;
+    }
+
+    .detail-item-value {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .badge-icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background-color: var(--accent-light);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
 
     /* Print Stylesheet for A4 Reports */
@@ -3012,6 +3115,8 @@
               <div class="view-header-sub">Holistic monitoring of mood, stress, vitality, mental focus, and recovery.</div>
             </div>
             <div class="view-header-actions">
+              <button class="btn btn-secondary" id="btn-view-wellness-today">ℹ️ Details</button>
+              <button class="btn btn-secondary" id="btn-edit-wellness-today">✏️ Edit Today</button>
               <button class="btn btn-primary" data-action="open-modal" data-target="modal-wellness">+ Daily Check-in</button>
             </div>
           </div>
@@ -3546,13 +3651,82 @@
 
   <!-- MODAL CONTAINER & DIALOGS -->
   <div class="modal-overlay" id="modal-container">
+    <!-- 0. Universal Entry Details Modal -->
+    <div class="modal-dialog" id="modal-entry-details" style="display: none; max-width: 560px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div id="detail-entity-icon" class="badge-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </div>
+          <div>
+            <h2 class="modal-title" id="detail-entity-title">Entry Details</h2>
+            <div id="detail-entity-subtitle" style="font-size: 0.8125rem; color: var(--text-muted);">View specifications</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" data-action="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="detail-entity-badge-row" style="margin-bottom: 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+        <div id="detail-entity-grid" class="detail-grid"></div>
+        <div id="detail-entity-notes-card" style="margin-top: 1rem; display: none;">
+          <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem;">Notes & Observations</div>
+          <div id="detail-entity-notes" style="font-size: 0.875rem; color: var(--text); background: var(--surface-subtle); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); line-height: 1.55;"></div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <button type="button" class="btn btn-danger btn-sm" id="btn-detail-delete" style="display: flex; align-items: center; gap: 0.4rem;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Delete Entry
+        </button>
+        <div style="display: flex; gap: 0.6rem;">
+          <button type="button" class="btn btn-secondary" data-action="close-modal">Close</button>
+          <button type="button" class="btn btn-primary" id="btn-detail-edit" style="display: flex; align-items: center; gap: 0.4rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Edit Entry
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Water Edit Modal -->
+    <div class="modal-dialog" id="modal-water-edit" style="display: none; max-width: 440px;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="water-modal-title">Edit Water Entry</h2>
+        <button class="modal-close-btn" data-action="close-modal">&times;</button>
+      </div>
+      <form id="form-water-edit">
+        <input type="hidden" id="water-edit-id" value="">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Date *</label>
+            <input type="date" class="form-input" id="water-edit-date" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Time Logged *</label>
+              <input type="time" class="form-input" id="water-edit-time" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Amount (ml) *</label>
+              <input type="number" class="form-input" id="water-edit-amount" min="10" step="10" required placeholder="250">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Water</button>
+        </div>
+      </form>
+    </div>
+
     <!-- 1. Log Workout Modal -->
     <div class="modal-dialog" id="modal-workout" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Log Workout Session</h2>
+        <h2 class="modal-title" id="modal-workout-title">Log Workout Session</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-workout">
+        <input type="hidden" id="workout-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Workout or Exercise Name *</label>
@@ -3623,10 +3797,11 @@
     <!-- 2. Log Meal / Food Item Modal -->
     <div class="modal-dialog" id="modal-meal" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Log Meal or Food Item</h2>
+        <h2 class="modal-title" id="modal-meal-title">Log Meal or Food Item</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-meal">
+        <input type="hidden" id="meal-edit-id" value="">
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group">
@@ -3690,10 +3865,11 @@
     <!-- 3. Planner / Today's Task Modal -->
     <div class="modal-dialog" id="modal-task" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Add Schedule Item / Task</h2>
+        <h2 class="modal-title" id="modal-task-title">Add Schedule Item / Task</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-task">
+        <input type="hidden" id="task-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Task or Activity Title *</label>
@@ -3746,10 +3922,11 @@
     <!-- 4. Calendar Event Modal -->
     <div class="modal-dialog" id="modal-calendar-event" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Create Calendar Event</h2>
+        <h2 class="modal-title" id="modal-cal-event-title">Create Calendar Event</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-calendar-event">
+        <input type="hidden" id="cal-event-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Event Name *</label>
@@ -3790,10 +3967,11 @@
     <!-- 5. Weight & Measurements Modal -->
     <div class="modal-dialog modal-lg" id="modal-weight" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Log Weigh-in & Body Measurements</h2>
+        <h2 class="modal-title" id="modal-weight-title">Log Weigh-in & Body Measurements</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-weight">
+        <input type="hidden" id="weight-edit-id" value="">
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group">
@@ -3849,10 +4027,11 @@
     <!-- 6. Habit Modal -->
     <div class="modal-dialog" id="modal-habit" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Create Daily Habit</h2>
+        <h2 class="modal-title" id="modal-habit-title">Create Daily Habit</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-habit">
+        <input type="hidden" id="habit-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Habit Name *</label>
@@ -3889,10 +4068,11 @@
     <!-- 7. Sleep Modal -->
     <div class="modal-dialog" id="modal-sleep" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Log Sleep Session</h2>
+        <h2 class="modal-title" id="modal-sleep-title">Log Sleep Session</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-sleep">
+        <input type="hidden" id="sleep-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Date (Morning of Wake-up) *</label>
@@ -3939,10 +4119,11 @@
     <!-- 8. Wellness Check-in Modal -->
     <div class="modal-dialog" id="modal-wellness" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Daily Wellness Check-in</h2>
+        <h2 class="modal-title" id="modal-wellness-title">Daily Wellness Check-in</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-wellness">
+        <input type="hidden" id="wellness-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Date *</label>
@@ -4007,10 +4188,11 @@
     <!-- 9. Mood Journal Modal -->
     <div class="modal-dialog" id="modal-journal" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Write Reflection & Journal</h2>
+        <h2 class="modal-title" id="modal-journal-title">Write Reflection & Journal</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-journal">
+        <input type="hidden" id="journal-edit-id" value="">
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group">
@@ -4051,10 +4233,11 @@
     <!-- 10. SMART Goal Modal -->
     <div class="modal-dialog" id="modal-goal" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Create SMART Goal</h2>
+        <h2 class="modal-title" id="modal-goal-title">Create SMART Goal</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-goal">
+        <input type="hidden" id="goal-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Goal Title *</label>
@@ -4107,10 +4290,11 @@
     <!-- 11. Custom Exercise Modal -->
     <div class="modal-dialog" id="modal-exercise" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Add Custom Exercise</h2>
+        <h2 class="modal-title" id="modal-exercise-title">Add Custom Exercise</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-exercise">
+        <input type="hidden" id="cust-ex-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Exercise Name *</label>
@@ -4167,10 +4351,11 @@
     <!-- 12. Weekly Meal Planner Item Modal -->
     <div class="modal-dialog" id="modal-plan-meal" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Plan Meal for Week</h2>
+        <h2 class="modal-title" id="modal-plan-meal-title">Plan Meal for Week</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-plan-meal">
+        <input type="hidden" id="plan-meal-edit-id" value="">
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group">
@@ -4212,7 +4397,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add to Plan</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-plan-meal">Add to Plan</button>
         </div>
       </form>
     </div>
@@ -4220,10 +4405,11 @@
     <!-- 13. Grocery Item Modal -->
     <div class="modal-dialog" id="modal-grocery" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Add Grocery Item</h2>
+        <h2 class="modal-title" id="modal-grocery-title">Add Grocery Item</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-grocery">
+        <input type="hidden" id="grocery-edit-id" value="">
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Item Name *</label>
@@ -4257,10 +4443,11 @@
     <!-- 14. Steps Logger Modal -->
     <div class="modal-dialog" id="modal-steps" style="display: none;">
       <div class="modal-header">
-        <h2 class="modal-title">Log Daily Activity & Steps</h2>
+        <h2 class="modal-title" id="modal-steps-title">Log Daily Activity & Steps</h2>
         <button class="modal-close-btn" data-action="close-modal">&times;</button>
       </div>
       <form id="form-steps">
+        <input type="hidden" id="steps-edit-id" value="">
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group">
@@ -4318,6 +4505,9 @@
 
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
+
+  <!-- Floating Interactive Chart Tooltip -->
+  <div id="chart-floating-tooltip" class="chart-tooltip"></div>
 
   <script>
     /* ==========================================================================
@@ -4558,26 +4748,50 @@
 
       // --- PERSISTENCE LAYER: INDEXEDDB & LOCALSTORAGE ---
       function initIndexedDB() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           if (!window.indexedDB) {
             console.warn('IndexedDB not supported, using LocalStorage');
             return resolve(null);
           }
-          const request = window.indexedDB.open(DB_NAME, DB_VERSION);
-          request.onupgradeneeded = function(e) {
-            const db = e.target.result;
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-              db.createObjectStore(STORE_NAME);
-            }
-          };
-          request.onsuccess = function(e) {
-            resolve(e.target.result);
-          };
-          request.onerror = function(e) {
-            console.warn('IndexedDB error:', e);
+          const timer = setTimeout(() => {
+            console.warn('IndexedDB connection timed out, falling back to LocalStorage');
             resolve(null);
-          };
+          }, 800);
+          try {
+            const request = window.indexedDB.open(DB_NAME, DB_VERSION);
+            request.onupgradeneeded = function(e) {
+              const db = e.target.result;
+              if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME);
+              }
+            };
+            request.onsuccess = function(e) {
+              clearTimeout(timer);
+              resolve(e.target.result);
+            };
+            request.onerror = function(e) {
+              clearTimeout(timer);
+              console.warn('IndexedDB error:', e);
+              resolve(null);
+            };
+            request.onblocked = function() {
+              clearTimeout(timer);
+              console.warn('IndexedDB blocked');
+              resolve(null);
+            };
+          } catch(err) {
+            clearTimeout(timer);
+            resolve(null);
+          }
         });
+      }
+
+      function ensureMealPlanIds(data) {
+        if (data && Array.isArray(data.mealPlans)) {
+          data.mealPlans.forEach((p, idx) => {
+            if (!p.id) p.id = `mp-${(p.day || 'day').toLowerCase()}-${(p.slot || 'slot').toLowerCase()}-${idx}`;
+          });
+        }
       }
 
       async function loadAppData() {
@@ -4586,6 +4800,7 @@
           const localJson = localStorage.getItem(STORAGE_KEY);
           if (localJson) {
             appData = JSON.parse(localJson);
+            ensureMealPlanIds(appData);
             seedHabitLogs(appData);
             return appData;
           }
@@ -4602,6 +4817,7 @@
             });
             if (result) {
               appData = result;
+              ensureMealPlanIds(appData);
               seedHabitLogs(appData);
               localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
               return appData;
@@ -4613,6 +4829,7 @@
 
         // Initialize fresh defaults
         appData = getDefaultData();
+        ensureMealPlanIds(appData);
         seedHabitLogs(appData);
         saveAppData();
         return appData;
@@ -4771,6 +4988,7 @@
         const targetDialog = document.getElementById(modalId);
         if (targetDialog) {
           targetDialog.style.display = 'block';
+          container.style.display = 'flex';
           container.classList.add('active');
           // Autofocus first input
           const firstInput = targetDialog.querySelector('input:not([type=hidden]), select, textarea');
@@ -4782,10 +5000,796 @@
         const container = document.getElementById('modal-container');
         if (!container) return;
         container.classList.remove('active');
-        setTimeout(() => {
-          const allDialogs = container.querySelectorAll('.modal-dialog');
-          allDialogs.forEach(d => d.style.display = 'none');
-        }, 200);
+        container.style.display = 'none';
+        const allDialogs = container.querySelectorAll('.modal-dialog');
+        allDialogs.forEach(d => d.style.display = 'none');
+      }
+
+      function resetModalForCreation(modalId) {
+        const m = document.getElementById(modalId);
+        if (!m) return;
+        const form = m.querySelector('form');
+        if (form) form.reset();
+        const editInput = m.querySelector('input[id$="-edit-id"]');
+        if (editInput) editInput.value = '';
+        const titleMap = {
+          'modal-workout': 'Log Workout',
+          'modal-meal': 'Log Food Item',
+          'modal-task': 'Add Schedule Task',
+          'modal-cal-event': 'Add Calendar Event',
+          'modal-weight': 'Log Weigh-in & Measurements',
+          'modal-habit': 'Create New Habit',
+          'modal-sleep': 'Log Sleep Session',
+          'modal-wellness': 'Daily Wellness Check-in',
+          'modal-journal': 'New Mood Journal Entry',
+          'modal-goal': 'Create SMART Goal',
+          'modal-exercise': 'Add Custom Exercise',
+          'modal-plan-meal': 'Plan Meal',
+          'modal-grocery': 'Add Grocery Item',
+          'modal-steps': 'Log Daily Steps & Activity'
+        };
+        if (titleMap[modalId]) {
+          const tEl = m.querySelector('.modal-title');
+          if (tEl) tEl.textContent = titleMap[modalId];
+        }
+        if (modalId === 'modal-plan-meal') {
+          const sBtn = document.getElementById('btn-submit-plan-meal');
+          if (sBtn) sBtn.textContent = 'Add to Plan';
+        }
+      }
+
+      // --- INTERACTIVE CHART FLOATING TOOLTIP ENGINE ---
+      function initChartTooltips() {
+        const tipEl = document.getElementById('chart-floating-tooltip');
+        if (!tipEl) return;
+        document.addEventListener('mouseover', (e) => {
+          const target = e.target.closest('[data-tip]');
+          if (target) {
+            const tipText = target.getAttribute('data-tip');
+            if (tipText) {
+              tipEl.textContent = tipText;
+              tipEl.style.display = 'block';
+              tipEl.style.opacity = '1';
+              tipEl.style.left = `${e.clientX}px`;
+              tipEl.style.top = `${e.clientY - 12}px`;
+            }
+          }
+        });
+        document.addEventListener('mousemove', (e) => {
+          if (tipEl.style.display === 'block') {
+            tipEl.style.left = `${e.clientX}px`;
+            tipEl.style.top = `${e.clientY - 12}px`;
+          }
+        });
+        document.addEventListener('mouseout', (e) => {
+          const target = e.target.closest('[data-tip]');
+          if (target) {
+            tipEl.style.display = 'none';
+            tipEl.style.opacity = '0';
+          }
+        });
+      }
+
+      // --- UNIVERSAL DETAILS POPUP ENGINE ---
+      function showEntryDetails(type, id) {
+        let item = null;
+        let iconSvg = '📋';
+        let title = 'Entry Details';
+        let subtitle = 'Recorded Item';
+        let badgesHtml = '';
+        let gridItems = [];
+        let notesText = '';
+
+        const unit = (appData.profile && appData.profile.units === 'imperial') ? 'lb' : 'kg';
+
+        switch (type) {
+          case 'workout': {
+            item = appData.workouts.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '🏋️';
+            title = item.name;
+            subtitle = `Workout Session • ${item.date}`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.category}</span>
+              <span class="kpi-badge positive">🔥 ${item.calories || 0} kcal</span>
+              <span class="kpi-badge neutral">⏱️ ${item.duration} mins</span>
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Category', val: item.category },
+              { label: 'Duration', val: `${item.duration} minutes` },
+              { label: 'Load / Scheme', val: item.weight > 0 ? `${item.sets} sets × ${item.reps} reps @ ${item.weight} ${unit}` : item.distance > 0 ? `${item.distance} km` : 'Bodyweight' },
+              { label: 'Est. Calories Burned', val: `${item.calories || 0} kcal` },
+              { label: 'Sets × Reps', val: item.sets && item.reps ? `${item.sets} × ${item.reps}` : '—' }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'meal': {
+            item = appData.meals.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '🥗';
+            title = item.foodName;
+            subtitle = `${item.slot} • ${item.date}`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.slot}</span>
+              <span class="kpi-badge positive">⚡ ${item.calories} kcal</span>
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Meal Slot', val: item.slot },
+              { label: 'Serving Portion', val: item.quantity || '1 serving' },
+              { label: 'Calories', val: `${item.calories} kcal` },
+              { label: 'Protein', val: `${item.protein || 0} g` },
+              { label: 'Carbohydrates', val: `${item.carbs || 0} g` },
+              { label: 'Fats', val: `${item.fat || 0} g` },
+              { label: 'Fiber', val: `${item.fiber || 0} g` }
+            ];
+            break;
+          }
+          case 'task': {
+            item = appData.plannerTasks.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '📋';
+            title = item.title;
+            subtitle = `Planner Task • ${item.date}`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.category}</span>
+              <span class="kpi-badge ${item.completed ? 'positive' : 'neutral'}">${item.completed ? '✓ Completed' : 'Pending'}</span>
+              <span class="kpi-badge" style="background: ${item.priority === 'High' ? 'var(--danger-light)' : 'var(--surface-subtle)'}; color: ${item.priority === 'High' ? 'var(--danger)' : 'var(--text)'};">${item.priority} Priority</span>
+            `;
+            gridItems = [
+              { label: 'Scheduled Date', val: item.date },
+              { label: 'Scheduled Time', val: item.time || 'Anytime' },
+              { label: 'Category', val: item.category },
+              { label: 'Priority Level', val: `${item.priority} Priority` },
+              { label: 'Status', val: item.completed ? 'Done' : 'Not completed' }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'event': {
+            item = appData.calendarEvents.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '📅';
+            title = item.title;
+            subtitle = `Calendar Event • ${item.date}`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.category || 'Event'}</span>
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Time', val: item.time || 'All Day' },
+              { label: 'Category', val: item.category || 'General' }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'water': {
+            item = appData.waterLogs.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '💧';
+            title = `${item.amount} ml Hydration`;
+            subtitle = `Water Intake Log • ${item.date}`;
+            const targetWater = (appData.settings && appData.settings.dailyTargets ? appData.settings.dailyTargets.water : 2500);
+            const pctContribution = Math.round((item.amount / targetWater) * 100);
+            badgesHtml = `
+              <span class="kpi-badge positive">💧 ${item.amount} ml</span>
+              <span class="kpi-badge neutral">${pctContribution}% of daily goal</span>
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Time Logged', val: item.time || 'Logged' },
+              { label: 'Volume (ml)', val: `${item.amount} ml` },
+              { label: 'Volume (L)', val: `${(item.amount / 1000).toFixed(2)} Liters` },
+              { label: 'Daily Target', val: `${targetWater} ml` }
+            ];
+            break;
+          }
+          case 'step': {
+            item = appData.stepsLogs.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '👟';
+            title = `${item.steps.toLocaleString()} Steps`;
+            subtitle = `Activity Log • ${item.date}`;
+            const targetSteps = (appData.settings && appData.settings.dailyTargets ? appData.settings.dailyTargets.steps : 10000);
+            const pct = Math.round((item.steps / targetSteps) * 100);
+            badgesHtml = `
+              <span class="kpi-badge positive">🚶 ${item.steps.toLocaleString()} steps</span>
+              <span class="kpi-badge neutral">${pct}% of Goal</span>
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Total Steps', val: item.steps.toLocaleString() },
+              { label: 'Distance', val: `${item.distance || (item.steps * 0.00075).toFixed(1)} km` },
+              { label: 'Active Time', val: `${item.activeMinutes || Math.round(item.steps / 160)} mins` },
+              { label: 'Calories Burned', val: `🔥 ${item.calories || Math.round(item.steps * 0.045)} kcal` },
+              { label: 'Daily Target', val: `${targetSteps.toLocaleString()} steps` }
+            ];
+            break;
+          }
+          case 'sleep': {
+            item = appData.sleepLogs.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '🌙';
+            const h = Math.floor(item.durationHours || 0);
+            const m = Math.round(((item.durationHours || 0) % 1) * 60);
+            title = `${h}h ${m}m Sleep Session`;
+            subtitle = `Night of ${item.date}`;
+            badgesHtml = `
+              <span class="kpi-badge positive">★ ${item.quality}/5 Quality</span>
+              <span class="kpi-badge neutral">⏱️ ${item.durationHours} hrs</span>
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Bedtime', val: item.bedtime || '—' },
+              { label: 'Wake Time', val: item.wakeTime || '—' },
+              { label: 'Total Duration', val: `${h} hours ${m} mins` },
+              { label: 'Sleep Quality Rating', val: `★ ${item.quality} / 5` },
+              { label: 'Night Interruptions', val: `${item.interruptions || 0} times` }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'weight': {
+            item = appData.weightLogs.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '⚖️';
+            title = `${item.weight} ${unit} Weigh-in`;
+            subtitle = `Recorded on ${item.date}`;
+            const goalW = appData.profile ? appData.profile.goalWeight : 65;
+            const diff = (item.weight - goalW).toFixed(1);
+            badgesHtml = `
+              <span class="kpi-badge neutral">⚖️ ${item.weight} ${unit}</span>
+              <span class="kpi-badge positive">${diff > 0 ? `${diff} ${unit} above goal` : 'Goal reached!'}</span>
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Weight', val: `${item.weight} ${unit}` },
+              { label: 'Goal Target', val: `${goalW} ${unit}` },
+              { label: 'Variance to Goal', val: `${diff} ${unit}` }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'measurement': {
+            item = appData.bodyMeasurements.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '📏';
+            title = `Body Circumference Check-in`;
+            subtitle = `Recorded on ${item.date}`;
+            badgesHtml = `
+              <span class="kpi-badge neutral">Weight: ${item.weight} ${unit}</span>
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Weight', val: `${item.weight} ${unit}` },
+              { label: 'Waist', val: item.waist ? `${item.waist} cm` : '—' },
+              { label: 'Chest', val: item.chest ? `${item.chest} cm` : '—' },
+              { label: 'Hips', val: item.hips ? `${item.hips} cm` : '—' },
+              { label: 'Arms', val: item.arms ? `${item.arms} cm` : '—' },
+              { label: 'Thighs', val: item.thighs ? `${item.thighs} cm` : '—' },
+              { label: 'Neck', val: item.neck ? `${item.neck} cm` : '—' }
+            ];
+            break;
+          }
+          case 'wellness': {
+            item = appData.wellnessLogs.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '🧘';
+            title = `Wellness Score: ${item.overallScore || 88}/100`;
+            subtitle = `Daily Reflection • ${item.date}`;
+            badgesHtml = `
+              <span class="kpi-badge ${item.overallScore >= 80 ? 'positive' : 'neutral'}">Composite Score: ${item.overallScore || 88}/100</span>
+            `;
+            gridItems = [
+              { label: 'Check-in Date', val: item.date },
+              { label: 'Mood Index', val: `${item.mood || 4} / 5` },
+              { label: 'Physical Energy', val: `${item.energy || 4} / 5` },
+              { label: 'Stress Level', val: `${item.stress || 2} / 5 (${item.stress <= 2 ? 'Low' : 'Elevated'})` },
+              { label: 'Mental Focus', val: `${item.focus || 4} / 5` },
+              { label: 'Overall Motivation', val: `${item.motivation || 4} / 5` }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'journal': {
+            item = appData.moodJournal.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = item.emoji || '📝';
+            title = item.title;
+            subtitle = `Journal Reflection • ${item.date}`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.emoji} Mood</span>
+              ${item.tags ? `<span class="kpi-badge neutral">${item.tags}</span>` : ''}
+            `;
+            gridItems = [
+              { label: 'Date', val: item.date },
+              { label: 'Mood Emoji', val: item.emoji },
+              { label: 'Reflection Title', val: item.title },
+              { label: 'Focus Tags', val: item.tags || 'General' }
+            ];
+            notesText = item.text || '';
+            break;
+          }
+          case 'habit': {
+            item = appData.habits.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '⭐';
+            title = item.name;
+            subtitle = `${item.category} Habit`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.category}</span>
+              <span class="kpi-badge positive">🔥 ${item.streak || 0}d Streak</span>
+            `;
+            gridItems = [
+              { label: 'Habit Name', val: item.name },
+              { label: 'Category', val: item.category },
+              { label: 'Target Frequency', val: `${item.targetFrequency} days / week` },
+              { label: 'Current Streak', val: `${item.streak || 0} consecutive days` },
+              { label: 'Best Recorded Streak', val: `${item.bestStreak || item.streak || 0} days` }
+            ];
+            break;
+          }
+          case 'goal': {
+            item = appData.goals.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '🎯';
+            title = item.title;
+            subtitle = `SMART Goal • Due: ${item.deadline}`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.category}</span>
+              <span class="kpi-badge ${item.progress >= 100 ? 'positive' : 'neutral'}">${item.progress >= 100 ? '✓ Achieved' : item.progress + '% Complete'}</span>
+            `;
+            gridItems = [
+              { label: 'Goal Category', val: item.category },
+              { label: 'Target Deadline', val: item.deadline },
+              { label: 'Starting Baseline', val: `${item.startValue} ${item.unit}` },
+              { label: 'Current Level', val: `${item.currentValue} ${item.unit}` },
+              { label: 'Target Objective', val: `${item.targetValue} ${item.unit}` },
+              { label: 'Completion Progress', val: `${item.progress}%` }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'exercise': {
+            item = appData.exercises.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '🏋️';
+            title = item.name;
+            subtitle = `${item.muscleGroup} • ${item.equipment}`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.muscleGroup}</span>
+              <span class="schedule-category-chip">${item.equipment}</span>
+              ${item.isFavorite ? '<span class="kpi-badge positive">★ Favorited</span>' : ''}
+            `;
+            gridItems = [
+              { label: 'Exercise Name', val: item.name },
+              { label: 'Target Muscle', val: item.muscleGroup },
+              { label: 'Equipment Needed', val: item.equipment },
+              { label: 'Default Sets', val: `${item.sets} sets` },
+              { label: 'Default Rep Scheme', val: `${item.reps} reps` }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'mealPlan':
+          case 'plan-meal': {
+            item = appData.mealPlans.find(x => x.id === id || (x.day && x.slot && `mp-${x.day.toLowerCase()}-${x.slot.toLowerCase()}` === id));
+            if (!item) return;
+            iconSvg = '🍽️';
+            title = item.name;
+            subtitle = `Weekly Meal Plan • ${item.day} (${item.slot})`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.day}</span>
+              <span class="schedule-category-chip">${item.slot}</span>
+              <span class="kpi-badge positive">⚡ ${item.calories || 450} kcal</span>
+            `;
+            gridItems = [
+              { label: 'Day of Week', val: item.day },
+              { label: 'Meal Slot', val: item.slot },
+              { label: 'Planned Dish', val: item.name },
+              { label: 'Estimated Calories', val: `${item.calories || 450} kcal` }
+            ];
+            notesText = item.notes || '';
+            break;
+          }
+          case 'grocery': {
+            item = appData.groceryList.find(x => x.id === id);
+            if (!item) return;
+            iconSvg = '🛒';
+            title = item.name;
+            subtitle = `${item.category} Grocery Item`;
+            badgesHtml = `
+              <span class="schedule-category-chip">${item.category}</span>
+              <span class="kpi-badge ${item.checked ? 'positive' : 'neutral'}">${item.checked ? '✓ In Cart' : 'Need to buy'}</span>
+            `;
+            gridItems = [
+              { label: 'Item Name', val: item.name },
+              { label: 'Department Category', val: item.category },
+              { label: 'Quantity / Packaging', val: item.quantity || '1 portion' },
+              { label: 'Shopping Status', val: item.checked ? 'Completed / Purchased' : 'Pending' }
+            ];
+            break;
+          }
+        }
+
+        const iconEl = document.getElementById('detail-entity-icon');
+        if (iconEl) iconEl.innerHTML = `<span style="font-size: 1.25rem;">${iconSvg}</span>`;
+        const titleEl = document.getElementById('detail-entity-title');
+        if (titleEl) titleEl.textContent = title;
+        const subEl = document.getElementById('detail-entity-subtitle');
+        if (subEl) subEl.textContent = subtitle;
+        const badgesEl = document.getElementById('detail-entity-badge-row');
+        if (badgesEl) badgesEl.innerHTML = badgesHtml;
+
+        const gridEl = document.getElementById('detail-entity-grid');
+        if (gridEl) {
+          gridEl.innerHTML = gridItems.map(g => `
+            <div class="detail-item">
+              <div class="detail-item-label">${g.label}</div>
+              <div class="detail-item-value">${g.val}</div>
+            </div>
+          `).join('');
+        }
+
+        const notesCard = document.getElementById('detail-entity-notes-card');
+        const notesEl = document.getElementById('detail-entity-notes');
+        if (notesCard && notesEl) {
+          if (notesText && notesText.trim()) {
+            notesEl.textContent = notesText;
+            notesCard.style.display = 'block';
+          } else {
+            notesCard.style.display = 'none';
+          }
+        }
+
+        const editBtn = document.getElementById('btn-detail-edit');
+        if (editBtn) {
+          editBtn.onclick = () => {
+            closeModal();
+            setTimeout(() => editEntry(type, id), 150);
+          };
+        }
+
+        const delBtn = document.getElementById('btn-detail-delete');
+        if (delBtn) {
+          delBtn.onclick = () => {
+            if (confirm(`Delete "${title}"? This cannot be undone.`)) {
+              deleteEntry(type, id);
+              closeModal();
+            }
+          };
+        }
+
+        openModal('modal-entry-details');
+      }
+
+      // --- UNIVERSAL EDIT CONTROLLER ---
+      function editEntry(type, id) {
+        switch (type) {
+          case 'workout': {
+            const w = appData.workouts.find(x => x.id === id);
+            if (!w) return;
+            const editId = document.getElementById('workout-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-workout-title');
+            if (title) title.textContent = 'Edit Workout Session';
+
+            if (document.getElementById('workout-name')) document.getElementById('workout-name').value = w.name;
+            if (document.getElementById('workout-category')) document.getElementById('workout-category').value = w.category;
+            if (document.getElementById('workout-date')) document.getElementById('workout-date').value = w.date;
+            if (document.getElementById('workout-duration')) document.getElementById('workout-duration').value = w.duration;
+            if (document.getElementById('workout-sets')) document.getElementById('workout-sets').value = w.sets || '';
+            if (document.getElementById('workout-reps')) document.getElementById('workout-reps').value = w.reps || '';
+            if (document.getElementById('workout-weight')) document.getElementById('workout-weight').value = w.weight || '';
+            if (document.getElementById('workout-distance')) document.getElementById('workout-distance').value = w.distance || '';
+            if (document.getElementById('workout-calories')) document.getElementById('workout-calories').value = w.calories || '';
+            if (document.getElementById('workout-notes')) document.getElementById('workout-notes').value = w.notes || '';
+
+            openModal('modal-workout');
+            break;
+          }
+          case 'meal': {
+            const m = appData.meals.find(x => x.id === id);
+            if (!m) return;
+            const editId = document.getElementById('meal-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-meal-title');
+            if (title) title.textContent = 'Edit Meal or Food Item';
+
+            if (document.getElementById('meal-food-name')) document.getElementById('meal-food-name').value = m.foodName;
+            if (document.getElementById('meal-date')) document.getElementById('meal-date').value = m.date;
+            if (document.getElementById('meal-slot')) document.getElementById('meal-slot').value = m.slot;
+            if (document.getElementById('meal-quantity')) document.getElementById('meal-quantity').value = m.quantity || '';
+            if (document.getElementById('meal-calories')) document.getElementById('meal-calories').value = m.calories;
+            if (document.getElementById('meal-protein')) document.getElementById('meal-protein').value = m.protein || '';
+            if (document.getElementById('meal-carbs')) document.getElementById('meal-carbs').value = m.carbs || '';
+            if (document.getElementById('meal-fat')) document.getElementById('meal-fat').value = m.fat || '';
+            if (document.getElementById('meal-fiber')) document.getElementById('meal-fiber').value = m.fiber || '';
+
+            openModal('modal-meal');
+            break;
+          }
+          case 'task': {
+            const t = appData.plannerTasks.find(x => x.id === id);
+            if (!t) return;
+            const editId = document.getElementById('task-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-task-title');
+            if (title) title.textContent = 'Edit Schedule Item / Task';
+
+            if (document.getElementById('task-title')) document.getElementById('task-title').value = t.title;
+            if (document.getElementById('task-date')) document.getElementById('task-date').value = t.date;
+            if (document.getElementById('task-time')) document.getElementById('task-time').value = t.time || '08:00';
+            if (document.getElementById('task-category')) document.getElementById('task-category').value = t.category;
+            if (document.getElementById('task-priority')) document.getElementById('task-priority').value = t.priority;
+            if (document.getElementById('task-notes')) document.getElementById('task-notes').value = t.notes || '';
+
+            openModal('modal-task');
+            break;
+          }
+          case 'event': {
+            const ev = appData.calendarEvents.find(x => x.id === id);
+            if (!ev) return;
+            const editId = document.getElementById('cal-event-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-cal-event-title');
+            if (title) title.textContent = 'Edit Calendar Event';
+
+            if (document.getElementById('cal-event-title')) document.getElementById('cal-event-title').value = ev.title;
+            if (document.getElementById('cal-event-date')) document.getElementById('cal-event-date').value = ev.date;
+            if (document.getElementById('cal-event-time')) document.getElementById('cal-event-time').value = ev.time || '09:00';
+            if (document.getElementById('cal-event-category')) document.getElementById('cal-event-category').value = ev.category || 'Workout';
+            if (document.getElementById('cal-event-notes')) document.getElementById('cal-event-notes').value = ev.notes || '';
+
+            openModal('modal-calendar-event');
+            break;
+          }
+          case 'water': {
+            const wl = appData.waterLogs.find(x => x.id === id);
+            if (!wl) return;
+            const editId = document.getElementById('water-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('water-modal-title');
+            if (title) title.textContent = 'Edit Water Entry';
+
+            if (document.getElementById('water-edit-date')) document.getElementById('water-edit-date').value = wl.date;
+            if (document.getElementById('water-edit-time')) document.getElementById('water-edit-time').value = wl.time || '12:00';
+            if (document.getElementById('water-edit-amount')) document.getElementById('water-edit-amount').value = wl.amount;
+
+            openModal('modal-water-edit');
+            break;
+          }
+          case 'step': {
+            const st = appData.stepsLogs.find(x => x.id === id);
+            if (!st) return;
+            const editId = document.getElementById('steps-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-steps-title');
+            if (title) title.textContent = 'Edit Daily Activity & Steps';
+
+            if (document.getElementById('steps-date')) document.getElementById('steps-date').value = st.date;
+            if (document.getElementById('steps-count')) document.getElementById('steps-count').value = st.steps;
+            if (document.getElementById('steps-input-dist')) document.getElementById('steps-input-dist').value = st.distance || '';
+            if (document.getElementById('steps-input-mins')) document.getElementById('steps-input-mins').value = st.activeMinutes || '';
+            if (document.getElementById('steps-input-cal')) document.getElementById('steps-input-cal').value = st.calories || '';
+
+            openModal('modal-steps');
+            break;
+          }
+          case 'sleep': {
+            const sl = appData.sleepLogs.find(x => x.id === id);
+            if (!sl) return;
+            const editId = document.getElementById('sleep-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-sleep-title');
+            if (title) title.textContent = 'Edit Sleep Record';
+
+            if (document.getElementById('sleep-date')) document.getElementById('sleep-date').value = sl.date;
+            if (document.getElementById('sleep-bedtime')) document.getElementById('sleep-bedtime').value = sl.bedtime || '22:30';
+            if (document.getElementById('sleep-waketime')) document.getElementById('sleep-waketime').value = sl.wakeTime || '07:00';
+            if (document.getElementById('sleep-quality')) document.getElementById('sleep-quality').value = sl.quality || 4;
+            if (document.getElementById('sleep-interruptions')) document.getElementById('sleep-interruptions').value = sl.interruptions || 0;
+            if (document.getElementById('sleep-notes')) document.getElementById('sleep-notes').value = sl.notes || '';
+
+            openModal('modal-sleep');
+            break;
+          }
+          case 'weight': {
+            const wt = appData.weightLogs.find(x => x.id === id);
+            if (!wt) return;
+            const editId = document.getElementById('weight-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-weight-title');
+            if (title) title.textContent = 'Edit Weigh-in Record';
+
+            if (document.getElementById('weight-date')) document.getElementById('weight-date').value = wt.date;
+            if (document.getElementById('weight-val')) document.getElementById('weight-val').value = wt.weight;
+            if (document.getElementById('weight-notes')) document.getElementById('weight-notes').value = wt.notes || '';
+
+            const bm = appData.bodyMeasurements.find(x => x.date === wt.date);
+            if (bm) {
+              if (document.getElementById('meas-waist')) document.getElementById('meas-waist').value = bm.waist || '';
+              if (document.getElementById('meas-chest')) document.getElementById('meas-chest').value = bm.chest || '';
+              if (document.getElementById('meas-hips')) document.getElementById('meas-hips').value = bm.hips || '';
+              if (document.getElementById('meas-arms')) document.getElementById('meas-arms').value = bm.arms || '';
+              if (document.getElementById('meas-thighs')) document.getElementById('meas-thighs').value = bm.thighs || '';
+              if (document.getElementById('meas-neck')) document.getElementById('meas-neck').value = bm.neck || '';
+            }
+
+            openModal('modal-weight');
+            break;
+          }
+          case 'measurement': {
+            const bm = appData.bodyMeasurements.find(x => x.id === id);
+            if (!bm) return;
+            const editId = document.getElementById('weight-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-weight-title');
+            if (title) title.textContent = 'Edit Circumference Measurements';
+
+            if (document.getElementById('weight-date')) document.getElementById('weight-date').value = bm.date;
+            if (document.getElementById('weight-val')) document.getElementById('weight-val').value = bm.weight;
+            if (document.getElementById('meas-waist')) document.getElementById('meas-waist').value = bm.waist || '';
+            if (document.getElementById('meas-chest')) document.getElementById('meas-chest').value = bm.chest || '';
+            if (document.getElementById('meas-hips')) document.getElementById('meas-hips').value = bm.hips || '';
+            if (document.getElementById('meas-arms')) document.getElementById('meas-arms').value = bm.arms || '';
+            if (document.getElementById('meas-thighs')) document.getElementById('meas-thighs').value = bm.thighs || '';
+            if (document.getElementById('meas-neck')) document.getElementById('meas-neck').value = bm.neck || '';
+
+            openModal('modal-weight');
+            break;
+          }
+          case 'wellness': {
+            const wn = appData.wellnessLogs.find(x => x.id === id);
+            if (!wn) return;
+            const editId = document.getElementById('wellness-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-wellness-title');
+            if (title) title.textContent = 'Edit Daily Wellness Check-in';
+
+            if (document.getElementById('wellness-date')) document.getElementById('wellness-date').value = wn.date;
+            if (document.getElementById('wellness-mood')) document.getElementById('wellness-mood').value = wn.mood || 4;
+            if (document.getElementById('wellness-energy')) document.getElementById('wellness-energy').value = wn.energy || 4;
+            if (document.getElementById('wellness-stress')) document.getElementById('wellness-stress').value = wn.stress || 2;
+            if (document.getElementById('wellness-focus')) document.getElementById('wellness-focus').value = wn.focus || 4;
+            if (document.getElementById('wellness-notes')) document.getElementById('wellness-notes').value = wn.notes || '';
+
+            openModal('modal-wellness');
+            break;
+          }
+          case 'journal': {
+            const mj = appData.moodJournal.find(x => x.id === id);
+            if (!mj) return;
+            const editId = document.getElementById('journal-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-journal-title');
+            if (title) title.textContent = 'Edit Reflection Entry';
+
+            if (document.getElementById('journal-date')) document.getElementById('journal-date').value = mj.date;
+            if (document.getElementById('journal-emoji')) document.getElementById('journal-emoji').value = mj.emoji;
+            if (document.getElementById('journal-title')) document.getElementById('journal-title').value = mj.title;
+            if (document.getElementById('journal-text')) document.getElementById('journal-text').value = mj.text;
+            if (document.getElementById('journal-tags')) document.getElementById('journal-tags').value = mj.tags || '';
+
+            openModal('modal-journal');
+            break;
+          }
+          case 'habit': {
+            const hb = appData.habits.find(x => x.id === id);
+            if (!hb) return;
+            const editId = document.getElementById('habit-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-habit-title');
+            if (title) title.textContent = 'Edit Daily Habit';
+
+            if (document.getElementById('habit-name')) document.getElementById('habit-name').value = hb.name;
+            if (document.getElementById('habit-category')) document.getElementById('habit-category').value = hb.category;
+            if (document.getElementById('habit-frequency')) document.getElementById('habit-frequency').value = hb.targetFrequency;
+
+            openModal('modal-habit');
+            break;
+          }
+          case 'goal': {
+            const gl = appData.goals.find(x => x.id === id);
+            if (!gl) return;
+            const editId = document.getElementById('goal-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-goal-title');
+            if (title) title.textContent = 'Edit SMART Goal';
+
+            if (document.getElementById('goal-name')) document.getElementById('goal-name').value = gl.title;
+            if (document.getElementById('goal-category')) document.getElementById('goal-category').value = gl.category;
+            if (document.getElementById('goal-start')) document.getElementById('goal-start').value = gl.startValue;
+            if (document.getElementById('goal-target')) document.getElementById('goal-target').value = gl.targetValue;
+            if (document.getElementById('goal-unit')) document.getElementById('goal-unit').value = gl.unit;
+            if (document.getElementById('goal-deadline')) document.getElementById('goal-deadline').value = gl.deadline;
+            if (document.getElementById('goal-notes')) document.getElementById('goal-notes').value = gl.notes || '';
+
+            openModal('modal-goal');
+            break;
+          }
+          case 'exercise': {
+            const ex = appData.exercises.find(x => x.id === id);
+            if (!ex) return;
+            const editId = document.getElementById('exercise-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-exercise-title');
+            if (title) title.textContent = 'Edit Custom Exercise';
+
+            if (document.getElementById('cust-ex-name')) document.getElementById('cust-ex-name').value = ex.name;
+            if (document.getElementById('cust-ex-muscle')) document.getElementById('cust-ex-muscle').value = ex.muscleGroup;
+            if (document.getElementById('cust-ex-equipment')) document.getElementById('cust-ex-equipment').value = ex.equipment;
+            if (document.getElementById('cust-ex-sets')) document.getElementById('cust-ex-sets').value = ex.sets;
+            if (document.getElementById('cust-ex-reps')) document.getElementById('cust-ex-reps').value = ex.reps;
+            if (document.getElementById('cust-ex-notes')) document.getElementById('cust-ex-notes').value = ex.notes || '';
+
+            openModal('modal-exercise');
+            break;
+          }
+          case 'mealPlan':
+          case 'plan-meal': {
+            const pm = appData.mealPlans.find(x => x.id === id || (x.day && x.slot && `mp-${x.day.toLowerCase()}-${x.slot.toLowerCase()}` === id));
+            if (!pm) return;
+            const editId = document.getElementById('plan-meal-edit-id');
+            if (editId) editId.value = pm.id;
+            const title = document.getElementById('modal-plan-meal-title');
+            if (title) title.textContent = 'Edit Planned Meal';
+            const sBtn = document.getElementById('btn-submit-plan-meal');
+            if (sBtn) sBtn.textContent = 'Save Changes';
+
+            if (document.getElementById('plan-day')) document.getElementById('plan-day').value = pm.day;
+            if (document.getElementById('plan-slot')) document.getElementById('plan-slot').value = pm.slot;
+            if (document.getElementById('plan-meal-name')) document.getElementById('plan-meal-name').value = pm.name;
+            if (document.getElementById('plan-calories')) document.getElementById('plan-calories').value = pm.calories || '';
+            if (document.getElementById('plan-notes')) document.getElementById('plan-notes').value = pm.notes || '';
+
+            openModal('modal-plan-meal');
+            break;
+          }
+          case 'grocery': {
+            const gr = appData.groceryList.find(x => x.id === id);
+            if (!gr) return;
+            const editId = document.getElementById('grocery-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-grocery-title');
+            if (title) title.textContent = 'Edit Grocery Item';
+
+            if (document.getElementById('grocery-name')) document.getElementById('grocery-name').value = gr.name;
+            if (document.getElementById('grocery-category')) document.getElementById('grocery-category').value = gr.category;
+            if (document.getElementById('grocery-quantity')) document.getElementById('grocery-quantity').value = gr.quantity || '';
+
+            openModal('modal-grocery');
+            break;
+          }
+        }
+      }
+
+      // --- UNIVERSAL DELETE CONTROLLER ---
+      function deleteEntry(type, id) {
+        updateState(d => {
+          switch (type) {
+            case 'workout': d.workouts = d.workouts.filter(x => x.id !== id); break;
+            case 'meal': d.meals = d.meals.filter(x => x.id !== id); break;
+            case 'task': d.plannerTasks = d.plannerTasks.filter(x => x.id !== id); break;
+            case 'event': d.calendarEvents = d.calendarEvents.filter(x => x.id !== id); break;
+            case 'water': d.waterLogs = d.waterLogs.filter(x => x.id !== id); break;
+            case 'step': d.stepsLogs = d.stepsLogs.filter(x => x.id !== id); break;
+            case 'sleep': d.sleepLogs = d.sleepLogs.filter(x => x.id !== id); break;
+            case 'weight': d.weightLogs = d.weightLogs.filter(x => x.id !== id); break;
+            case 'measurement': d.bodyMeasurements = d.bodyMeasurements.filter(x => x.id !== id); break;
+            case 'wellness': d.wellnessLogs = d.wellnessLogs.filter(x => x.id !== id); break;
+            case 'journal': d.moodJournal = d.moodJournal.filter(x => x.id !== id); break;
+            case 'habit': d.habits = d.habits.filter(x => x.id !== id); break;
+            case 'goal': d.goals = d.goals.filter(x => x.id !== id); break;
+            case 'exercise': d.exercises = d.exercises.filter(x => x.id !== id); break;
+            case 'mealPlan':
+            case 'plan-meal': d.mealPlans = d.mealPlans.filter(x => x.id !== id && `mp-${(x.day||'').toLowerCase()}-${(x.slot||'').toLowerCase()}` !== id); break;
+            case 'grocery': d.groceryList = d.groceryList.filter(x => x.id !== id); break;
+          }
+        });
+        showToast('Entry removed successfully.');
       }
 
       // --- STANDALONE SVG CHARTING ENGINE ---
@@ -4857,7 +5861,7 @@
         let pointsHtml = '';
         coords.forEach(c => {
           pointsHtml += `
-            <circle cx="${c.x}" cy="${c.y}" r="4.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5" class="chart-point">
+            <circle cx="${c.x}" cy="${c.y}" r="4.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5" class="chart-point" data-tip="${c.label}: ${c.val}">
               <title>${c.label}: ${c.val}</title>
             </circle>
             <text x="${c.x}" y="${padding.top + chartH + 18}" fill="var(--text-muted)" font-size="10" text-anchor="middle">${c.label}</text>
@@ -4933,7 +5937,7 @@
           const color = b.val >= (options.targetVal || 0) ? (options.hitColor || 'var(--accent)') : (options.missColor || 'var(--accent-2)');
 
           barsHtml += `
-            <rect x="${bx}" y="${by}" width="${barWidth}" height="${barH}" rx="4" fill="${color}" opacity="0.9">
+            <rect x="${bx}" y="${by}" width="${barWidth}" height="${barH}" rx="4" fill="${color}" opacity="0.9" class="chart-bar" data-tip="${b.label}: ${b.val.toLocaleString()}">
               <title>${b.label}: ${b.val}</title>
             </rect>
             <text x="${bx + barWidth / 2}" y="${padding.top + chartH + 18}" fill="var(--text-muted)" font-size="10" font-weight="600" text-anchor="middle">${b.label}</text>
@@ -4963,7 +5967,8 @@
           circlesHtml += `
             <circle cx="18" cy="18" r="15.91549430918954" fill="transparent"
                     stroke="${slice.color}" stroke-width="3.8"
-                    stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}">
+                    stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}"
+                    class="donut-slice" data-tip="${slice.label}: ${slice.val}g (${Math.round(percent)}%)">
               <title>${slice.label}: ${slice.val}g (${Math.round(percent)}%)</title>
             </circle>
           `;
@@ -4986,7 +5991,10 @@
           <circle cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="var(--surface-subtle)" stroke-width="3.5"/>
           <circle cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="${strokeColor}" stroke-width="3.5"
                   stroke-dasharray="${dashArray}" stroke-dashoffset="0" stroke-linecap="round"
-                  style="transition: stroke-dasharray 0.6s ease;"/>
+                  class="donut-slice" data-tip="Wellness Vitality: ${score} / ${max} (${Math.round(pct)}%)"
+                  style="transition: stroke-dasharray 0.6s ease; cursor: pointer;">
+            <title>Wellness Vitality: ${score} / ${max} (${Math.round(pct)}%)</title>
+          </circle>
         `;
       }
 
@@ -5073,6 +6081,17 @@
         if (sAvatar) {
           const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
           sAvatar.textContent = initials || 'AM';
+        }
+
+        // Header user badge
+        const hName = document.getElementById('header-user-name');
+        if (hName) hName.textContent = name;
+        const hGoal = document.getElementById('header-user-goal');
+        if (hGoal) hGoal.textContent = `Goal: ${goalWeight} ${unit}`;
+        const hAvatar = document.getElementById('header-user-avatar');
+        if (hAvatar) {
+          const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+          hAvatar.textContent = initials || 'AM';
         }
       }
 
@@ -5346,7 +6365,7 @@
         }
 
         list.innerHTML = filtered.map(t => `
-          <div class="schedule-item ${t.completed ? 'completed' : ''}" style="justify-content: space-between;">
+          <div class="schedule-item table-clickable-row ${t.completed ? 'completed' : ''}" data-task-id="${t.id}" style="justify-content: space-between; cursor: pointer;">
             <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1;">
               <input type="checkbox" ${t.completed ? 'checked' : ''} class="planner-chk" data-task-id="${t.id}" style="width: 18px; height: 18px; cursor: pointer;">
               <span class="schedule-time">${t.time || 'Anytime'}</span>
@@ -5359,14 +6378,47 @@
                 </div>
               </div>
             </div>
-            <button class="btn-icon-only btn-delete-task" data-task-id="${t.id}" title="Delete Task">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            </button>
+            <div class="btn-action-group">
+              <button class="btn-icon-only btn-view-task" data-task-id="${t.id}" title="View Details">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              </button>
+              <button class="btn-icon-only btn-edit-task" data-task-id="${t.id}" title="Edit Task">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </button>
+              <button class="btn-icon-only btn-delete-task" data-task-id="${t.id}" title="Delete Task">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
           </div>
         `).join('');
 
+        list.querySelectorAll('.schedule-item').forEach(row => {
+          row.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('input')) return;
+            const tid = row.getAttribute('data-task-id');
+            showEntryDetails('task', tid);
+          });
+        });
+
+        list.querySelectorAll('.btn-view-task').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const tid = btn.getAttribute('data-task-id');
+            showEntryDetails('task', tid);
+          });
+        });
+
+        list.querySelectorAll('.btn-edit-task').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const tid = btn.getAttribute('data-task-id');
+            editEntry('task', tid);
+          });
+        });
+
         list.querySelectorAll('.planner-chk').forEach(chk => {
           chk.addEventListener('change', (e) => {
+            e.stopPropagation();
             const tid = e.target.getAttribute('data-task-id');
             updateState(d => {
               const item = d.plannerTasks.find(x => x.id === tid);
@@ -5377,6 +6429,7 @@
 
         list.querySelectorAll('.btn-delete-task').forEach(btn => {
           btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const tid = btn.getAttribute('data-task-id');
             updateState(d => {
               d.plannerTasks = d.plannerTasks.filter(x => x.id !== tid);
@@ -5421,10 +6474,10 @@
 
           let tagsHtml = '';
           workouts.forEach(w => {
-            tagsHtml += `<div class="calendar-event-tag" style="background:#eff6ff;color:#2563eb;border-left-color:#2563eb;">🏋️ ${w.name}</div>`;
+            tagsHtml += `<div class="calendar-event-tag cal-workout-tag" data-id="${w.id}" style="background:#eff6ff;color:#2563eb;border-left-color:#2563eb;cursor:pointer;" title="Click for Workout Details">🏋️ ${w.name}</div>`;
           });
           events.forEach(e => {
-            tagsHtml += `<div class="calendar-event-tag">${e.title}</div>`;
+            tagsHtml += `<div class="calendar-event-tag cal-event-tag" data-id="${e.id}" style="cursor:pointer;" title="Click for Event Details">${e.title}</div>`;
           });
 
           cellsHtml += `
@@ -5437,12 +6490,33 @@
 
         grid.innerHTML = cellsHtml;
 
+        grid.querySelectorAll('.cal-workout-tag').forEach(tag => {
+          tag.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wid = tag.getAttribute('data-id');
+            showEntryDetails('workout', wid);
+          });
+        });
+
+        grid.querySelectorAll('.cal-event-tag').forEach(tag => {
+          tag.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const eid = tag.getAttribute('data-id');
+            showEntryDetails('event', eid);
+          });
+        });
+
         // Click cell to open event modal for that date
         grid.querySelectorAll('.calendar-cell:not(.other-month)').forEach(cell => {
-          cell.addEventListener('click', () => {
+          cell.addEventListener('click', (e) => {
+            if (e.target.closest('.calendar-event-tag')) return;
             const dt = cell.getAttribute('data-date');
             const dateInput = document.getElementById('cal-event-date');
             if (dateInput) dateInput.value = dt;
+            const editId = document.getElementById('cal-event-edit-id');
+            if (editId) editId.value = '';
+            const title = document.getElementById('modal-cal-event-title');
+            if (title) title.textContent = 'Create Calendar Event';
             openModal('modal-calendar-event');
           });
         });
@@ -5484,7 +6558,7 @@
         }
 
         tbody.innerHTML = list.map(w => `
-          <tr>
+          <tr class="table-clickable-row" data-workout-id="${w.id}">
             <td style="font-weight: 600;">${w.date}</td>
             <td><strong>${w.name}</strong></td>
             <td><span class="schedule-category-chip">${w.category}</span></td>
@@ -5493,15 +6567,48 @@
             <td><span class="kpi-badge positive">🔥 ${w.calories || 0} kcal</span></td>
             <td style="font-size: 0.8125rem; color: var(--text-muted);">${w.notes || '—'}</td>
             <td style="text-align: right;">
-              <button class="btn-icon-only btn-delete-workout" data-workout-id="${w.id}" title="Delete Workout">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-              </button>
+              <div class="btn-action-group">
+                <button class="btn-icon-only btn-view-workout" data-workout-id="${w.id}" title="View Details">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+                <button class="btn-icon-only btn-edit-workout" data-workout-id="${w.id}" title="Edit Workout">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <button class="btn-icon-only btn-delete-workout" data-workout-id="${w.id}" title="Delete Workout">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
             </td>
           </tr>
         `).join('');
 
+        tbody.querySelectorAll('.table-clickable-row').forEach(row => {
+          row.addEventListener('click', (e) => {
+            if (e.target.closest('button')) return;
+            const wid = row.getAttribute('data-workout-id');
+            showEntryDetails('workout', wid);
+          });
+        });
+
+        tbody.querySelectorAll('.btn-view-workout').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wid = btn.getAttribute('data-workout-id');
+            showEntryDetails('workout', wid);
+          });
+        });
+
+        tbody.querySelectorAll('.btn-edit-workout').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wid = btn.getAttribute('data-workout-id');
+            editEntry('workout', wid);
+          });
+        });
+
         tbody.querySelectorAll('.btn-delete-workout').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const wid = btn.getAttribute('data-workout-id');
             updateState(d => {
               d.workouts = d.workouts.filter(x => x.id !== wid);
@@ -5531,7 +6638,7 @@
         }
 
         grid.innerHTML = list.map(e => `
-          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div class="card table-clickable-row" data-ex-id="${e.id}" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;">
             <div>
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
                 <h3 style="font-size: 1rem; font-weight: 700; color: var(--text);">${e.name}</h3>
@@ -5548,14 +6655,43 @@
                 ${e.notes || 'Focus on strict technique and full muscular tension.'}
               </div>
             </div>
-            <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end;">
-              <button class="btn btn-sm btn-secondary btn-log-this-ex" data-name="${e.name}">Log Session</button>
+            <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+              <div class="btn-action-group">
+                <button class="btn btn-sm btn-secondary btn-view-ex" data-id="${e.id}">Details</button>
+                <button class="btn btn-sm btn-secondary btn-edit-ex" data-id="${e.id}">✏️ Edit</button>
+              </div>
+              <button class="btn btn-sm btn-primary btn-log-this-ex" data-name="${e.name}">Log Session</button>
             </div>
           </div>
         `).join('');
 
+        grid.querySelectorAll('.card.table-clickable-row').forEach(card => {
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('button')) return;
+            const id = card.getAttribute('data-ex-id');
+            showEntryDetails('exercise', id);
+          });
+        });
+
+        grid.querySelectorAll('.btn-view-ex').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            showEntryDetails('exercise', id);
+          });
+        });
+
+        grid.querySelectorAll('.btn-edit-ex').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            editEntry('exercise', id);
+          });
+        });
+
         grid.querySelectorAll('.btn-fav-ex').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const id = btn.getAttribute('data-id');
             updateState(d => {
               const ex = d.exercises.find(x => x.id === id);
@@ -5565,7 +6701,8 @@
         });
 
         grid.querySelectorAll('.btn-log-this-ex').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const name = btn.getAttribute('data-name');
             const nameInput = document.getElementById('workout-name');
             if (nameInput) nameInput.value = name;
@@ -5646,27 +6783,50 @@
             tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 0.85rem; font-size: 0.8125rem;">No food logged for ${slot}.</td></tr>`;
           } else {
             tbody.innerHTML = slotItems.map(item => `
-              <tr>
+              <tr class="table-clickable-row meal-row" data-id="${item.id}">
                 <td style="font-weight: 600;">${item.foodName}</td>
                 <td style="color: var(--text-muted);">${item.quantity || '1 serving'}</td>
                 <td><strong>${item.calories} kcal</strong></td>
                 <td>P: ${item.protein}g</td>
                 <td>C: ${item.carbs}g • F: ${item.fat}g</td>
-                <td style="text-align: right;">
-                  <button class="btn-icon-only btn-delete-meal-item" data-id="${item.id}" style="width: 26px; height: 26px;">
-                    &times;
-                  </button>
+                <td style="text-align: right;" onclick="event.stopPropagation()">
+                  <div class="btn-action-group">
+                    <button class="btn-icon-only btn-view-meal" data-id="${item.id}" title="View Details" style="width: 26px; height: 26px; font-size: 0.75rem;">ℹ️</button>
+                    <button class="btn-icon-only btn-edit-meal" data-id="${item.id}" title="Edit Food Item" style="width: 26px; height: 26px; font-size: 0.75rem;">✏️</button>
+                    <button class="btn-icon-only btn-delete-meal-item" data-id="${item.id}" title="Delete" style="width: 26px; height: 26px;">&times;</button>
+                  </div>
                 </td>
               </tr>
             `).join('');
 
-            tbody.querySelectorAll('.btn-delete-meal-item').forEach(btn => {
-              btn.addEventListener('click', () => {
+            tbody.querySelectorAll('.meal-row').forEach(row => {
+              row.addEventListener('click', () => {
+                const id = row.getAttribute('data-id');
+                showEntryDetails('meal', id);
+              });
+            });
+
+            tbody.querySelectorAll('.btn-view-meal').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const id = btn.getAttribute('data-id');
-                updateState(d => {
-                  d.meals = d.meals.filter(x => x.id !== id);
-                });
-                showToast('Food item removed.');
+                showEntryDetails('meal', id);
+              });
+            });
+
+            tbody.querySelectorAll('.btn-edit-meal').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                editEntry('meal', id);
+              });
+            });
+
+            tbody.querySelectorAll('.btn-delete-meal-item').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                deleteEntry('meal', id);
               });
             });
           }
@@ -5687,16 +6847,24 @@
             ${days.map(day => {
               const plan = appData.mealPlans.find(p => p.day === day && p.slot === slot);
               if (plan) {
+                if (!plan.id) plan.id = `mp-${day.toLowerCase()}-${slot.toLowerCase()}`;
                 return `
-                  <td style="vertical-align: top;">
-                    <div style="font-weight: 600; font-size: 0.8125rem; color: var(--text);">${plan.name}</div>
+                  <td style="vertical-align: top; cursor: pointer;" class="table-clickable-row meal-plan-cell" data-id="${plan.id}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 4px;">
+                      <div style="font-weight: 600; font-size: 0.8125rem; color: var(--text);">${plan.name}</div>
+                      <div class="btn-action-group" onclick="event.stopPropagation()">
+                        <button class="btn-icon-only btn-view-plan" data-id="${plan.id}" title="View Details" style="width: 20px; height: 20px; font-size: 0.6rem; padding: 0;">👁️</button>
+                        <button class="btn-icon-only btn-edit-plan" data-id="${plan.id}" title="Edit Plan" style="width: 20px; height: 20px; font-size: 0.6rem; padding: 0;">✏️</button>
+                        <button class="btn-icon-only btn-delete-plan" data-id="${plan.id}" title="Delete" style="width: 20px; height: 20px; font-size: 0.6rem; padding: 0;">&times;</button>
+                      </div>
+                    </div>
                     <div style="font-size: 0.6875rem; color: var(--text-muted);">${plan.calories ? plan.calories + ' kcal' : ''}</div>
-                    <button class="btn btn-sm btn-secondary btn-sync-plan-today" data-name="${plan.name}" data-cal="${plan.calories || 400}" data-slot="${slot}" style="margin-top: 4px; padding: 2px 6px; font-size: 0.6875rem;">+ Log Today</button>
+                    <button class="btn btn-sm btn-secondary btn-sync-plan-today" data-name="${plan.name}" data-cal="${plan.calories || 400}" data-slot="${slot}" onclick="event.stopPropagation()" style="margin-top: 4px; padding: 2px 6px; font-size: 0.6875rem;">+ Log Today</button>
                   </td>
                 `;
               } else {
                 return `
-                  <td style="vertical-align: top; color: var(--text-muted); font-size: 0.75rem;">
+                  <td style="vertical-align: top; color: var(--text-muted); font-size: 0.75rem; cursor: pointer;" class="meal-plan-empty-slot" data-day="${day}" data-slot="${slot}">
                     <button class="btn btn-sm btn-secondary btn-add-plan-slot" data-day="${day}" data-slot="${slot}" style="padding: 2px 6px; font-size: 0.6875rem;">+ Plan</button>
                   </td>
                 `;
@@ -5704,6 +6872,37 @@
             }).join('')}
           </tr>
         `).join('');
+
+        tbody.querySelectorAll('.meal-plan-cell').forEach(cell => {
+          cell.addEventListener('click', () => {
+            const id = cell.getAttribute('data-id');
+            showEntryDetails('mealPlan', id);
+          });
+        });
+
+        tbody.querySelectorAll('.btn-view-plan').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            showEntryDetails('mealPlan', id);
+          });
+        });
+
+        tbody.querySelectorAll('.btn-edit-plan').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            editEntry('mealPlan', id);
+          });
+        });
+
+        tbody.querySelectorAll('.btn-delete-plan').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            deleteEntry('mealPlan', id);
+          });
+        });
 
         tbody.querySelectorAll('.btn-sync-plan-today').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -5729,15 +6928,29 @@
           });
         });
 
+        const openPlanSlot = (day, slot) => {
+          resetModalForCreation('modal-plan-meal');
+          const daySelect = document.getElementById('plan-day');
+          if (daySelect) daySelect.value = day;
+          const slotSelect = document.getElementById('plan-slot');
+          if (slotSelect) slotSelect.value = slot;
+          openModal('modal-plan-meal');
+        };
+
+        tbody.querySelectorAll('.meal-plan-empty-slot').forEach(cell => {
+          cell.addEventListener('click', () => {
+            const day = cell.getAttribute('data-day');
+            const slot = cell.getAttribute('data-slot');
+            openPlanSlot(day, slot);
+          });
+        });
+
         tbody.querySelectorAll('.btn-add-plan-slot').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const day = btn.getAttribute('data-day');
             const slot = btn.getAttribute('data-slot');
-            const daySelect = document.getElementById('plan-day');
-            if (daySelect) daySelect.value = day;
-            const slotSelect = document.getElementById('plan-slot');
-            if (slotSelect) slotSelect.value = slot;
-            openModal('modal-plan-meal');
+            openPlanSlot(day, slot);
           });
         });
       }
@@ -5785,22 +6998,47 @@
             tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:1rem;">No water logs recorded yet today.</td></tr>`;
           } else {
             tbody.innerHTML = todayLogs.map(l => `
-              <tr>
+              <tr class="table-clickable-row water-row" data-id="${l.id}">
                 <td style="font-weight: 600;">${l.time || 'Logged'}</td>
                 <td><strong style="color: var(--accent);">${l.amount} ml</strong></td>
-                <td style="text-align: right;">
-                  <button class="btn-icon-only btn-delete-water" data-id="${l.id}" style="width: 24px; height: 24px;">&times;</button>
+                <td style="text-align: right;" onclick="event.stopPropagation()">
+                  <div class="btn-action-group">
+                    <button class="btn-icon-only btn-view-water" data-id="${l.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
+                    <button class="btn-icon-only btn-edit-water" data-id="${l.id}" title="Edit Water Amount" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
+                    <button class="btn-icon-only btn-delete-water" data-id="${l.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
+                  </div>
                 </td>
               </tr>
             `).join('');
 
-            tbody.querySelectorAll('.btn-delete-water').forEach(btn => {
-              btn.addEventListener('click', () => {
+            tbody.querySelectorAll('.water-row').forEach(row => {
+              row.addEventListener('click', () => {
+                const id = row.getAttribute('data-id');
+                showEntryDetails('water', id);
+              });
+            });
+
+            tbody.querySelectorAll('.btn-view-water').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const id = btn.getAttribute('data-id');
-                updateState(d => {
-                  d.waterLogs = d.waterLogs.filter(x => x.id !== id);
-                });
-                showToast('Water entry removed.');
+                showEntryDetails('water', id);
+              });
+            });
+
+            tbody.querySelectorAll('.btn-edit-water').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                editEntry('water', id);
+              });
+            });
+
+            tbody.querySelectorAll('.btn-delete-water').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                deleteEntry('water', id);
               });
             });
           }
@@ -5844,25 +7082,50 @@
         const tbody = document.getElementById('steps-history-tbody');
         if (tbody) {
           tbody.innerHTML = appData.stepsLogs.slice(-10).reverse().map(s => `
-            <tr>
+            <tr class="table-clickable-row step-row" data-id="${s.id}">
               <td style="font-weight: 600;">${s.date}</td>
               <td><strong>${s.steps.toLocaleString()}</strong></td>
               <td>${s.distance} km</td>
               <td>${s.activeMinutes} mins</td>
               <td>🔥 ${s.calories} kcal</td>
-              <td style="text-align: right;">
-                <button class="btn-icon-only btn-delete-step" data-id="${s.id}" style="width: 24px; height: 24px;">&times;</button>
+              <td style="text-align: right;" onclick="event.stopPropagation()">
+                <div class="btn-action-group">
+                  <button class="btn-icon-only btn-view-step" data-id="${s.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
+                  <button class="btn-icon-only btn-edit-step" data-id="${s.id}" title="Edit Step Log" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
+                  <button class="btn-icon-only btn-delete-step" data-id="${s.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
+                </div>
               </td>
             </tr>
           `).join('');
 
-          tbody.querySelectorAll('.btn-delete-step').forEach(btn => {
-            btn.addEventListener('click', () => {
+          tbody.querySelectorAll('.step-row').forEach(row => {
+            row.addEventListener('click', () => {
+              const id = row.getAttribute('data-id');
+              showEntryDetails('step', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-view-step').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
               const id = btn.getAttribute('data-id');
-              updateState(d => {
-                d.stepsLogs = d.stepsLogs.filter(x => x.id !== id);
-              });
-              showToast('Step log entry deleted.');
+              showEntryDetails('step', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-edit-step').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const id = btn.getAttribute('data-id');
+              editEntry('step', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-delete-step').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const id = btn.getAttribute('data-id');
+              deleteEntry('step', id);
             });
           });
         }
@@ -5900,7 +7163,7 @@
         const tbody = document.getElementById('sleep-history-tbody');
         if (tbody) {
           tbody.innerHTML = appData.sleepLogs.map(s => `
-            <tr>
+            <tr class="table-clickable-row sleep-row" data-id="${s.id}">
               <td style="font-weight: 600;">${s.date}</td>
               <td>${s.bedtime}</td>
               <td>${s.wakeTime}</td>
@@ -5908,19 +7171,44 @@
               <td>★ ${s.quality}</td>
               <td>${s.interruptions || 0}</td>
               <td style="font-size: 0.8125rem; color: var(--text-muted);">${s.notes || '—'}</td>
-              <td style="text-align: right;">
-                <button class="btn-icon-only btn-delete-sleep" data-id="${s.id}" style="width: 24px; height: 24px;">&times;</button>
+              <td style="text-align: right;" onclick="event.stopPropagation()">
+                <div class="btn-action-group">
+                  <button class="btn-icon-only btn-view-sleep" data-id="${s.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
+                  <button class="btn-icon-only btn-edit-sleep" data-id="${s.id}" title="Edit Sleep Log" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
+                  <button class="btn-icon-only btn-delete-sleep" data-id="${s.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
+                </div>
               </td>
             </tr>
           `).join('');
 
-          tbody.querySelectorAll('.btn-delete-sleep').forEach(btn => {
-            btn.addEventListener('click', () => {
+          tbody.querySelectorAll('.step-row, .sleep-row').forEach(row => {
+            row.addEventListener('click', () => {
+              const id = row.getAttribute('data-id');
+              showEntryDetails('sleep', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-view-sleep').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
               const id = btn.getAttribute('data-id');
-              updateState(d => {
-                d.sleepLogs = d.sleepLogs.filter(x => x.id !== id);
-              });
-              showToast('Sleep entry removed.');
+              showEntryDetails('sleep', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-edit-sleep').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const id = btn.getAttribute('data-id');
+              editEntry('sleep', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-delete-sleep').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const id = btn.getAttribute('data-id');
+              deleteEntry('sleep', id);
             });
           });
         }
@@ -5966,7 +7254,7 @@
         const tbody = document.getElementById('measurements-tbody');
         if (tbody) {
           tbody.innerHTML = appData.bodyMeasurements.map(m => `
-            <tr>
+            <tr class="table-clickable-row meas-row" data-id="${m.id}">
               <td style="font-weight: 600;">${m.date}</td>
               <td><strong>${m.weight} ${unit}</strong></td>
               <td>${m.waist || '—'}</td>
@@ -5975,19 +7263,44 @@
               <td>${m.arms || '—'}</td>
               <td>${m.thighs || '—'}</td>
               <td>${m.neck || '—'}</td>
-              <td style="text-align: right;">
-                <button class="btn-icon-only btn-delete-meas" data-id="${m.id}" style="width: 24px; height: 24px;">&times;</button>
+              <td style="text-align: right;" onclick="event.stopPropagation()">
+                <div class="btn-action-group">
+                  <button class="btn-icon-only btn-view-meas" data-id="${m.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.7rem;">ℹ️</button>
+                  <button class="btn-icon-only btn-edit-meas" data-id="${m.id}" title="Edit Weigh-in & Measurements" style="width: 24px; height: 24px; font-size: 0.7rem;">✏️</button>
+                  <button class="btn-icon-only btn-delete-meas" data-id="${m.id}" title="Delete" style="width: 24px; height: 24px;">&times;</button>
+                </div>
               </td>
             </tr>
           `).join('');
 
-          tbody.querySelectorAll('.btn-delete-meas').forEach(btn => {
-            btn.addEventListener('click', () => {
+          tbody.querySelectorAll('.meas-row').forEach(row => {
+            row.addEventListener('click', () => {
+              const id = row.getAttribute('data-id');
+              showEntryDetails('measurement', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-view-meas').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
               const id = btn.getAttribute('data-id');
-              updateState(d => {
-                d.bodyMeasurements = d.bodyMeasurements.filter(x => x.id !== id);
-              });
-              showToast('Measurement deleted.');
+              showEntryDetails('measurement', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-edit-meas').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const id = btn.getAttribute('data-id');
+              editEntry('weight', id);
+            });
+          });
+
+          tbody.querySelectorAll('.btn-delete-meas').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const id = btn.getAttribute('data-id');
+              deleteEntry('weight', id);
             });
           });
         }
@@ -6024,6 +7337,15 @@
             color: 'var(--success)'
           });
         }
+
+        const vBtn = document.getElementById('btn-view-wellness-today');
+        if (vBtn && log) {
+          vBtn.onclick = () => showEntryDetails('wellness', log.id);
+        }
+        const eBtn = document.getElementById('btn-edit-wellness-today');
+        if (eBtn && log) {
+          eBtn.onclick = () => editEntry('wellness', log.id);
+        }
       }
 
       // --- MOOD JOURNAL RENDERER ---
@@ -6044,7 +7366,7 @@
         }
 
         grid.innerHTML = list.map(j => `
-          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div class="card table-clickable-row journal-card" data-id="${j.id}" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;">
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                 <span style="font-size: 1.5rem;">${j.emoji}</span>
@@ -6055,20 +7377,45 @@
             </div>
             <div>
               <div style="font-size: 0.75rem; font-weight: 600; color: var(--accent); margin-bottom: 0.75rem;">${j.tags || ''}</div>
-              <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 0.5rem;">
-                <button class="btn-icon-only btn-delete-journal" data-id="${j.id}" title="Delete Entry" style="width: 26px; height: 26px;">&times;</button>
+              <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 0.5rem; gap: 0.4rem;" onclick="event.stopPropagation()">
+                <div class="btn-action-group">
+                  <button class="btn-icon-only btn-view-journal" data-id="${j.id}" title="View Details" style="width: 26px; height: 26px; font-size: 0.75rem;">ℹ️</button>
+                  <button class="btn-icon-only btn-edit-journal" data-id="${j.id}" title="Edit Journal" style="width: 26px; height: 26px; font-size: 0.75rem;">✏️</button>
+                  <button class="btn-icon-only btn-delete-journal" data-id="${j.id}" title="Delete Entry" style="width: 26px; height: 26px;">&times;</button>
+                </div>
               </div>
             </div>
           </div>
         `).join('');
 
-        grid.querySelectorAll('.btn-delete-journal').forEach(btn => {
-          btn.addEventListener('click', () => {
+        grid.querySelectorAll('.journal-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const id = card.getAttribute('data-id');
+            showEntryDetails('journal', id);
+          });
+        });
+
+        grid.querySelectorAll('.btn-view-journal').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const id = btn.getAttribute('data-id');
-            updateState(d => {
-              d.moodJournal = d.moodJournal.filter(x => x.id !== id);
-            });
-            showToast('Journal entry deleted.');
+            showEntryDetails('journal', id);
+          });
+        });
+
+        grid.querySelectorAll('.btn-edit-journal').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            editEntry('journal', id);
+          });
+        });
+
+        grid.querySelectorAll('.btn-delete-journal').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            deleteEntry('journal', id);
           });
         });
       }
@@ -6094,27 +7441,31 @@
           const adherence = Math.round((completedCount / 30) * 100);
 
           return `
-            <div style="border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; background: var(--surface);">
+            <div class="table-clickable-row habit-item-card" data-id="${h.id}" style="border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; background: var(--surface); cursor: pointer; margin-bottom: 0.75rem;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                  <button class="btn btn-sm ${isDoneToday ? 'btn-success' : 'btn-secondary'} btn-toggle-habit-today" data-id="${h.id}">
+                  <button class="btn btn-sm ${isDoneToday ? 'btn-success' : 'btn-secondary'} btn-toggle-habit-today" data-id="${h.id}" onclick="event.stopPropagation()">
                     ${isDoneToday ? '✓ Done Today' : '+ Mark Done'}
                   </button>
                   <div>
-                    <h3 style="font-size: 0.9375rem; font-weight: 700; color: var(--text);">${h.name}</h3>
+                    <h3 style="font-size: 0.9375rem; font-weight: 700; color: var(--text); margin-bottom: 2px;">${h.name}</h3>
                     <div style="font-size: 0.75rem; color: var(--text-muted);">${h.category} • Target ${h.targetFrequency} days/wk</div>
                   </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 1rem; font-size: 0.8125rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.8125rem;" onclick="event.stopPropagation()">
                   <span>🔥 Streak: <strong>${h.streak || 0}d</strong> (Best: ${h.bestStreak || 0}d)</span>
                   <span>Adherence: <strong>${adherence}%</strong></span>
-                  <button class="btn-icon-only btn-delete-habit" data-id="${h.id}" title="Delete Habit" style="width: 26px; height: 26px;">&times;</button>
+                  <div class="btn-action-group">
+                    <button class="btn-icon-only btn-view-habit" data-id="${h.id}" title="View Details" style="width: 26px; height: 26px; font-size: 0.75rem;">ℹ️</button>
+                    <button class="btn-icon-only btn-edit-habit" data-id="${h.id}" title="Edit Habit" style="width: 26px; height: 26px; font-size: 0.75rem;">✏️</button>
+                    <button class="btn-icon-only btn-delete-habit" data-id="${h.id}" title="Delete Habit" style="width: 26px; height: 26px;">&times;</button>
+                  </div>
                 </div>
               </div>
 
               <!-- 30-Day Activity Heatmap -->
               <div style="font-size: 0.6875rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">30-Day Activity Heatmap</div>
-              <div class="habit-heatmap-grid">
+              <div class="habit-heatmap-grid" onclick="event.stopPropagation()">
                 ${dates.map(dt => {
                   const done = h.logs && h.logs[dt];
                   return `<div class="habit-heatmap-day ${done ? 'completed' : ''}" title="${dt}: ${done ? 'Completed' : 'Missed'}" data-hid="${h.id}" data-date="${dt}"></div>`;
@@ -6123,6 +7474,29 @@
             </div>
           `;
         }).join('');
+
+        masterList.querySelectorAll('.habit-item-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const id = card.getAttribute('data-id');
+            showEntryDetails('habit', id);
+          });
+        });
+
+        masterList.querySelectorAll('.btn-view-habit').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            showEntryDetails('habit', id);
+          });
+        });
+
+        masterList.querySelectorAll('.btn-edit-habit').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            editEntry('habit', id);
+          });
+        });
 
         masterList.querySelectorAll('.btn-toggle-habit-today').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -6155,12 +7529,10 @@
         });
 
         masterList.querySelectorAll('.btn-delete-habit').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const hid = btn.getAttribute('data-id');
-            updateState(d => {
-              d.habits = d.habits.filter(x => x.id !== hid);
-            });
-            showToast('Habit removed.');
+            deleteEntry('habit', hid);
           });
         });
       }
@@ -6182,7 +7554,7 @@
         grid.innerHTML = list.map(g => {
           const isDone = g.progress >= 100;
           return `
-            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="card table-clickable-row goal-card" data-id="${g.id}" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;">
               <div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                   <span class="schedule-category-chip">${g.category}</span>
@@ -6200,21 +7572,46 @@
                   <span>${g.progress}% Achieved</span>
                 </div>
               </div>
-              <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+              <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;" onclick="event.stopPropagation()">
                 <span style="font-size: 0.75rem; color: var(--text-muted);">Due: ${g.deadline}</span>
-                <button class="btn-icon-only btn-delete-goal" data-id="${g.id}" title="Delete Goal" style="width: 26px; height: 26px;">&times;</button>
+                <div class="btn-action-group">
+                  <button class="btn-icon-only btn-view-goal" data-id="${g.id}" title="View Details" style="width: 26px; height: 26px; font-size: 0.75rem;">ℹ️</button>
+                  <button class="btn-icon-only btn-edit-goal" data-id="${g.id}" title="Edit Goal" style="width: 26px; height: 26px; font-size: 0.75rem;">✏️</button>
+                  <button class="btn-icon-only btn-delete-goal" data-id="${g.id}" title="Delete Goal" style="width: 26px; height: 26px;">&times;</button>
+                </div>
               </div>
             </div>
           `;
         }).join('');
 
-        grid.querySelectorAll('.btn-delete-goal').forEach(btn => {
-          btn.addEventListener('click', () => {
+        grid.querySelectorAll('.goal-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const id = card.getAttribute('data-id');
+            showEntryDetails('goal', id);
+          });
+        });
+
+        grid.querySelectorAll('.btn-view-goal').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const id = btn.getAttribute('data-id');
-            updateState(d => {
-              d.goals = d.goals.filter(x => x.id !== id);
-            });
-            showToast('Goal deleted.');
+            showEntryDetails('goal', id);
+          });
+        });
+
+        grid.querySelectorAll('.btn-edit-goal').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            editEntry('goal', id);
+          });
+        });
+
+        grid.querySelectorAll('.btn-delete-goal').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            deleteEntry('goal', id);
           });
         });
       }
@@ -6319,19 +7716,46 @@
               </div>
               <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 ${items.length === 0 ? '<div style="font-size: 0.8125rem; color: var(--text-muted);">No items added yet.</div>' : items.map(item => `
-                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); background: var(--surface-subtle);">
-                    <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; flex: 1;">
+                  <div class="table-clickable-row grocery-item-row" data-id="${item.id}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); background: var(--surface-subtle); cursor: pointer;">
+                    <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; flex: 1;" onclick="event.stopPropagation()">
                       <input type="checkbox" ${item.checked ? 'checked' : ''} class="grocery-chk" data-id="${item.id}">
                       <span style="font-size: 0.875rem; ${item.checked ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${item.name}</span>
                     </label>
                     <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 0.5rem;">${item.quantity || ''}</span>
-                    <button class="btn-icon-only btn-delete-grocery" data-id="${item.id}" style="width: 22px; height: 22px; border: none;">&times;</button>
+                    <div class="btn-action-group" onclick="event.stopPropagation()">
+                      <button class="btn-icon-only btn-view-grocery" data-id="${item.id}" title="View Details" style="width: 24px; height: 24px; font-size: 0.65rem;">ℹ️</button>
+                      <button class="btn-icon-only btn-edit-grocery" data-id="${item.id}" title="Edit Item" style="width: 24px; height: 24px; font-size: 0.65rem;">✏️</button>
+                      <button class="btn-icon-only btn-delete-grocery" data-id="${item.id}" title="Delete" style="width: 24px; height: 24px; border: none;">&times;</button>
+                    </div>
                   </div>
                 `).join('')}
               </div>
             </div>
           `;
         }).join('');
+
+        container.querySelectorAll('.grocery-item-row').forEach(row => {
+          row.addEventListener('click', () => {
+            const id = row.getAttribute('data-id');
+            showEntryDetails('grocery', id);
+          });
+        });
+
+        container.querySelectorAll('.btn-view-grocery').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            showEntryDetails('grocery', id);
+          });
+        });
+
+        container.querySelectorAll('.btn-edit-grocery').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            editEntry('grocery', id);
+          });
+        });
 
         container.querySelectorAll('.grocery-chk').forEach(chk => {
           chk.addEventListener('change', (e) => {
@@ -6344,12 +7768,10 @@
         });
 
         container.querySelectorAll('.btn-delete-grocery').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const id = btn.getAttribute('data-id');
-            updateState(d => {
-              d.groceryList = d.groceryList.filter(x => x.id !== id);
-            });
-            showToast('Item removed from grocery list.');
+            deleteEntry('grocery', id);
           });
         });
       }
@@ -6572,9 +7994,12 @@
           }
         });
 
-        // Sidebar user click -> settings
+        // Sidebar & Header user clicks -> settings
         const userBtn = document.getElementById('sidebar-user-btn');
         if (userBtn) userBtn.addEventListener('click', () => switchView('settings'));
+
+        const headerUserBtn = document.getElementById('header-user-btn');
+        if (headerUserBtn) headerUserBtn.addEventListener('click', () => switchView('settings'));
 
         // Mobile Menu Toggle
         const mobileBtn = document.getElementById('btn-mobile-menu');
@@ -6593,16 +8018,57 @@
           });
         }
 
-        // Theme Pickers
+        // Theme Pickers & Light/Dark Mode Header Toggle
         const topTheme = document.getElementById('theme-selector');
         if (topTheme) topTheme.addEventListener('change', e => applyTheme(e.target.value));
         const setTheme = document.getElementById('set-theme-select');
         if (setTheme) setTheme.addEventListener('change', e => applyTheme(e.target.value));
 
+        const themeToggleBtn = document.getElementById('btn-theme-toggle');
+        if (themeToggleBtn) {
+          themeToggleBtn.addEventListener('click', () => {
+            const currTheme = document.documentElement.getAttribute('data-theme') || (appData && appData.settings ? appData.settings.theme : 'wellness-blue');
+            if (currTheme === 'dark-mode') {
+              const target = (appData && appData.settings && appData.settings.lastLightTheme && appData.settings.lastLightTheme !== 'dark-mode') 
+                ? appData.settings.lastLightTheme 
+                : 'wellness-blue';
+              applyTheme(target);
+              showToast(`Switched to Light Mode (${target.replace('-', ' ')})`);
+            } else {
+              if (appData && appData.settings) {
+                appData.settings.lastLightTheme = currTheme;
+              }
+              applyTheme('dark-mode');
+              showToast('Switched to Dark Mode');
+            }
+          });
+        }
+
+        // Quick Action Dropdown in Header
+        const quickDropBtn = document.getElementById('btn-quick-dropdown-toggle');
+        const quickDropMenu = document.getElementById('quick-action-menu');
+        if (quickDropBtn && quickDropMenu) {
+          quickDropBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            quickDropMenu.classList.toggle('show');
+          });
+          document.addEventListener('click', (e) => {
+            if (!quickDropBtn.contains(e.target) && !quickDropMenu.contains(e.target)) {
+              quickDropMenu.classList.remove('show');
+            }
+          });
+          quickDropMenu.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+              quickDropMenu.classList.remove('show');
+            });
+          });
+        }
+
         // Modal Open Buttons
         document.querySelectorAll('[data-action="open-modal"]').forEach(btn => {
           btn.addEventListener('click', () => {
             const target = btn.getAttribute('data-target');
+            resetModalForCreation(target);
             // Default dates to today
             const todayStr = new Date().toISOString().split('T')[0];
             const dateInputs = document.querySelectorAll('#modal-container input[type="date"]');
@@ -6615,6 +8081,7 @@
         document.querySelectorAll('[data-action="open-modal-slot"]').forEach(btn => {
           btn.addEventListener('click', () => {
             const slot = btn.getAttribute('data-slot');
+            resetModalForCreation('modal-meal');
             const select = document.getElementById('meal-slot');
             if (select) select.value = slot;
             const dateInput = document.getElementById('meal-date');
@@ -6909,8 +8376,8 @@
         if (formWorkout) {
           formWorkout.addEventListener('submit', (e) => {
             e.preventDefault();
-            const w = {
-              id: 'w-' + Date.now(),
+            const editId = document.getElementById('workout-edit-id')?.value;
+            const wData = {
               name: document.getElementById('workout-name').value,
               category: document.getElementById('workout-category').value,
               date: document.getElementById('workout-date').value,
@@ -6922,10 +8389,22 @@
               calories: Number(document.getElementById('workout-calories').value) || 0,
               notes: document.getElementById('workout-notes').value
             };
-            updateState(d => d.workouts.unshift(w));
+            if (editId) {
+              updateState(d => {
+                const item = d.workouts.find(x => x.id === editId);
+                if (item) Object.assign(item, wData);
+              });
+              if (document.getElementById('workout-edit-id')) document.getElementById('workout-edit-id').value = '';
+              const title = document.getElementById('modal-workout-title');
+              if (title) title.textContent = 'Log Workout';
+              showToast(`Workout "${wData.name}" updated!`, 'success');
+            } else {
+              const w = Object.assign({ id: 'w-' + Date.now() }, wData);
+              updateState(d => d.workouts.unshift(w));
+              showToast(`Workout "${w.name}" saved!`, 'success');
+            }
             closeModal();
             formWorkout.reset();
-            showToast(`Workout "${w.name}" saved!`, 'success');
           });
         }
 
@@ -6934,8 +8413,8 @@
         if (formMeal) {
           formMeal.addEventListener('submit', (e) => {
             e.preventDefault();
-            const m = {
-              id: 'm-' + Date.now(),
+            const editId = document.getElementById('meal-edit-id')?.value;
+            const mData = {
               date: document.getElementById('meal-date').value,
               slot: document.getElementById('meal-slot').value,
               foodName: document.getElementById('meal-food-name').value,
@@ -6946,10 +8425,22 @@
               fat: Number(document.getElementById('meal-fat').value) || 0,
               fiber: Number(document.getElementById('meal-fiber').value) || 0
             };
-            updateState(d => d.meals.push(m));
+            if (editId) {
+              updateState(d => {
+                const item = d.meals.find(x => x.id === editId);
+                if (item) Object.assign(item, mData);
+              });
+              if (document.getElementById('meal-edit-id')) document.getElementById('meal-edit-id').value = '';
+              const title = document.getElementById('modal-meal-title');
+              if (title) title.textContent = 'Log Food Item';
+              showToast(`"${mData.foodName}" updated!`, 'success');
+            } else {
+              const m = Object.assign({ id: 'm-' + Date.now() }, mData);
+              updateState(d => d.meals.push(m));
+              showToast(`"${m.foodName}" added to ${m.slot}!`, 'success');
+            }
             closeModal();
             formMeal.reset();
-            showToast(`"${m.foodName}" added to ${m.slot}!`, 'success');
           });
         }
 
@@ -6958,20 +8449,31 @@
         if (formTask) {
           formTask.addEventListener('submit', (e) => {
             e.preventDefault();
-            const t = {
-              id: 'pt-' + Date.now(),
+            const editId = document.getElementById('task-edit-id')?.value;
+            const tData = {
               title: document.getElementById('task-title').value,
               date: document.getElementById('task-date').value,
               time: document.getElementById('task-time').value,
               category: document.getElementById('task-category').value,
               priority: document.getElementById('task-priority').value,
-              notes: document.getElementById('task-notes').value,
-              completed: false
+              notes: document.getElementById('task-notes').value
             };
-            updateState(d => d.plannerTasks.push(t));
+            if (editId) {
+              updateState(d => {
+                const item = d.plannerTasks.find(x => x.id === editId);
+                if (item) Object.assign(item, tData);
+              });
+              if (document.getElementById('task-edit-id')) document.getElementById('task-edit-id').value = '';
+              const title = document.getElementById('modal-task-title');
+              if (title) title.textContent = 'Add Schedule Task';
+              showToast('Schedule task updated.', 'success');
+            } else {
+              const t = Object.assign({ id: 'pt-' + Date.now(), completed: false }, tData);
+              updateState(d => d.plannerTasks.push(t));
+              showToast('Schedule task created.', 'success');
+            }
             closeModal();
             formTask.reset();
-            showToast('Schedule task created.', 'success');
           });
         }
 
@@ -6980,18 +8482,30 @@
         if (formCal) {
           formCal.addEventListener('submit', (e) => {
             e.preventDefault();
-            const ev = {
-              id: 'ce-' + Date.now(),
+            const editId = document.getElementById('cal-event-edit-id')?.value;
+            const evData = {
               title: document.getElementById('cal-event-title').value,
               date: document.getElementById('cal-event-date').value,
               time: document.getElementById('cal-event-time').value,
               category: document.getElementById('cal-event-category').value,
               notes: document.getElementById('cal-event-notes').value
             };
-            updateState(d => d.calendarEvents.push(ev));
+            if (editId) {
+              updateState(d => {
+                const item = d.calendarEvents.find(x => x.id === editId);
+                if (item) Object.assign(item, evData);
+              });
+              if (document.getElementById('cal-event-edit-id')) document.getElementById('cal-event-edit-id').value = '';
+              const title = document.getElementById('modal-cal-event-title');
+              if (title) title.textContent = 'Add Calendar Event';
+              showToast('Calendar event updated.', 'success');
+            } else {
+              const ev = Object.assign({ id: 'ce-' + Date.now() }, evData);
+              updateState(d => d.calendarEvents.push(ev));
+              showToast('Calendar event created.', 'success');
+            }
             closeModal();
             formCal.reset();
-            showToast('Calendar event created.', 'success');
           });
         }
 
@@ -7000,6 +8514,7 @@
         if (formWeight) {
           formWeight.addEventListener('submit', (e) => {
             e.preventDefault();
+            const editId = document.getElementById('weight-edit-id')?.value;
             const wVal = Number(document.getElementById('weight-val').value);
             const wDate = document.getElementById('weight-date').value;
             const wNotes = document.getElementById('weight-notes').value;
@@ -7011,21 +8526,55 @@
             const thighs = Number(document.getElementById('meas-thighs').value) || null;
             const neck = Number(document.getElementById('meas-neck').value) || null;
 
-            updateState(d => {
-              d.profile.currentWeight = wVal;
-              d.weightLogs.push({ id: 'wt-' + Date.now(), date: wDate, weight: wVal, notes: wNotes });
-              if (waist || chest || hips) {
-                d.bodyMeasurements.push({
-                  id: 'bm-' + Date.now(),
-                  date: wDate,
-                  weight: wVal,
-                  waist, chest, hips, arms, thighs, neck
-                });
-              }
-            });
+            if (editId) {
+              updateState(d => {
+                d.profile.currentWeight = wVal;
+                const wtItem = d.weightLogs.find(x => x.id === editId || x.date === wDate);
+                if (wtItem) {
+                  wtItem.weight = wVal;
+                  wtItem.date = wDate;
+                  wtItem.notes = wNotes;
+                }
+                const bmItem = d.bodyMeasurements.find(x => x.id === editId || x.date === wDate);
+                if (bmItem) {
+                  bmItem.weight = wVal;
+                  bmItem.date = wDate;
+                  bmItem.waist = waist;
+                  bmItem.chest = chest;
+                  bmItem.hips = hips;
+                  bmItem.arms = arms;
+                  bmItem.thighs = thighs;
+                  bmItem.neck = neck;
+                } else if (waist || chest || hips) {
+                  d.bodyMeasurements.push({
+                    id: 'bm-' + Date.now(),
+                    date: wDate,
+                    weight: wVal,
+                    waist, chest, hips, arms, thighs, neck
+                  });
+                }
+              });
+              if (document.getElementById('weight-edit-id')) document.getElementById('weight-edit-id').value = '';
+              const title = document.getElementById('modal-weight-title');
+              if (title) title.textContent = 'Log Weigh-in & Measurements';
+              showToast(`Weigh-in updated (${wVal} kg)!`, 'success');
+            } else {
+              updateState(d => {
+                d.profile.currentWeight = wVal;
+                d.weightLogs.push({ id: 'wt-' + Date.now(), date: wDate, weight: wVal, notes: wNotes });
+                if (waist || chest || hips) {
+                  d.bodyMeasurements.push({
+                    id: 'bm-' + Date.now(),
+                    date: wDate,
+                    weight: wVal,
+                    waist, chest, hips, arms, thighs, neck
+                  });
+                }
+              });
+              showToast(`Weigh-in recorded (${wVal} kg)!`, 'success');
+            }
             closeModal();
             formWeight.reset();
-            showToast(`Weigh-in recorded (${wVal} kg)!`, 'success');
           });
         }
 
@@ -7034,19 +8583,28 @@
         if (formHabit) {
           formHabit.addEventListener('submit', (e) => {
             e.preventDefault();
-            const h = {
-              id: 'hb-' + Date.now(),
+            const editId = document.getElementById('habit-edit-id')?.value;
+            const hData = {
               name: document.getElementById('habit-name').value,
               category: document.getElementById('habit-category').value,
-              targetFrequency: Number(document.getElementById('habit-frequency').value),
-              streak: 0,
-              bestStreak: 0,
-              logs: {}
+              targetFrequency: Number(document.getElementById('habit-frequency').value)
             };
-            updateState(d => d.habits.push(h));
+            if (editId) {
+              updateState(d => {
+                const item = d.habits.find(x => x.id === editId);
+                if (item) Object.assign(item, hData);
+              });
+              if (document.getElementById('habit-edit-id')) document.getElementById('habit-edit-id').value = '';
+              const title = document.getElementById('modal-habit-title');
+              if (title) title.textContent = 'Create New Habit';
+              showToast(`Habit "${hData.name}" updated!`, 'success');
+            } else {
+              const h = Object.assign({ id: 'hb-' + Date.now(), streak: 0, bestStreak: 0, logs: {} }, hData);
+              updateState(d => d.habits.push(h));
+              showToast(`Habit "${h.name}" created!`, 'success');
+            }
             closeModal();
             formHabit.reset();
-            showToast(`Habit "${h.name}" created!`, 'success');
           });
         }
 
@@ -7055,18 +8613,17 @@
         if (formSleep) {
           formSleep.addEventListener('submit', (e) => {
             e.preventDefault();
+            const editId = document.getElementById('sleep-edit-id')?.value;
             const bt = document.getElementById('sleep-bedtime').value;
             const wt = document.getElementById('sleep-waketime').value;
 
-            // Calculate duration in hours
             const [bH, bM] = bt.split(':').map(Number);
             const [wH, wM] = wt.split(':').map(Number);
             let totalMins = (wH * 60 + wM) - (bH * 60 + bM);
             if (totalMins < 0) totalMins += 24 * 60;
             const durHours = +(totalMins / 60).toFixed(2);
 
-            const sl = {
-              id: 'sl-' + Date.now(),
+            const slData = {
               date: document.getElementById('sleep-date').value,
               bedtime: bt,
               wakeTime: wt,
@@ -7075,10 +8632,22 @@
               interruptions: Number(document.getElementById('sleep-interruptions').value),
               notes: document.getElementById('sleep-notes').value
             };
-            updateState(d => d.sleepLogs.unshift(sl));
+            if (editId) {
+              updateState(d => {
+                const item = d.sleepLogs.find(x => x.id === editId);
+                if (item) Object.assign(item, slData);
+              });
+              if (document.getElementById('sleep-edit-id')) document.getElementById('sleep-edit-id').value = '';
+              const title = document.getElementById('modal-sleep-title');
+              if (title) title.textContent = 'Log Sleep Session';
+              showToast(`Sleep log updated (${durHours} hours)!`, 'success');
+            } else {
+              const sl = Object.assign({ id: 'sl-' + Date.now() }, slData);
+              updateState(d => d.sleepLogs.unshift(sl));
+              showToast(`Sleep log saved (${durHours} hours)!`, 'success');
+            }
             closeModal();
             formSleep.reset();
-            showToast(`Sleep log saved (${durHours} hours)!`, 'success');
           });
         }
 
@@ -7087,16 +8656,15 @@
         if (formWellness) {
           formWellness.addEventListener('submit', (e) => {
             e.preventDefault();
+            const editId = document.getElementById('wellness-edit-id')?.value;
             const m = Number(document.getElementById('wellness-mood').value);
             const en = Number(document.getElementById('wellness-energy').value);
             const st = Number(document.getElementById('wellness-stress').value);
             const fo = Number(document.getElementById('wellness-focus').value);
 
-            // Calculate composite score (0-100)
             const score = Math.round(((m + en + (6 - st) + fo) / 20) * 100);
 
-            const wn = {
-              id: 'wn-' + Date.now(),
+            const wnData = {
               date: document.getElementById('wellness-date').value,
               mood: m,
               energy: en,
@@ -7106,10 +8674,22 @@
               overallScore: score,
               notes: document.getElementById('wellness-notes').value
             };
-            updateState(d => d.wellnessLogs.unshift(wn));
+            if (editId) {
+              updateState(d => {
+                const item = d.wellnessLogs.find(x => x.id === editId);
+                if (item) Object.assign(item, wnData);
+              });
+              if (document.getElementById('wellness-edit-id')) document.getElementById('wellness-edit-id').value = '';
+              const title = document.getElementById('modal-wellness-title');
+              if (title) title.textContent = 'Daily Wellness Check-in';
+              showToast(`Wellness check-in updated (${score}/100)!`, 'success');
+            } else {
+              const wn = Object.assign({ id: 'wn-' + Date.now() }, wnData);
+              updateState(d => d.wellnessLogs.unshift(wn));
+              showToast(`Wellness check-in completed (${score}/100)!`, 'success');
+            }
             closeModal();
             formWellness.reset();
-            showToast(`Wellness check-in completed (${score}/100)!`, 'success');
           });
         }
 
@@ -7118,18 +8698,30 @@
         if (formJournal) {
           formJournal.addEventListener('submit', (e) => {
             e.preventDefault();
-            const j = {
-              id: 'mj-' + Date.now(),
+            const editId = document.getElementById('journal-edit-id')?.value;
+            const jData = {
               date: document.getElementById('journal-date').value,
               emoji: document.getElementById('journal-emoji').value,
               title: document.getElementById('journal-title').value,
               text: document.getElementById('journal-text').value,
               tags: document.getElementById('journal-tags').value
             };
-            updateState(d => d.moodJournal.unshift(j));
+            if (editId) {
+              updateState(d => {
+                const item = d.moodJournal.find(x => x.id === editId);
+                if (item) Object.assign(item, jData);
+              });
+              if (document.getElementById('journal-edit-id')) document.getElementById('journal-edit-id').value = '';
+              const title = document.getElementById('modal-journal-title');
+              if (title) title.textContent = 'New Mood Journal Entry';
+              showToast('Journal reflection updated.', 'success');
+            } else {
+              const j = Object.assign({ id: 'mj-' + Date.now() }, jData);
+              updateState(d => d.moodJournal.unshift(j));
+              showToast('Journal entry saved.', 'success');
+            }
             closeModal();
             formJournal.reset();
-            showToast('Journal entry saved.', 'success');
           });
         }
 
@@ -7138,24 +8730,39 @@
         if (formGoal) {
           formGoal.addEventListener('submit', (e) => {
             e.preventDefault();
+            const editId = document.getElementById('goal-edit-id')?.value;
             const start = Number(document.getElementById('goal-start').value);
             const target = Number(document.getElementById('goal-target').value);
-            const g = {
-              id: 'gl-' + Date.now(),
+            const gData = {
               title: document.getElementById('goal-name').value,
               category: document.getElementById('goal-category').value,
               startValue: start,
-              currentValue: start,
               targetValue: target,
               unit: document.getElementById('goal-unit').value,
               deadline: document.getElementById('goal-deadline').value,
-              progress: 0,
               notes: document.getElementById('goal-notes').value
             };
-            updateState(d => d.goals.push(g));
+            if (editId) {
+              updateState(d => {
+                const item = d.goals.find(x => x.id === editId);
+                if (item) {
+                  Object.assign(item, gData);
+                  const span = Math.abs(item.targetValue - item.startValue) || 1;
+                  const prog = Math.abs(item.currentValue - item.startValue);
+                  item.progress = Math.min(100, Math.round((prog / span) * 100));
+                }
+              });
+              if (document.getElementById('goal-edit-id')) document.getElementById('goal-edit-id').value = '';
+              const title = document.getElementById('modal-goal-title');
+              if (title) title.textContent = 'Create SMART Goal';
+              showToast(`SMART Goal "${gData.title}" updated!`, 'success');
+            } else {
+              const g = Object.assign({ id: 'gl-' + Date.now(), currentValue: start, progress: 0 }, gData);
+              updateState(d => d.goals.push(g));
+              showToast(`SMART Goal "${g.title}" created!`, 'success');
+            }
             closeModal();
             formGoal.reset();
-            showToast(`SMART Goal "${g.title}" created!`, 'success');
           });
         }
 
@@ -7164,20 +8771,31 @@
         if (formEx) {
           formEx.addEventListener('submit', (e) => {
             e.preventDefault();
-            const ex = {
-              id: 'ex-' + Date.now(),
+            const editId = document.getElementById('exercise-edit-id')?.value;
+            const exData = {
               name: document.getElementById('cust-ex-name').value,
               muscleGroup: document.getElementById('cust-ex-muscle').value,
               equipment: document.getElementById('cust-ex-equipment').value,
               sets: Number(document.getElementById('cust-ex-sets').value) || 3,
               reps: document.getElementById('cust-ex-reps').value || '10',
-              notes: document.getElementById('cust-ex-notes').value,
-              isFavorite: false
+              notes: document.getElementById('cust-ex-notes').value
             };
-            updateState(d => d.exercises.push(ex));
+            if (editId) {
+              updateState(d => {
+                const item = d.exercises.find(x => x.id === editId);
+                if (item) Object.assign(item, exData);
+              });
+              if (document.getElementById('exercise-edit-id')) document.getElementById('exercise-edit-id').value = '';
+              const title = document.getElementById('modal-exercise-title');
+              if (title) title.textContent = 'Add Custom Exercise';
+              showToast(`Exercise "${exData.name}" updated!`, 'success');
+            } else {
+              const ex = Object.assign({ id: 'ex-' + Date.now(), isFavorite: false }, exData);
+              updateState(d => d.exercises.push(ex));
+              showToast(`Exercise "${ex.name}" added to library!`, 'success');
+            }
             closeModal();
             formEx.reset();
-            showToast(`Exercise "${ex.name}" added to library!`, 'success');
           });
         }
 
@@ -7186,21 +8804,38 @@
         if (formPlan) {
           formPlan.addEventListener('submit', (e) => {
             e.preventDefault();
-            const p = {
-              id: 'mp-' + Date.now(),
+            const editId = document.getElementById('plan-meal-edit-id')?.value;
+            const pData = {
               day: document.getElementById('plan-day').value,
               slot: document.getElementById('plan-slot').value,
               name: document.getElementById('plan-meal-name').value,
               calories: Number(document.getElementById('plan-calories').value) || 450,
               notes: document.getElementById('plan-notes').value
             };
-            updateState(d => {
-              d.mealPlans = d.mealPlans.filter(x => !(x.day === p.day && x.slot === p.slot));
-              d.mealPlans.push(p);
-            });
+            if (editId) {
+              updateState(d => {
+                const item = d.mealPlans.find(x => x.id === editId || (x.day && x.slot && `mp-${x.day.toLowerCase()}-${x.slot.toLowerCase()}` === editId));
+                if (item) {
+                  Object.assign(item, pData);
+                  if (!item.id) item.id = editId;
+                }
+              });
+              if (document.getElementById('plan-meal-edit-id')) document.getElementById('plan-meal-edit-id').value = '';
+              const title = document.getElementById('modal-plan-meal-title');
+              if (title) title.textContent = 'Plan Meal';
+              const sBtn = document.getElementById('btn-submit-plan-meal');
+              if (sBtn) sBtn.textContent = 'Add to Plan';
+              showToast(`Meal plan updated for ${pData.day} ${pData.slot}!`, 'success');
+            } else {
+              const p = Object.assign({ id: 'mp-' + Date.now() }, pData);
+              updateState(d => {
+                d.mealPlans = d.mealPlans.filter(x => !(x.day === p.day && x.slot === p.slot));
+                d.mealPlans.push(p);
+              });
+              showToast(`Meal planned for ${p.day} ${p.slot}!`, 'success');
+            }
             closeModal();
             formPlan.reset();
-            showToast(`Meal planned for ${p.day} ${p.slot}!`, 'success');
           });
         }
 
@@ -7209,17 +8844,28 @@
         if (formGroc) {
           formGroc.addEventListener('submit', (e) => {
             e.preventDefault();
-            const g = {
-              id: 'gr-' + Date.now(),
+            const editId = document.getElementById('grocery-edit-id')?.value;
+            const gData = {
               name: document.getElementById('grocery-name').value,
               category: document.getElementById('grocery-category').value,
-              quantity: document.getElementById('grocery-quantity').value,
-              checked: false
+              quantity: document.getElementById('grocery-quantity').value
             };
-            updateState(d => d.groceryList.push(g));
+            if (editId) {
+              updateState(d => {
+                const item = d.groceryList.find(x => x.id === editId);
+                if (item) Object.assign(item, gData);
+              });
+              if (document.getElementById('grocery-edit-id')) document.getElementById('grocery-edit-id').value = '';
+              const title = document.getElementById('modal-grocery-title');
+              if (title) title.textContent = 'Add Grocery Item';
+              showToast(`"${gData.name}" updated in grocery list!`, 'success');
+            } else {
+              const g = Object.assign({ id: 'gr-' + Date.now(), checked: false }, gData);
+              updateState(d => d.groceryList.push(g));
+              showToast(`"${g.name}" added to grocery list!`, 'success');
+            }
             closeModal();
             formGroc.reset();
-            showToast(`"${g.name}" added to grocery list!`, 'success');
           });
         }
 
@@ -7228,28 +8874,73 @@
         if (formSteps) {
           formSteps.addEventListener('submit', (e) => {
             e.preventDefault();
+            const editId = document.getElementById('steps-edit-id')?.value;
             const sDate = document.getElementById('steps-date').value;
             const stepsCount = Number(document.getElementById('steps-count').value);
             const dist = Number(document.getElementById('steps-input-dist').value) || +(stepsCount * 0.00075).toFixed(1);
             const mins = Number(document.getElementById('steps-input-mins').value) || Math.round(stepsCount / 160);
             const cal = Number(document.getElementById('steps-input-cal').value) || Math.round(stepsCount * 0.045);
 
+            if (editId) {
+              updateState(d => {
+                const existing = d.stepsLogs.find(x => x.id === editId || x.date === sDate);
+                if (existing) {
+                  existing.date = sDate;
+                  existing.steps = stepsCount;
+                  existing.distance = dist;
+                  existing.activeMinutes = mins;
+                  existing.calories = cal;
+                }
+              });
+              if (document.getElementById('steps-edit-id')) document.getElementById('steps-edit-id').value = '';
+              const title = document.getElementById('modal-steps-title');
+              if (title) title.textContent = 'Log Daily Steps & Activity';
+              showToast(`Updated steps to ${stepsCount.toLocaleString()}!`, 'success');
+            } else {
+              updateState(d => {
+                const existing = d.stepsLogs.find(x => x.date === sDate);
+                if (existing) {
+                  existing.steps = stepsCount;
+                  existing.distance = dist;
+                  existing.activeMinutes = mins;
+                  existing.calories = cal;
+                } else {
+                  d.stepsLogs.push({ id: 'st-' + Date.now(), date: sDate, steps: stepsCount, distance: dist, activeMinutes: mins, calories: cal });
+                }
+              });
+              showToast(`Logged ${stepsCount.toLocaleString()} steps!`, 'success');
+            }
+            closeModal();
+            formSteps.reset();
+          });
+        }
+
+        // Form Submit: Water Edit Modal
+        const formWaterEdit = document.getElementById('form-water-edit');
+        if (formWaterEdit) {
+          formWaterEdit.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('water-edit-id')?.value;
+            const date = document.getElementById('water-edit-date').value;
+            const time = document.getElementById('water-edit-time').value;
+            const amount = Number(document.getElementById('water-edit-amount').value) || 250;
+
             updateState(d => {
-              const existing = d.stepsLogs.find(x => x.date === sDate);
-              if (existing) {
-                existing.steps = stepsCount;
-                existing.distance = dist;
-                existing.activeMinutes = mins;
-                existing.calories = cal;
-              } else {
-                d.stepsLogs.push({ id: 'st-' + Date.now(), date: sDate, steps: stepsCount, distance: dist, activeMinutes: mins, calories: cal });
+              const item = d.waterLogs.find(x => x.id === id);
+              if (item) {
+                item.date = date;
+                item.time = time;
+                item.amount = amount;
               }
             });
             closeModal();
-            formSteps.reset();
-            showToast(`Logged ${stepsCount.toLocaleString()} steps!`, 'success');
+            formWaterEdit.reset();
+            showToast(`Water entry updated to ${amount} ml!`, 'success');
           });
         }
+
+        // Initialize Interactive Chart Hover Tooltips
+        initChartTooltips();
       }
 
       // --- APPLICATION BOOTSTRAP ---
@@ -7261,6 +8952,17 @@
         renderHeaderUserInfo();
         switchView('dashboard');
         showToast('PulseWellness ready • 100% Offline Mode Active', 'success');
+
+        // Expose API globally for accessibility and scripting
+        window.appData = appData;
+        window.showEntryDetails = showEntryDetails;
+        window.editEntry = editEntry;
+        window.deleteEntry = deleteEntry;
+        window.switchView = switchView;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.recalculateMetrics = recalculateMetrics;
+        window.updateState = updateState;
       }
 
       if (document.readyState === 'loading') {
