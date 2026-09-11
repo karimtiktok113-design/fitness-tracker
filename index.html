@@ -1082,12 +1082,155 @@
       background: var(--danger);
     }
 
-    /* Dashboard Layout Columns */
+    /* Dashboard Layout Columns & Equal-Height Alignment */
     .dashboard-row {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 1.55fr 1fr;
       gap: 1.25rem;
       margin-bottom: 1.5rem;
+      align-items: stretch;
+    }
+
+    .dashboard-row > .card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      min-height: 100%;
+      box-sizing: border-box;
+      min-width: 0;
+    }
+
+    .dashboard-row > .card > .card-header {
+      flex-shrink: 0;
+      margin-bottom: 0.85rem;
+    }
+
+    .dashboard-card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
+    }
+
+    .dashboard-card-footer {
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Scrollable Containers & Subtle Scrollbars for Dashboard Lists */
+    #dashboard-schedule-list {
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    #dashboard-habits-checklist {
+      max-height: 230px;
+      overflow-y: auto;
+      padding-right: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    #dashboard-schedule-list::-webkit-scrollbar,
+    #dashboard-habits-checklist::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    #dashboard-schedule-list::-webkit-scrollbar-track,
+    #dashboard-habits-checklist::-webkit-scrollbar-track {
+      background: var(--surface-subtle);
+      border-radius: 4px;
+    }
+
+    #dashboard-schedule-list::-webkit-scrollbar-thumb,
+    #dashboard-habits-checklist::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    #dashboard-schedule-list::-webkit-scrollbar-thumb:hover,
+    #dashboard-habits-checklist::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+
+    /* Dashboard Hydration Widget Alignment & Live Stats */
+    .dashboard-hydration-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1;
+      width: 100%;
+      gap: 0.75rem;
+    }
+
+    .dashboard-hydration-body .water-bottle-container {
+      width: 125px;
+      height: 195px;
+      margin: 0 auto;
+      border: 3.5px solid var(--accent);
+      border-radius: 18px 18px 28px 28px;
+    }
+
+    .dashboard-hydration-stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .dash-hydration-stat-pill {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.35rem 0.45rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .dash-h-stat-label {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-weight: 600;
+    }
+
+    .dash-h-stat-val {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .dash-water-btn-group {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .dash-water-btn {
+      flex: 1;
+      font-size: 0.75rem;
+      padding: 0.38rem 0.55rem;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .dashboard-col-3 {
@@ -2678,7 +2821,11 @@
     /* Responsive Queries */
     @media (max-width: 1024px) {
       .dashboard-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+      }
+      .dashboard-row > .card {
+        height: auto !important;
+        min-height: auto !important;
       }
       .dashboard-col-3 {
         grid-template-columns: 1fr;
@@ -2881,6 +3028,16 @@
       .dashboard-row, .dashboard-col-3, .dashboard-col-2 {
         grid-template-columns: 1fr !important;
         gap: 0.85rem !important;
+      }
+      .dashboard-row > .card {
+        height: auto !important;
+        min-height: auto !important;
+      }
+      .dashboard-macro-split {
+        grid-template-columns: 1fr !important;
+        justify-items: center;
+        text-align: center;
+        gap: 1rem !important;
       }
       /* Universal Mobile Card & Grid Item Width Constraints - Eliminates horizontal overflow */
       .dashboard-row > *,
@@ -4113,12 +4270,25 @@
                 </div>
                 <button class="btn btn-sm btn-secondary" data-action="open-modal" data-target="modal-task">+ Add Task</button>
               </div>
-              <div class="schedule-list" id="dashboard-schedule-list">
-                <!-- Dynamically Populated -->
+              <div class="dashboard-card-body">
+                <div class="schedule-list" id="dashboard-schedule-list">
+                  <!-- Dynamically Populated -->
+                </div>
+              </div>
+              <div class="dashboard-card-footer">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+                  <span id="dashboard-schedule-summary">0 of 0 tasks completed (0%)</span>
+                  <a href="#" data-jump="planner" style="font-weight: 700; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 0.25rem;">
+                    Full Planner <span>&rarr;</span>
+                  </a>
+                </div>
+                <div class="progress-track" style="height: 4px;">
+                  <div class="progress-fill success" id="dashboard-schedule-progress-bar" style="width: 0%;"></div>
+                </div>
               </div>
             </div>
 
-            <div class="card">
+            <div class="card dashboard-hydration-card">
               <div class="card-header">
                 <div class="card-title-group">
                   <div class="card-icon">
@@ -4129,28 +4299,53 @@
                     <div class="card-subtitle" id="dashboard-water-subtitle">2,100 / 2,500 ml</div>
                   </div>
                 </div>
+                <span class="kpi-badge positive" id="dashboard-water-badge" style="font-size: 0.75rem;">84% Met</span>
               </div>
-              <div class="water-bottle-container">
-                <div class="water-fluid" id="dashboard-water-fluid" style="height: 84%;"></div>
-                <div class="water-markers">
-                  <span>2.5L</span>
-                  <span>2.0L</span>
-                  <span>1.5L</span>
-                  <span>1.0L</span>
-                  <span>0.5L</span>
+              <div class="dashboard-card-body dashboard-hydration-body">
+                <div class="water-bottle-container">
+                  <div class="water-fluid" id="dashboard-water-fluid" style="height: 84%;"></div>
+                  <div class="water-markers">
+                    <span>2.5L</span>
+                    <span>2.0L</span>
+                    <span>1.5L</span>
+                    <span>1.0L</span>
+                    <span>0.5L</span>
+                  </div>
+                </div>
+                <!-- Hydration Live Stats Strip -->
+                <div class="dashboard-hydration-stats-strip">
+                  <div class="dash-hydration-stat-pill">
+                    <span class="dash-h-stat-label">Glasses</span>
+                    <strong class="dash-h-stat-val" id="dashboard-water-glasses">8.4</strong>
+                  </div>
+                  <div class="dash-hydration-stat-pill">
+                    <span class="dash-h-stat-label">Remaining</span>
+                    <strong class="dash-h-stat-val" id="dashboard-water-remaining">400 ml</strong>
+                  </div>
+                  <div class="dash-hydration-stat-pill">
+                    <span class="dash-h-stat-label">Pace</span>
+                    <strong class="dash-h-stat-val" id="dashboard-water-pace" style="color: var(--success);">On Track</strong>
+                  </div>
+                </div>
+                <!-- Quick Water Buttons -->
+                <div class="dash-water-btn-group">
+                  <button class="btn btn-sm btn-secondary dash-water-btn" data-action="quick-water-250">+250 ml</button>
+                  <button class="btn btn-sm btn-secondary dash-water-btn" data-action="quick-water-500">+500 ml</button>
+                  <button class="btn btn-sm btn-secondary dash-water-btn" data-action="undo-water">-250 ml</button>
                 </div>
               </div>
-              <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1.25rem;">
-                <button class="btn btn-sm btn-secondary" data-action="quick-water-250">+250 ml</button>
-                <button class="btn btn-sm btn-secondary" data-action="quick-water-500">+500 ml</button>
-                <button class="btn btn-sm btn-secondary" data-action="undo-water">-250 ml</button>
+              <div class="dashboard-card-footer">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted);">
+                  <span>💧 <span id="dashboard-water-tip">Consistent hydration powers mental clarity</span></span>
+                  <a href="#" data-jump="water" style="font-weight: 700; color: var(--accent); text-decoration: none; white-space: nowrap;">Water Hub &rarr;</a>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Dashboard Row 2: Macros & Habit Checklist -->
           <div class="dashboard-row">
-            <div class="card">
+            <div class="card dashboard-macros-card">
               <div class="card-header">
                 <div class="card-title-group">
                   <div class="card-icon">
@@ -4163,41 +4358,53 @@
                 </div>
                 <button class="btn btn-sm btn-secondary" data-jump="nutrition">View Full Log</button>
               </div>
-              <div class="dashboard-macro-split" style="display: grid; grid-template-columns: 140px 1fr; gap: 1.5rem; align-items: center;">
-                <div style="width: 140px; height: 140px; position: relative;">
-                  <svg id="dashboard-macro-donut" viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);"></svg>
-                  <div style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
-                    <span style="font-size: 1.25rem; font-weight: 800; line-height: 1;" id="donut-cal-val">1,420</span>
-                    <span style="font-size: 0.6875rem; color: var(--text-muted);">kcal</span>
+              <div class="dashboard-card-body">
+                <div class="dashboard-macro-split" style="display: grid; grid-template-columns: 140px 1fr; gap: 1.5rem; align-items: center;">
+                  <div style="width: 140px; height: 140px; position: relative;">
+                    <svg id="dashboard-macro-donut" viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);"></svg>
+                    <div style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+                      <span style="font-size: 1.25rem; font-weight: 800; line-height: 1;" id="donut-cal-val">1,420</span>
+                      <span style="font-size: 0.6875rem; color: var(--text-muted);">kcal</span>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div>
+                      <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; margin-bottom: 2px;">
+                        <span>Protein (Target 130g)</span>
+                        <span id="macro-protein-text">95g (73%)</span>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" id="macro-protein-bar" style="width: 73%; background: #2563eb;"></div></div>
+                    </div>
+                    <div>
+                      <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; margin-bottom: 2px;">
+                        <span>Carbohydrates (Target 220g)</span>
+                        <span id="macro-carbs-text">145g (66%)</span>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" id="macro-carbs-bar" style="width: 66%; background: #10b981;"></div></div>
+                    </div>
+                    <div>
+                      <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; margin-bottom: 2px;">
+                        <span>Fat (Target 65g)</span>
+                        <span id="macro-fat-text">42g (65%)</span>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" id="macro-fat-bar" style="width: 65%; background: #f59e0b;"></div></div>
+                    </div>
                   </div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                  <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; margin-bottom: 2px;">
-                      <span>Protein (Target 130g)</span>
-                      <span id="macro-protein-text">95g (73%)</span>
-                    </div>
-                    <div class="progress-track"><div class="progress-fill" id="macro-protein-bar" style="width: 73%; background: #2563eb;"></div></div>
-                  </div>
-                  <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; margin-bottom: 2px;">
-                      <span>Carbohydrates (Target 220g)</span>
-                      <span id="macro-carbs-text">145g (66%)</span>
-                    </div>
-                    <div class="progress-track"><div class="progress-fill" id="macro-carbs-bar" style="width: 66%; background: #10b981;"></div></div>
-                  </div>
-                  <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; margin-bottom: 2px;">
-                      <span>Fat (Target 65g)</span>
-                      <span id="macro-fat-text">42g (65%)</span>
-                    </div>
-                    <div class="progress-track"><div class="progress-fill" id="macro-fat-bar" style="width: 65%; background: #f59e0b;"></div></div>
+              </div>
+              <div class="dashboard-card-footer">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); flex-wrap: wrap; gap: 0.5rem;">
+                  <span id="dashboard-macro-cal-summary">Target: <strong>2,000 kcal</strong> • Remaining: <strong style="color: var(--accent);">580 kcal</strong></span>
+                  <div style="display: flex; gap: 0.35rem;" id="dashboard-macro-ratios">
+                    <span class="kpi-badge" style="background: rgba(37,99,235,0.1); color: #2563eb; font-size: 0.7rem;">P: 27%</span>
+                    <span class="kpi-badge" style="background: rgba(16,185,129,0.1); color: #10b981; font-size: 0.7rem;">C: 41%</span>
+                    <span class="kpi-badge" style="background: rgba(245,158,11,0.1); color: #f59e0b; font-size: 0.7rem;">F: 32%</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="card">
+            <div class="card dashboard-habits-card">
               <div class="card-header">
                 <div class="card-title-group">
                   <div class="card-icon">
@@ -4210,8 +4417,19 @@
                 </div>
                 <button class="btn btn-sm btn-secondary" data-jump="habits">Manage</button>
               </div>
-              <div class="schedule-list" id="dashboard-habits-checklist">
-                <!-- Dynamically Populated -->
+              <div class="dashboard-card-body">
+                <div class="schedule-list" id="dashboard-habits-checklist">
+                  <!-- Dynamically Populated -->
+                </div>
+              </div>
+              <div class="dashboard-card-footer">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+                  <span id="dashboard-habits-summary">3 of 4 Habits Completed Today</span>
+                  <span class="kpi-badge positive" id="dashboard-habits-streak-badge" style="font-size: 0.7rem;">🔥 14d Best</span>
+                </div>
+                <div class="progress-track" style="height: 4px;">
+                  <div class="progress-fill success" id="dashboard-habits-progress-bar" style="width: 75%;"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -8819,9 +9037,18 @@
               });
             });
           }
+
+          // Update Schedule Summary Footer
+          const totalTasks = tasks.length;
+          const completedTasks = tasks.filter(t => t.completed).length;
+          const schedPct = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+          const schedSummary = document.getElementById('dashboard-schedule-summary');
+          if (schedSummary) schedSummary.textContent = `${completedTasks} of ${totalTasks} task${totalTasks !== 1 ? 's' : ''} completed (${schedPct}%)`;
+          const schedBar = document.getElementById('dashboard-schedule-progress-bar');
+          if (schedBar) schedBar.style.width = `${schedPct}%`;
         }
 
-        // 2. Water Bottle Fill
+        // 2. Water Bottle Fill & Live Stats Strip
         const water = appData.dailyStats ? (appData.dailyStats.water || 0) : 0;
         const targetWater = (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.water) || 2500;
         const waterPct = Math.min(100, Math.round((water / targetWater) * 100));
@@ -8830,7 +9057,29 @@
         const waterSub = document.getElementById('dashboard-water-subtitle');
         if (waterSub) waterSub.textContent = `${water.toLocaleString()} / ${targetWater.toLocaleString()} ml`;
 
-        // 3. Macro Donut Chart
+        const waterBadge = document.getElementById('dashboard-water-badge');
+        if (waterBadge) {
+          waterBadge.textContent = water >= targetWater ? '✓ Goal Met' : `${waterPct}% Met`;
+          waterBadge.className = `kpi-badge ${water >= targetWater ? 'positive' : 'neutral'}`;
+        }
+        const waterGlasses = document.getElementById('dashboard-water-glasses');
+        if (waterGlasses) waterGlasses.textContent = (water / 250).toFixed(1);
+        const waterRem = document.getElementById('dashboard-water-remaining');
+        if (waterRem) {
+          const rem = Math.max(0, targetWater - water);
+          waterRem.textContent = rem > 0 ? `${rem.toLocaleString()} ml` : '0 ml ✓';
+          waterRem.style.color = rem === 0 ? 'var(--success)' : 'var(--text)';
+        }
+        const waterPace = document.getElementById('dashboard-water-pace');
+        if (waterPace) {
+          const hr = new Date().getHours();
+          const expectedPct = Math.min(100, Math.max(10, Math.round(((hr - 7) / 14) * 100)));
+          const isAhead = waterPct >= expectedPct;
+          waterPace.textContent = water >= targetWater ? 'Goal Won!' : isAhead ? 'On Track' : 'Drink More';
+          waterPace.style.color = water >= targetWater || isAhead ? 'var(--success)' : 'var(--warning)';
+        }
+
+        // 3. Macro Donut Chart & Calorie Summary
         const p = appData.dailyStats ? (appData.dailyStats.protein || 0) : 0;
         const c = appData.dailyStats ? (appData.dailyStats.carbs || 0) : 0;
         const f = appData.dailyStats ? (appData.dailyStats.fat || 0) : 0;
@@ -8846,8 +9095,9 @@
             ]);
           }
         }
+        const currentCal = appData.dailyStats ? (appData.dailyStats.calories || 0) : 0;
         const donutCalVal = document.getElementById('donut-cal-val');
-        if (donutCalVal) donutCalVal.textContent = (appData.dailyStats ? (appData.dailyStats.calories || 0) : 0).toLocaleString();
+        if (donutCalVal) donutCalVal.textContent = currentCal.toLocaleString();
 
         // Macro Bars
         const pText = document.getElementById('macro-protein-text');
@@ -8865,10 +9115,37 @@
         const fBar = document.getElementById('macro-fat-bar');
         if (fBar) fBar.style.width = `${Math.min(100, Math.round((f/65)*100))}%`;
 
-        // 4. Habits Checklist
+        // Macro Calorie & Ratio Summary Footer
+        const targetCal = (appData.profile && appData.profile.dailyCalorieTarget) || (appData.settings && appData.settings.dailyTargets && appData.settings.dailyTargets.calories) || 2000;
+        const remCal = Math.max(0, targetCal - currentCal);
+        const calSummary = document.getElementById('dashboard-macro-cal-summary');
+        if (calSummary) {
+          calSummary.innerHTML = `Target: <strong>${targetCal.toLocaleString()} kcal</strong> • Remaining: <strong style="color: ${remCal === 0 ? 'var(--success)' : 'var(--accent)'};">${remCal.toLocaleString()} kcal</strong>`;
+        }
+        const totalMacroGrams = p + c + f;
+        const macroRatios = document.getElementById('dashboard-macro-ratios');
+        if (macroRatios) {
+          if (totalMacroGrams > 0) {
+            const pPct = Math.round((p / totalMacroGrams) * 100);
+            const cPct = Math.round((c / totalMacroGrams) * 100);
+            const fPct = Math.round((f / totalMacroGrams) * 100);
+            macroRatios.innerHTML = `
+              <span class="kpi-badge" style="background: rgba(37,99,235,0.1); color: #2563eb; font-size: 0.7rem;">P: ${pPct}%</span>
+              <span class="kpi-badge" style="background: rgba(16,185,129,0.1); color: #10b981; font-size: 0.7rem;">C: ${cPct}%</span>
+              <span class="kpi-badge" style="background: rgba(245,158,11,0.1); color: #f59e0b; font-size: 0.7rem;">F: ${fPct}%</span>
+            `;
+          } else {
+            macroRatios.innerHTML = `
+              <span class="kpi-badge neutral" style="font-size: 0.7rem;">No meals logged yet</span>
+            `;
+          }
+        }
+
+        // 4. Habits Checklist & Summary Footer
         const habitsContainer = document.getElementById('dashboard-habits-checklist');
         if (habitsContainer) {
-          const habits = (appData.habits || []).slice(0, 4);
+          const allHabits = appData.habits || [];
+          const habits = allHabits.slice(0, 4);
           if (habits.length === 0) {
             habitsContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 1rem;">No habits tracked yet. Click "+ Add Habit" to start!</div>';
           } else {
@@ -8900,6 +9177,18 @@
               });
             });
           }
+
+          const totalHabitsCount = allHabits.length;
+          const completedHabitsCount = allHabits.filter(h => h.logs && h.logs[todayStr]).length;
+          const habitPct = totalHabitsCount > 0 ? Math.round((completedHabitsCount / totalHabitsCount) * 100) : 0;
+
+          const habitSummary = document.getElementById('dashboard-habits-summary');
+          if (habitSummary) habitSummary.textContent = `${completedHabitsCount} of ${totalHabitsCount} Habits Done (${habitPct}%)`;
+          const habitBar = document.getElementById('dashboard-habits-progress-bar');
+          if (habitBar) habitBar.style.width = `${habitPct}%`;
+          const maxStreak = Math.max(0, ...allHabits.map(h => h.streak || 0));
+          const habitStreakBadge = document.getElementById('dashboard-habits-streak-badge');
+          if (habitStreakBadge) habitStreakBadge.textContent = `🔥 ${maxStreak}d Best`;
         }
 
         // 5. Weight Snapshot Chart (Sorted Ascending: Left to Right)
