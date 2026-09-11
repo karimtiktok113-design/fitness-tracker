@@ -198,6 +198,134 @@
       --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
     }
 
+    /* Theme 8: Luxury Gold (Champagne & Onyx) */
+    [data-theme="gold-luxury"] {
+      --sidebar-bg: #14120e;
+      --sidebar-hover: #221f1a;
+      --sidebar-active: #d97706;
+      --sidebar-text: #d4c5a9;
+      --sidebar-text-active: #ffffff;
+      --sidebar-border: #2a251e;
+      --bg: #fcfbfa;
+      --surface: #ffffff;
+      --surface-subtle: #f7f4ee;
+      --surface-active: #ede7dc;
+      --border: #e8e0d1;
+      --border-focus: #d97706;
+      --text: #1c1917;
+      --text-muted: #78716c;
+      --text-light: #a8a29e;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --accent-hover: #b45309;
+      --accent-2: #f59e0b;
+      --accent-2-light: #fffbeb;
+    }
+
+    /* Theme 9: Crimson Stealth (Titanium Dark) */
+    [data-theme="crimson-stealth"] {
+      --sidebar-bg: #09090b;
+      --sidebar-hover: #18181b;
+      --sidebar-active: #ef4444;
+      --sidebar-text: #a1a1aa;
+      --sidebar-text-active: #ffffff;
+      --sidebar-border: #27272a;
+      --bg: #09090b;
+      --surface: #141417;
+      --surface-subtle: #1c1c21;
+      --surface-active: #27272f;
+      --border: #2e2e38;
+      --border-focus: #ef4444;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --text-light: #71717a;
+      --accent: #ef4444;
+      --accent-light: #2b1216;
+      --accent-hover: #dc2626;
+      --accent-2: #f97316;
+      --accent-2-light: #2c160c;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+      --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Theme 10: Nordic Frost (Glacial Ice) */
+    [data-theme="nordic-frost"] {
+      --sidebar-bg: #0b192c;
+      --sidebar-hover: #132742;
+      --sidebar-active: #0284c7;
+      --sidebar-text: #94b8db;
+      --sidebar-text-active: #ffffff;
+      --sidebar-border: #152c4a;
+      --bg: #f4f8fb;
+      --surface: #ffffff;
+      --surface-subtle: #e8f2f8;
+      --surface-active: #d6e6f2;
+      --border: #cde0ed;
+      --border-focus: #0284c7;
+      --text: #0b1f33;
+      --text-muted: #486a8a;
+      --text-light: #839fb8;
+      --accent: #0284c7;
+      --accent-light: #e0f2fe;
+      --accent-hover: #0369a1;
+      --accent-2: #0d9488;
+      --accent-2-light: #ccfbf1;
+    }
+
+    /* Theme 11: Sunset Horizon (Amber Twilight) */
+    [data-theme="sunset-horizon"] {
+      --sidebar-bg: #1c1018;
+      --sidebar-hover: #2b1925;
+      --sidebar-active: #ea580c;
+      --sidebar-text: #d4abbc;
+      --sidebar-text-active: #ffffff;
+      --sidebar-border: #331d2c;
+      --bg: #fdfbf9;
+      --surface: #ffffff;
+      --surface-subtle: #fbf1e8;
+      --surface-active: #f5e2d3;
+      --border: #eed5c2;
+      --border-focus: #ea580c;
+      --text: #26151b;
+      --text-muted: #7c5c68;
+      --text-light: #aa8996;
+      --accent: #ea580c;
+      --accent-light: #ffedd5;
+      --accent-hover: #c2410c;
+      --accent-2: #db2777;
+      --accent-2-light: #fce7f3;
+    }
+
+    /* Theme 12: Cyber Matrix (Neon Biohacker Dark) */
+    [data-theme="cyber-matrix"] {
+      --sidebar-bg: #030806;
+      --sidebar-hover: #0a150f;
+      --sidebar-active: #10b981;
+      --sidebar-text: #70a88e;
+      --sidebar-text-active: #ecfdf5;
+      --sidebar-border: #12241b;
+      --bg: #030806;
+      --surface: #0a140f;
+      --surface-subtle: #101e17;
+      --surface-active: #182b21;
+      --border: #1a3326;
+      --border-focus: #10b981;
+      --text: #ecfdf5;
+      --text-muted: #6ee7b7;
+      --text-light: #34d399;
+      --accent: #10b981;
+      --accent-light: #063723;
+      --accent-hover: #059669;
+      --accent-2: #06b6d4;
+      --accent-2-light: #083344;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.6);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.6);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
+      --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.85);
+    }
+
     /* Reset & Base */
     *, *::before, *::after {
       box-sizing: border-box;
@@ -705,19 +833,23 @@
     }
 
     /* When in dark mode: show sun, hide moon */
-    [data-theme="dark-mode"] .theme-toggle-icon.moon-icon {
+    [data-theme="dark-mode"] .theme-toggle-icon.moon-icon,
+    [data-theme="crimson-stealth"] .theme-toggle-icon.moon-icon,
+    [data-theme="cyber-matrix"] .theme-toggle-icon.moon-icon {
       display: none;
     }
-    [data-theme="dark-mode"] .theme-toggle-icon.sun-icon {
+    [data-theme="dark-mode"] .theme-toggle-icon.sun-icon,
+    [data-theme="crimson-stealth"] .theme-toggle-icon.sun-icon,
+    [data-theme="cyber-matrix"] .theme-toggle-icon.sun-icon {
       display: flex;
       color: #f59e0b;
     }
 
     /* In light modes: show moon, hide sun */
-    :root:not([data-theme="dark-mode"]) .theme-toggle-icon.sun-icon {
+    :root:not([data-theme="dark-mode"]):not([data-theme="crimson-stealth"]):not([data-theme="cyber-matrix"]) .theme-toggle-icon.sun-icon {
       display: none;
     }
-    :root:not([data-theme="dark-mode"]) .theme-toggle-icon.moon-icon {
+    :root:not([data-theme="dark-mode"]):not([data-theme="crimson-stealth"]):not([data-theme="cyber-matrix"]) .theme-toggle-icon.moon-icon {
       display: flex;
       color: var(--text);
     }
@@ -1599,7 +1731,7 @@
 
     .achievement-card .ach-delete-btn {
       opacity: 0.6;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
       cursor: pointer;
     }
 
@@ -1607,6 +1739,13 @@
       opacity: 1;
       transform: scale(1.15);
       color: var(--danger) !important;
+    }
+
+    .btn-icon-only.btn-delete-ach:hover,
+    .btn-delete-ach:hover {
+      background-color: var(--danger-light) !important;
+      color: var(--danger) !important;
+      border-color: var(--danger) !important;
     }
 
     /* Buttons */
@@ -4217,7 +4356,12 @@
             <option value="coral-energy">Coral Energy</option>
             <option value="ocean">Ocean</option>
             <option value="premium-rose">Premium Rose</option>
-            <option value="dark-mode">Dark Mode</option>
+            <option value="dark-mode">Midnight Slate (Dark)</option>
+            <option value="gold-luxury">Luxury Gold</option>
+            <option value="crimson-stealth">Crimson Stealth (Dark)</option>
+            <option value="nordic-frost">Nordic Frost</option>
+            <option value="sunset-horizon">Sunset Horizon</option>
+            <option value="cyber-matrix">Cyber Matrix (Dark)</option>
           </select>
 
           <!-- Light / Dark Mode Toggle Button -->
@@ -5342,12 +5486,12 @@
           <div class="kpi-grid" style="margin-bottom: 1.25rem;">
             <div class="kpi-card">
               <span class="kpi-label">Current Weight</span>
-              <div class="kpi-value-row"><span class="kpi-main-val" id="weight-page-current">69.2</span><span class="kpi-unit">kg</span></div>
+              <div class="kpi-value-row"><span class="kpi-main-val" id="weight-page-current">69.2</span><span class="kpi-unit" id="weight-page-unit-1">kg</span></div>
               <div class="kpi-subtext" id="weight-page-change">↓ 5.3 kg since start (74.5 kg)</div>
             </div>
             <div class="kpi-card">
               <span class="kpi-label">Goal Target</span>
-              <div class="kpi-value-row"><span class="kpi-main-val" id="weight-page-goal">65.0</span><span class="kpi-unit">kg</span></div>
+              <div class="kpi-value-row"><span class="kpi-main-val" id="weight-page-goal">65.0</span><span class="kpi-unit" id="weight-page-unit-2">kg</span></div>
               <div class="kpi-subtext" id="weight-page-remaining">4.2 kg to goal</div>
               <div class="progress-track"><div class="progress-fill" id="weight-page-bar" style="width: 56%;"></div></div>
             </div>
@@ -5359,14 +5503,14 @@
             <div class="kpi-card">
               <span class="kpi-label">Body Fat % (Est)</span>
               <div class="kpi-value-row"><span class="kpi-main-val" id="weight-page-fat">21.8</span><span class="kpi-unit">%</span></div>
-              <div class="kpi-subtext">Lean athletic composition</div>
+              <div class="kpi-subtext" id="weight-page-fat-sub">Lean athletic composition</div>
             </div>
           </div>
 
           <div class="card" style="margin-bottom: 1.25rem;">
             <div class="card-header">
               <h2 class="card-title">Weight Progress & Trajectory</h2>
-              <span class="card-subtitle">Starting Line (74.5 kg) → Target Line (65.0 kg)</span>
+              <span class="card-subtitle" id="weight-chart-subtitle">Starting Line (74.5 kg) → Target Line (65.0 kg)</span>
             </div>
             <div class="chart-box" id="weight-full-chart-box">
               <svg id="weight-full-svg"></svg>
@@ -5694,6 +5838,10 @@
               <div class="view-header-sub">Earn badges as you hit workout milestones, hydration goals, and habit streaks.</div>
             </div>
             <div class="view-header-actions">
+              <button class="btn btn-secondary" id="btn-restore-achievements" title="Restore Default Milestone Badges">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                Restore Default Badges
+              </button>
               <button class="btn btn-primary" data-action="open-modal" data-target="modal-achievement">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 + Create Achievement
@@ -6051,13 +6199,18 @@
                 <div class="form-group">
                   <label class="form-label">Color Theme</label>
                   <select class="form-select" id="set-theme-select">
-                    <option value="wellness-blue">Theme 1: Wellness Blue</option>
+                    <option value="wellness-blue">Theme 1: Wellness Blue (Default)</option>
                     <option value="emerald-wellness">Theme 2: Emerald Wellness</option>
                     <option value="royal-purple">Theme 3: Royal Purple</option>
                     <option value="coral-energy">Theme 4: Coral Energy</option>
                     <option value="ocean">Theme 5: Ocean</option>
                     <option value="premium-rose">Theme 6: Premium Rose</option>
-                    <option value="dark-mode">Theme 7: Dark Mode</option>
+                    <option value="dark-mode">Theme 7: Midnight Slate (Dark Mode)</option>
+                    <option value="gold-luxury">Theme 8: Champagne &amp; Onyx (Luxury Gold)</option>
+                    <option value="crimson-stealth">Theme 9: Crimson Stealth (Titanium Dark)</option>
+                    <option value="nordic-frost">Theme 10: Nordic Frost (Glacial Ice)</option>
+                    <option value="sunset-horizon">Theme 11: Sunset Horizon (Amber Twilight)</option>
+                    <option value="cyber-matrix">Theme 12: Cyber Matrix (Neon Biohacker Dark)</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -6451,7 +6604,7 @@
               <input type="date" class="form-input" id="weight-date" required>
             </div>
             <div class="form-group">
-              <label class="form-label">Weight (kg / lb) *</label>
+              <label class="form-label">Weight (<span id="modal-weight-unit-lbl">kg</span>) *</label>
               <input type="number" step="0.1" class="form-input" id="weight-val" required placeholder="69.2">
             </div>
           </div>
@@ -7081,9 +7234,15 @@
             💡 <strong>Smart Live Synchronization:</strong> This achievement will automatically sync with your logged entries in real-time. When your tracked progress reaches the target, the badge unlocks with celebration!
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Achievement</button>
+        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <button type="button" class="btn btn-danger btn-sm" id="btn-delete-modal-ach" style="display: none; align-items: center; gap: 0.4rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Delete Achievement
+          </button>
+          <div style="display: flex; gap: 0.6rem; margin-left: auto;">
+            <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Achievement</button>
+          </div>
         </div>
       </form>
     </div>
@@ -7655,24 +7814,57 @@
 
         // 1. BMI & Weight Progress
         const heightMeters = ((appData.profile && appData.profile.height) || 172) / 100;
-        const currWeight = (appData.profile && appData.profile.currentWeight) || (appData.weightLogs && appData.weightLogs.length ? appData.weightLogs[appData.weightLogs.length - 1].weight : 0);
-        const startWeight = (appData.profile && appData.profile.startWeight) || 0;
-        const goalWeight = (appData.profile && appData.profile.goalWeight) || 0;
+        let currWeight = 0;
+        if (appData.weightLogs && appData.weightLogs.length > 0) {
+          appData.weightLogs.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+          currWeight = Number(appData.weightLogs[appData.weightLogs.length - 1].weight) || 0;
+        } else if (appData.profile && appData.profile.currentWeight) {
+          currWeight = Number(appData.profile.currentWeight) || 0;
+        } else if (appData.profile && appData.profile.startWeight) {
+          currWeight = Number(appData.profile.startWeight) || 0;
+        }
+        if (appData.profile && currWeight > 0) {
+          appData.profile.currentWeight = currWeight;
+        }
+
+        const startWeight = Number(appData.profile && appData.profile.startWeight) || currWeight || 0;
+        const goalWeight = Number(appData.profile && appData.profile.goalWeight) || 0;
         const bmi = (currWeight > 0 && heightMeters > 0) ? +(currWeight / (heightMeters * heightMeters)).toFixed(1) : 0;
         if (appData.profile) appData.profile.bmi = bmi;
 
-        const totalLost = (startWeight > 0 && currWeight > 0) ? +(startWeight - currWeight).toFixed(1) : 0;
-        const totalTargetLost = (startWeight > 0 && goalWeight > 0) ? +(startWeight - goalWeight).toFixed(1) : 0;
-        const weightPct = totalTargetLost > 0 ? Math.min(100, Math.max(0, Math.round((totalLost / totalTargetLost) * 100))) : 0;
+        let weightPct = 0;
+        if (startWeight > 0 && goalWeight > 0 && currWeight > 0) {
+          if (startWeight >= goalWeight) {
+            // Weight loss goal
+            const span = startWeight - goalWeight;
+            if (span > 0) {
+              const made = startWeight - currWeight;
+              weightPct = Math.min(100, Math.max(0, Math.round((made / span) * 100)));
+            } else {
+              weightPct = 100;
+            }
+          } else {
+            // Weight gain goal
+            const span = goalWeight - startWeight;
+            if (span > 0) {
+              const made = currWeight - startWeight;
+              weightPct = Math.min(100, Math.max(0, Math.round((made / span) * 100)));
+            } else {
+              weightPct = 100;
+            }
+          }
+        }
         if (appData.profile) appData.profile.weightProgressPct = weightPct;
 
         // Auto-update Weight SMART Goal if present
-        const weightGoal = appData.goals.find(g => g.category === 'Weight');
+        const weightGoal = (appData.goals || []).find(g => g.category === 'Weight');
         if (weightGoal && currWeight > 0) {
           weightGoal.currentValue = currWeight;
-          const span = Math.abs(weightGoal.targetValue - weightGoal.startValue) || 1;
-          const progressDiff = Math.abs(currWeight - weightGoal.startValue);
-          weightGoal.progress = Math.min(100, Math.round((progressDiff / span) * 100));
+          const sVal = Number(weightGoal.startValue) || startWeight || currWeight;
+          const tVal = Number(weightGoal.targetValue) || goalWeight || currWeight;
+          const span = Math.abs(tVal - sVal) || 1;
+          const made = Math.abs(currWeight - sVal);
+          weightGoal.progress = Math.min(100, Math.max(0, Math.round((made / span) * 100)));
         }
 
         // 2. Today's Calories & Macros
@@ -8200,6 +8392,22 @@
           const sBtn = document.getElementById('btn-submit-plan-meal');
           if (sBtn) sBtn.textContent = 'Add to Plan';
         }
+        if (modalId === 'modal-weight') {
+          const wDate = document.getElementById('weight-date');
+          if (wDate) {
+            wDate.value = new Date().toISOString().split('T')[0];
+          }
+          const wVal = document.getElementById('weight-val');
+          if (wVal) {
+            const latest = (appData && appData.profile && appData.profile.currentWeight) ||
+                           (appData && appData.weightLogs && appData.weightLogs.length ? appData.weightLogs[appData.weightLogs.length - 1].weight : '');
+            if (latest) wVal.placeholder = String(latest);
+          }
+          const uLbl = document.getElementById('modal-weight-unit-lbl');
+          if (uLbl) {
+            uLbl.textContent = (appData && appData.profile && appData.profile.units === 'imperial') ? 'lb' : 'kg';
+          }
+        }
         if (modalId === 'modal-goal') {
           if (typeof updateGoalFormForCategory === 'function') {
             updateGoalFormForCategory('Weight');
@@ -8209,6 +8417,8 @@
           if (typeof updateAchievementFormForCategory === 'function') {
             updateAchievementFormForCategory('Workouts');
           }
+          const modalDelBtn = document.getElementById('btn-delete-modal-ach');
+          if (modalDelBtn) modalDelBtn.style.display = 'none';
         }
       }
 
@@ -8641,7 +8851,7 @@
 
         const delBtn = document.getElementById('btn-detail-delete');
         if (delBtn) {
-          delBtn.style.display = (type === 'achievement' && (!item || !item.isCustom)) ? 'none' : 'inline-flex';
+          delBtn.style.display = 'inline-flex';
           delBtn.onclick = () => {
             if (confirm(`Delete "${title}"? This cannot be undone.`)) {
               deleteEntry(type, id);
@@ -8918,6 +9128,17 @@
             if (document.getElementById('ach-target')) document.getElementById('ach-target').value = ach.targetValue;
             if (document.getElementById('ach-unit')) document.getElementById('ach-unit').value = ach.unit;
 
+            const modalDelBtn = document.getElementById('btn-delete-modal-ach');
+            if (modalDelBtn) {
+              modalDelBtn.style.display = 'inline-flex';
+              modalDelBtn.onclick = () => {
+                if (confirm(`Delete custom achievement "${ach.title}"? This cannot be undone.`)) {
+                  deleteEntry('achievement', ach.id);
+                  closeModal();
+                }
+              };
+            }
+
             openModal('modal-achievement');
             break;
           }
@@ -8991,15 +9212,22 @@
             case 'weight':
             case 'measurement': {
               const targetDate = (d.weightLogs.find(x => x.id === id) || d.bodyMeasurements.find(x => x.id === id))?.date;
-              d.weightLogs = d.weightLogs.filter(x => x.id !== id && (!targetDate || x.date !== targetDate));
-              d.bodyMeasurements = d.bodyMeasurements.filter(x => x.id !== id && (!targetDate || x.date !== targetDate));
+              d.weightLogs = (d.weightLogs || []).filter(x => x.id !== id && (!targetDate || x.date !== targetDate));
+              d.bodyMeasurements = (d.bodyMeasurements || []).filter(x => x.id !== id && (!targetDate || x.date !== targetDate));
+              d.weightLogs.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+              d.bodyMeasurements.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+              if (d.weightLogs.length > 0) {
+                d.profile.currentWeight = Number(d.weightLogs[d.weightLogs.length - 1].weight) || d.profile.startWeight || 0;
+              } else if (d.profile && d.profile.startWeight) {
+                d.profile.currentWeight = d.profile.startWeight;
+              }
               break;
             }
             case 'wellness': d.wellnessLogs = d.wellnessLogs.filter(x => x.id !== id); break;
             case 'journal': d.moodJournal = d.moodJournal.filter(x => x.id !== id); break;
             case 'habit': d.habits = d.habits.filter(x => x.id !== id); break;
             case 'goal': d.goals = d.goals.filter(x => x.id !== id); break;
-            case 'achievement': d.achievements = (d.achievements || []).filter(x => x.id !== id); break;
+            case 'achievement': d.achievements = (d.achievements || []).filter(x => x.id !== id && x.key !== id); break;
             case 'exercise': d.exercises = d.exercises.filter(x => x.id !== id); break;
             case 'mealPlan':
             case 'plan-meal': d.mealPlans = d.mealPlans.filter(x => x.id !== id && `mp-${(x.day||'').toLowerCase()}-${(x.slot||'').toLowerCase()}` !== id); break;
@@ -9332,24 +9560,51 @@
       function renderDashboardKPIs() {
         if (!appData) return;
         const profile = appData.profile || {};
-        const currW = profile.currentWeight || (appData.weightLogs && appData.weightLogs.length ? appData.weightLogs[appData.weightLogs.length - 1].weight : 0);
-        const startW = profile.startWeight || 0;
-        const goalW = profile.goalWeight || 0;
+        let currW = 0;
+        if (appData.weightLogs && appData.weightLogs.length > 0) {
+          const sorted = [...appData.weightLogs].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+          currW = Number(sorted[sorted.length - 1].weight) || 0;
+        } else {
+          currW = Number(profile.currentWeight) || Number(profile.startWeight) || 0;
+        }
+        const startW = Number(profile.startWeight) || currW || 0;
+        const goalW = Number(profile.goalWeight) || 0;
         const unit = profile.units === 'imperial' ? 'lb' : 'kg';
-        const wPct = profile.weightProgressPct || 0;
-        const diffW = (startW > 0 && currW > 0) ? (startW - currW).toFixed(1) : '0.0';
+        const wPct = profile.weightProgressPct !== undefined ? profile.weightProgressPct : 0;
+        const netDiff = (startW > 0 && currW > 0) ? +(currW - startW).toFixed(1) : 0;
 
         // 1. Weight KPI
         const wVal = document.getElementById('kpi-weight-val');
-        if (wVal) wVal.textContent = currW || '—';
+        if (wVal) wVal.textContent = currW ? currW.toFixed(1) : '—';
         const wUnit = document.getElementById('kpi-weight-unit');
         if (wUnit) wUnit.textContent = unit;
         const wBadge = document.getElementById('kpi-weight-badge');
-        if (wBadge) wBadge.textContent = Number(diffW) > 0 ? `↓ ${diffW} ${unit}` : `${diffW} ${unit}`;
+        if (wBadge) {
+          if (netDiff < 0) {
+            wBadge.textContent = `↓ ${Math.abs(netDiff).toFixed(1)} ${unit}`;
+            wBadge.className = 'kpi-badge positive';
+          } else if (netDiff > 0) {
+            wBadge.textContent = `↑ ${netDiff.toFixed(1)} ${unit}`;
+            wBadge.className = 'kpi-badge neutral';
+          } else {
+            wBadge.textContent = `0.0 ${unit}`;
+            wBadge.className = 'kpi-badge neutral';
+          }
+        }
         const wSub = document.getElementById('kpi-weight-sub');
-        if (wSub) wSub.textContent = goalW > 0 ? `Goal: ${goalW} ${unit} (${wPct}% achieved)` : `Set your goal weight in Settings`;
+        if (wSub) {
+          if (goalW > 0) {
+            if (wPct >= 100) {
+              wSub.textContent = `Goal reached! 🎉 (${goalW} ${unit})`;
+            } else {
+              wSub.textContent = `Goal: ${goalW} ${unit} (${wPct}% achieved)`;
+            }
+          } else {
+            wSub.textContent = `Set your goal weight in Settings`;
+          }
+        }
         const wProg = document.getElementById('kpi-weight-progress');
-        if (wProg) wProg.style.width = `${Math.min(100, wPct)}%`;
+        if (wProg) wProg.style.width = `${Math.min(100, Math.max(0, wPct))}%`;
 
         // 2. Calories KPI
         const cal = appData.dailyStats ? (appData.dailyStats.calories || 0) : 0;
@@ -11041,35 +11296,153 @@
       // --- WEIGHT & BODY TRACKER RENDERER ---
       function renderWeight() {
         const profile = appData.profile || {};
-        const curr = profile.currentWeight || (appData.weightLogs && appData.weightLogs.length ? appData.weightLogs[appData.weightLogs.length - 1].weight : 0);
-        const start = profile.startWeight || 0;
-        const goal = profile.goalWeight || 0;
+        let curr = 0;
+        if (appData.weightLogs && appData.weightLogs.length > 0) {
+          appData.weightLogs.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+          curr = Number(appData.weightLogs[appData.weightLogs.length - 1].weight) || 0;
+        } else {
+          curr = Number(profile.currentWeight) || Number(profile.startWeight) || 0;
+        }
+        if (profile && curr > 0) profile.currentWeight = curr;
+
+        const start = Number(profile.startWeight) || curr || 0;
+        const goal = Number(profile.goalWeight) || 0;
         const unit = (profile.units === 'imperial') ? 'lb' : 'kg';
         const heightM = ((profile.height) || 172) / 100;
-        const bmi = (curr > 0 && heightM > 0) ? (curr / (heightM * heightM)).toFixed(1) : '—';
-        const pct = (start > goal && start > curr) ? Math.min(100, Math.round(((start - curr) / (start - goal)) * 100)) : 0;
+        const bmiNum = (curr > 0 && heightM > 0) ? +(curr / (heightM * heightM)).toFixed(1) : 0;
+        const bmiStr = bmiNum > 0 ? bmiNum.toFixed(1) : '—';
 
+        // Calculate progress percentage
+        let pct = 0;
+        if (start > 0 && goal > 0 && curr > 0) {
+          if (start >= goal) {
+            const span = start - goal;
+            pct = span > 0 ? Math.min(100, Math.max(0, Math.round(((start - curr) / span) * 100))) : 100;
+          } else {
+            const span = goal - start;
+            pct = span > 0 ? Math.min(100, Math.max(0, Math.round(((curr - start) / span) * 100))) : 100;
+          }
+        }
+
+        // 1. Current Weight Card
         const currEl = document.getElementById('weight-page-current');
-        if (currEl) currEl.textContent = curr || '—';
+        if (currEl) currEl.textContent = curr ? curr.toFixed(1) : '—';
+        const u1 = document.getElementById('weight-page-unit-1');
+        if (u1) u1.textContent = unit;
+
+        const changeEl = document.getElementById('weight-page-change');
+        if (changeEl) {
+          if (start > 0 && curr > 0) {
+            const diff = +(curr - start).toFixed(1);
+            if (diff < 0) {
+              changeEl.textContent = `↓ ${Math.abs(diff).toFixed(1)} ${unit} since start (${start} ${unit})`;
+            } else if (diff > 0) {
+              changeEl.textContent = `↑ ${diff.toFixed(1)} ${unit} since start (${start} ${unit})`;
+            } else {
+              changeEl.textContent = `No change since start (${start} ${unit})`;
+            }
+          } else {
+            changeEl.textContent = 'Start weight pending';
+          }
+        }
+
+        // 2. Goal Target Card
         const goalEl = document.getElementById('weight-page-goal');
-        if (goalEl) goalEl.textContent = goal || '—';
-        const bmiEl = document.getElementById('weight-page-bmi');
-        if (bmiEl) bmiEl.textContent = bmi;
+        if (goalEl) goalEl.textContent = goal ? goal.toFixed(1) : '—';
+        const u2 = document.getElementById('weight-page-unit-2');
+        if (u2) u2.textContent = unit;
+
+        const remEl = document.getElementById('weight-page-remaining');
+        if (remEl) {
+          if (curr > 0 && goal > 0) {
+            const rem = +(Math.abs(curr - goal)).toFixed(1);
+            if ((start >= goal && curr <= goal) || (start < goal && curr >= goal)) {
+              remEl.textContent = 'Goal reached! 🎉';
+            } else {
+              remEl.textContent = `${rem} ${unit} to goal`;
+            }
+          } else {
+            remEl.textContent = 'Goal pending';
+          }
+        }
         const barEl = document.getElementById('weight-page-bar');
         if (barEl) barEl.style.width = `${pct}%`;
-        const remEl = document.getElementById('weight-page-remaining');
-        if (remEl) remEl.textContent = (curr > 0 && goal > 0) ? `${(curr - goal).toFixed(1)} ${unit} to goal` : 'Goal pending';
-        const changeEl = document.getElementById('weight-page-change');
-        if (changeEl) changeEl.textContent = (start > 0 && curr > 0) ? `${start >= curr ? '↓' : '↑'} ${Math.abs(start - curr).toFixed(1)} ${unit} since start (${start} ${unit})` : 'Start weight pending';
 
-        // Weight Line Chart (Sorted Ascending: Left to Right)
+        // 3. Calculated BMI Card
+        const bmiEl = document.getElementById('weight-page-bmi');
+        if (bmiEl) bmiEl.textContent = bmiStr;
+        const bmiBadge = document.getElementById('weight-page-bmi-badge');
+        if (bmiBadge) {
+          if (bmiNum <= 0) {
+            bmiBadge.textContent = 'Pending';
+            bmiBadge.className = 'kpi-badge neutral';
+          } else if (bmiNum < 18.5) {
+            bmiBadge.textContent = 'Underweight (<18.5)';
+            bmiBadge.className = 'kpi-badge neutral';
+          } else if (bmiNum < 25.0) {
+            bmiBadge.textContent = 'Normal Range (18.5–24.9)';
+            bmiBadge.className = 'kpi-badge positive';
+          } else if (bmiNum < 30.0) {
+            bmiBadge.textContent = 'Overweight (25.0–29.9)';
+            bmiBadge.className = 'kpi-badge neutral';
+          } else {
+            bmiBadge.textContent = 'Obese (≥30.0)';
+            bmiBadge.className = 'kpi-badge negative';
+          }
+        }
+
+        // 4. Body Fat % Card (Estimated via Deurenberg formula)
+        const fatEl = document.getElementById('weight-page-fat');
+        const fatSub = document.getElementById('weight-page-fat-sub');
+        if (fatEl) {
+          if (bmiNum > 0) {
+            const age = Number(profile.age) || 29;
+            const sexFactor = (profile.gender === 'Female') ? 0 : 1;
+            // Deurenberg: Body Fat % = (1.20 * BMI) + (0.23 * Age) - (10.8 * sex) - 5.4
+            let estFat = (1.20 * bmiNum) + (0.23 * age) - (10.8 * sexFactor) - 5.4;
+            estFat = Math.max(5, Math.min(55, +estFat.toFixed(1)));
+            fatEl.textContent = estFat.toFixed(1);
+            if (fatSub) {
+              if (sexFactor === 0) {
+                // Female categories
+                if (estFat < 21) fatSub.textContent = 'Athletic composition';
+                else if (estFat < 25) fatSub.textContent = 'Fit healthy composition';
+                else if (estFat < 32) fatSub.textContent = 'Average healthy range';
+                else fatSub.textContent = 'Elevated adiposity';
+              } else {
+                // Male categories
+                if (estFat < 14) fatSub.textContent = 'Athletic composition';
+                else if (estFat < 18) fatSub.textContent = 'Fit healthy composition';
+                else if (estFat < 25) fatSub.textContent = 'Average healthy range';
+                else fatSub.textContent = 'Elevated adiposity';
+              }
+            }
+          } else {
+            fatEl.textContent = '—';
+            if (fatSub) fatSub.textContent = 'Body fat estimate pending';
+          }
+        }
+
+        // Chart Subtitle Live Sync
+        const chartSub = document.getElementById('weight-chart-subtitle');
+        if (chartSub) {
+          chartSub.textContent = `Starting Line (${start} ${unit}) → Target Line (${goal} ${unit})`;
+        }
+
+        // Weight Line Chart (Deduplicated by date & sorted Ascending: Left to Right)
         const chartSvg = document.getElementById('weight-full-svg');
         if (chartSvg) {
-          const points = [...(appData.weightLogs || [])]
-            .sort((a, b) => a.date.localeCompare(b.date))
-            .map(w => ({
-              label: w.date.substring(5),
-              val: w.weight
+          const chartMap = new Map();
+          (appData.weightLogs || []).forEach(w => {
+            if (w.date && w.weight !== undefined && w.weight !== null && !isNaN(w.weight)) {
+              chartMap.set(w.date, Number(w.weight));
+            }
+          });
+          const points = Array.from(chartMap.entries())
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map(([date, weight]) => ({
+              label: date.substring(5),
+              val: weight
             }));
           renderLineChart(chartSvg, points, {
             id: 'weight-full',
@@ -11082,45 +11455,48 @@
         const tbody = document.getElementById('measurements-tbody');
         if (tbody) {
           const mapByDate = new Map();
-          (appData.weightLogs || []).forEach(w => {
-            mapByDate.set(w.date, {
-              id: w.id,
-              date: w.date,
-              weight: w.weight,
-              notes: w.notes || '',
-              waist: null, chest: null, hips: null, arms: null, thighs: null, neck: null
+          // First fill from bodyMeasurements
+          (appData.bodyMeasurements || []).forEach(m => {
+            if (!m.date) return;
+            mapByDate.set(m.date, {
+              id: m.id,
+              date: m.date,
+              weight: m.weight ? Number(m.weight) : null,
+              notes: m.notes || '',
+              waist: m.waist || null,
+              chest: m.chest || null,
+              hips: m.hips || null,
+              arms: m.arms || null,
+              thighs: m.thighs || null,
+              neck: m.neck || null
             });
           });
-          (appData.bodyMeasurements || []).forEach(m => {
-            if (mapByDate.has(m.date)) {
-              const item = mapByDate.get(m.date);
-              if (m.weight) item.weight = m.weight;
-              if (m.waist) item.waist = m.waist;
-              if (m.chest) item.chest = m.chest;
-              if (m.hips) item.hips = m.hips;
-              if (m.arms) item.arms = m.arms;
-              if (m.thighs) item.thighs = m.thighs;
-              if (m.neck) item.neck = m.neck;
+          // Then overlay weightLogs (so explicit weight logs take precedence)
+          (appData.weightLogs || []).forEach(w => {
+            if (!w.date) return;
+            if (mapByDate.has(w.date)) {
+              const item = mapByDate.get(w.date);
+              item.weight = Number(w.weight);
+              if (w.notes) item.notes = w.notes;
             } else {
-              mapByDate.set(m.date, {
-                id: m.id,
-                date: m.date,
-                weight: m.weight,
-                notes: '',
-                waist: m.waist, chest: m.chest, hips: m.hips, arms: m.arms, thighs: m.thighs, neck: m.neck
+              mapByDate.set(w.date, {
+                id: w.id,
+                date: w.date,
+                weight: Number(w.weight),
+                notes: w.notes || '',
+                waist: null, chest: null, hips: null, arms: null, thighs: null, neck: null
               });
             }
           });
 
           const allEntries = [...mapByDate.values()].sort((a, b) => b.date.localeCompare(a.date));
-          const heightM = ((appData.profile && appData.profile.height) || 172) / 100;
 
           if (allEntries.length === 0) {
             tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 2rem; color: var(--text-muted);">No weigh-in or body measurement entries found. Click "+ Log Weigh-in" above to add your first record!</td></tr>`;
           } else {
             tbody.innerHTML = allEntries.map(m => {
-              const diffVal = m.weight ? (m.weight - start).toFixed(1) : null;
-              const diffHtml = diffVal !== null ? `<span class="kpi-badge ${Number(diffVal) <= 0 ? 'positive' : 'neutral'}">${Number(diffVal) > 0 ? '+' : ''}${diffVal} ${unit}</span>` : '—';
+              const diffVal = m.weight ? +(m.weight - start).toFixed(1) : null;
+              const diffHtml = diffVal !== null ? `<span class="kpi-badge ${diffVal <= 0 ? 'positive' : 'neutral'}">${diffVal > 0 ? '+' : ''}${diffVal} ${unit}</span>` : '—';
               const bmiVal = (m.weight && heightM > 0) ? (m.weight / (heightM * heightM)).toFixed(1) : '—';
               return `
                 <tr class="table-clickable-row meas-row" data-id="${m.id}">
@@ -12056,7 +12432,7 @@
                   <span class="kpi-badge ${a.unlocked ? 'positive' : 'neutral'}" style="white-space: nowrap;">
                     ${a.unlocked ? '✓ Unlocked' : `${a.progress || 0}% Progress`}
                   </span>
-                  ${a.isCustom ? `<button type="button" class="ach-delete-btn" data-delete-ach="${a.id}" title="Delete Custom Achievement" aria-label="Delete Custom Achievement" style="background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; padding: 2px 5px; border-radius: var(--radius-sm); line-height: 1;">&times;</button>` : ''}
+                  <button type="button" class="ach-delete-btn" data-delete-ach="${a.id}" title="Delete Achievement" aria-label="Delete Achievement" style="background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.15rem; padding: 2px 6px; border-radius: var(--radius-sm); line-height: 1;">&times;</button>
                 </div>
               </div>
               <h3 style="font-size: 0.9375rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; line-height: 1.3;">${a.title}</h3>
@@ -12076,6 +12452,17 @@
                     <strong>${a.progress || 0}%</strong>
                   </div>
                 </div>`}
+
+              <div style="margin-top: 0.85rem; padding-top: 0.65rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;" onclick="event.stopPropagation()">
+                <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">
+                  ${a.isCustom ? (a.category ? `${a.category} • Custom` : 'Custom Badge') : 'Milestone Challenge'}
+                </span>
+                <div class="btn-action-group">
+                  <button class="btn-icon-only btn-view-ach" data-id="${a.id}" title="View Details" aria-label="View Details" style="width: 26px; height: 26px; font-size: 0.75rem;">ℹ️</button>
+                  ${a.isCustom ? `<button class="btn-icon-only btn-edit-ach" data-id="${a.id}" title="Edit Custom Achievement" aria-label="Edit Custom Achievement" style="width: 26px; height: 26px; font-size: 0.75rem;">✏️</button>` : ''}
+                  <button class="btn-icon-only btn-delete-ach" data-id="${a.id}" title="Delete Achievement" aria-label="Delete Achievement" style="width: 26px; height: 26px; color: var(--danger); font-size: 0.95rem; line-height: 1;">&times;</button>
+                </div>
+              </div>
             </div>
           </div>
         `).join('');
@@ -12083,23 +12470,47 @@
         // Card Click Handler -> showEntryDetails
         grid.querySelectorAll('.achievement-card').forEach(card => {
           card.addEventListener('click', (e) => {
-            if (e.target.closest('.ach-delete-btn')) return;
+            if (e.target.closest('button') || e.target.closest('.ach-delete-btn')) return;
             const achId = card.getAttribute('data-ach-id');
             showEntryDetails('achievement', achId);
           });
         });
 
-        // Delete Custom Achievement Handler
-        grid.querySelectorAll('.ach-delete-btn').forEach(btn => {
+        // View Action Handler
+        grid.querySelectorAll('.btn-view-ach').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const achId = btn.getAttribute('data-delete-ach');
-            const targetAch = (appData.achievements || []).find(x => x.id === achId);
-            const title = targetAch ? targetAch.title : 'this achievement';
-            if (confirm(`Delete custom achievement "${title}"? This cannot be undone.`)) {
-              deleteEntry('achievement', achId);
-            }
+            const achId = btn.getAttribute('data-id');
+            showEntryDetails('achievement', achId);
           });
+        });
+
+        // Edit Action Handler
+        grid.querySelectorAll('.btn-edit-ach').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const achId = btn.getAttribute('data-id');
+            editEntry('achievement', achId);
+          });
+        });
+
+        // Delete Achievement Handler (handles both top-right and footer delete buttons)
+        const handleDeleteAch = (btn, e) => {
+          e.stopPropagation();
+          const achId = btn.getAttribute('data-delete-ach') || btn.getAttribute('data-id');
+          const targetAch = (appData.achievements || []).find(x => x.id === achId || x.key === achId);
+          const title = targetAch ? targetAch.title : 'this achievement';
+          if (confirm(`Delete achievement "${title}"? This cannot be undone.`)) {
+            deleteEntry('achievement', achId);
+          }
+        };
+
+        grid.querySelectorAll('.ach-delete-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => handleDeleteAch(btn, e));
+        });
+
+        grid.querySelectorAll('.btn-delete-ach').forEach(btn => {
+          btn.addEventListener('click', (e) => handleDeleteAch(btn, e));
         });
       }
 
@@ -13446,8 +13857,9 @@
         if (themeToggleBtn) {
           themeToggleBtn.addEventListener('click', () => {
             const currTheme = document.documentElement.getAttribute('data-theme') || (appData && appData.settings ? appData.settings.theme : 'wellness-blue');
-            if (currTheme === 'dark-mode') {
-              const target = (appData && appData.settings && appData.settings.lastLightTheme && appData.settings.lastLightTheme !== 'dark-mode') 
+            const darkThemes = ['dark-mode', 'crimson-stealth', 'cyber-matrix'];
+            if (darkThemes.includes(currTheme)) {
+              const target = (appData && appData.settings && appData.settings.lastLightTheme && !darkThemes.includes(appData.settings.lastLightTheme)) 
                 ? appData.settings.lastLightTheme 
                 : 'wellness-blue';
               applyTheme(target);
@@ -13770,6 +14182,25 @@
             renderAchievements();
           });
         });
+
+        // Restore Default Badges button listener
+        const btnRestoreAch = document.getElementById('btn-restore-achievements');
+        if (btnRestoreAch) {
+          btnRestoreAch.addEventListener('click', () => {
+            const defaults = (getDefaultData() && getDefaultData().achievements) || [];
+            const existingKeys = new Set((appData.achievements || []).map(a => a.key || a.id));
+            const missing = defaults.filter(d => !existingKeys.has(d.key) && !existingKeys.has(d.id));
+            if (missing.length === 0) {
+              showToast('All 16 default milestone badges are already present.', 'info');
+              return;
+            }
+            updateState(d => {
+              d.achievements = d.achievements || [];
+              d.achievements.push(...missing);
+            });
+            showToast(`Restored ${missing.length} default milestone badge(s)!`, 'success');
+          });
+        }
 
         // SMART Goal Quick Progress Form Submit
         const formGoalProgress = document.getElementById('form-goal-progress');
@@ -14132,73 +14563,89 @@
           formWeight.addEventListener('submit', (e) => {
             e.preventDefault();
             const editId = document.getElementById('weight-edit-id')?.value;
-            const wVal = Number(document.getElementById('weight-val').value);
-            const wDate = document.getElementById('weight-date').value;
-            const wNotes = document.getElementById('weight-notes').value;
+            const rawWeightStr = document.getElementById('weight-val')?.value || '';
+            const wVal = parseFloat(String(rawWeightStr).replace(',', '.'));
+            const wDate = document.getElementById('weight-date')?.value || new Date().toISOString().split('T')[0];
+            const wNotes = document.getElementById('weight-notes')?.value || '';
 
-            const waist = Number(document.getElementById('meas-waist').value) || null;
-            const chest = Number(document.getElementById('meas-chest').value) || null;
-            const hips = Number(document.getElementById('meas-hips').value) || null;
-            const arms = Number(document.getElementById('meas-arms').value) || null;
-            const thighs = Number(document.getElementById('meas-thighs').value) || null;
-            const neck = Number(document.getElementById('meas-neck').value) || null;
+            if (isNaN(wVal) || wVal <= 0) {
+              showToast('Please enter a valid weight value greater than zero.', 'warning');
+              return;
+            }
 
-            if (editId) {
-              updateState(d => {
-                d.profile.currentWeight = wVal;
-                let wtItem = d.weightLogs.find(x => x.id === editId || x.date === wDate);
-                if (wtItem) {
-                  wtItem.weight = wVal;
-                  wtItem.date = wDate;
-                  wtItem.notes = wNotes;
-                } else {
-                  d.weightLogs.push({
-                    id: editId.startsWith('wt-') ? editId : 'wt-' + Date.now(),
-                    date: wDate,
-                    weight: wVal,
-                    notes: wNotes
-                  });
-                }
-                let bmItem = d.bodyMeasurements.find(x => x.id === editId || x.date === wDate);
-                if (bmItem) {
-                  bmItem.weight = wVal;
-                  bmItem.date = wDate;
-                  bmItem.waist = waist;
-                  bmItem.chest = chest;
-                  bmItem.hips = hips;
-                  bmItem.arms = arms;
-                  bmItem.thighs = thighs;
-                  bmItem.neck = neck;
-                } else {
-                  d.bodyMeasurements.push({
-                    id: editId.startsWith('bm-') ? editId : 'bm-' + Date.now(),
-                    date: wDate,
-                    weight: wVal,
-                    waist, chest, hips, arms, thighs, neck
-                  });
-                }
-              });
-              if (document.getElementById('weight-edit-id')) document.getElementById('weight-edit-id').value = '';
-              const title = document.getElementById('modal-weight-title');
-              if (title) title.textContent = 'Log Weigh-in & Measurements';
-              showToast(`Weigh-in updated (${wVal} kg)!`, 'success');
-            } else {
-              const timestamp = Date.now();
-              updateState(d => {
-                d.profile.currentWeight = wVal;
-                d.weightLogs.push({ id: 'wt-' + timestamp, date: wDate, weight: wVal, notes: wNotes });
-                // Always create a corresponding measurement record so table row displays reliably
-                d.bodyMeasurements.push({
-                  id: 'bm-' + timestamp,
+            const waist = Number(document.getElementById('meas-waist')?.value) || null;
+            const chest = Number(document.getElementById('meas-chest')?.value) || null;
+            const hips = Number(document.getElementById('meas-hips')?.value) || null;
+            const arms = Number(document.getElementById('meas-arms')?.value) || null;
+            const thighs = Number(document.getElementById('meas-thighs')?.value) || null;
+            const neck = Number(document.getElementById('meas-neck')?.value) || null;
+
+            const timestamp = Date.now();
+            const unit = (appData?.profile?.units === 'imperial') ? 'lb' : 'kg';
+
+            updateState(d => {
+              d.weightLogs = d.weightLogs || [];
+              d.bodyMeasurements = d.bodyMeasurements || [];
+
+              // Deduplicate and upsert in weightLogs
+              let targetWt = d.weightLogs.find(x => (editId && x.id === editId) || x.date === wDate);
+              if (targetWt) {
+                targetWt.date = wDate;
+                targetWt.weight = wVal;
+                if (wNotes) targetWt.notes = wNotes;
+              } else {
+                targetWt = {
+                  id: editId && editId.startsWith('wt-') ? editId : 'wt-' + timestamp,
+                  date: wDate,
+                  weight: wVal,
+                  notes: wNotes
+                };
+                d.weightLogs.push(targetWt);
+              }
+              // Remove any other duplicate entries for this exact date
+              d.weightLogs = d.weightLogs.filter(x => x === targetWt || x.date !== wDate);
+
+              // Deduplicate and upsert in bodyMeasurements
+              let targetBm = d.bodyMeasurements.find(x => (editId && x.id === editId) || x.date === wDate);
+              if (targetBm) {
+                targetBm.date = wDate;
+                targetBm.weight = wVal;
+                if (waist !== null) targetBm.waist = waist;
+                if (chest !== null) targetBm.chest = chest;
+                if (hips !== null) targetBm.hips = hips;
+                if (arms !== null) targetBm.arms = arms;
+                if (thighs !== null) targetBm.thighs = thighs;
+                if (neck !== null) targetBm.neck = neck;
+              } else {
+                targetBm = {
+                  id: editId && editId.startsWith('bm-') ? editId : 'bm-' + timestamp,
                   date: wDate,
                   weight: wVal,
                   waist, chest, hips, arms, thighs, neck
-                });
-              });
-              showToast(`Weigh-in recorded (${wVal} kg)!`, 'success');
-            }
+                };
+                d.bodyMeasurements.push(targetBm);
+              }
+              // Remove any other duplicate entries for this exact date
+              d.bodyMeasurements = d.bodyMeasurements.filter(x => x === targetBm || x.date !== wDate);
+
+              // Sort chronologically ascending
+              d.weightLogs.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+              d.bodyMeasurements.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+              // Update profile.currentWeight to the latest chronological weigh-in
+              if (d.weightLogs.length > 0) {
+                d.profile.currentWeight = Number(d.weightLogs[d.weightLogs.length - 1].weight) || wVal;
+              } else {
+                d.profile.currentWeight = wVal;
+              }
+            });
+
+            if (document.getElementById('weight-edit-id')) document.getElementById('weight-edit-id').value = '';
+            const title = document.getElementById('modal-weight-title');
+            if (title) title.textContent = 'Log Weigh-in & Measurements';
             closeModal();
             formWeight.reset();
+            showToast(`Weigh-in saved (${wVal} ${unit})!`, 'success');
           });
         }
 
