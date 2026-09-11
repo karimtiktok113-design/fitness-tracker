@@ -1547,6 +1547,13 @@
       font-weight: 700;
     }
 
+    /* Goals Summary Cards Responsive Grid */
+    #goals-summary-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
     /* Goals & Achievements Enhanced Cards */
     .goal-card {
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -1583,6 +1590,23 @@
     .achievement-card.unlocked {
       border-color: var(--accent);
       background: linear-gradient(180deg, var(--surface) 0%, rgba(37, 99, 235, 0.04) 100%);
+    }
+
+    .achievement-card.custom-achievement {
+      border: 1px dashed var(--accent);
+      background: linear-gradient(180deg, var(--surface) 0%, rgba(99, 102, 241, 0.04) 100%);
+    }
+
+    .achievement-card .ach-delete-btn {
+      opacity: 0.6;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .achievement-card .ach-delete-btn:hover {
+      opacity: 1;
+      transform: scale(1.15);
+      color: var(--danger) !important;
     }
 
     /* Buttons */
@@ -2638,185 +2662,8 @@
       flex-shrink: 0;
     }
 
-    /* Print Stylesheet for Professional A4 Infographic Reports */
-    @page {
-      size: A4 portrait;
-      margin: 10mm 12mm 10mm 12mm;
-    }
+    /* Print stylesheet is placed at the very end of the stylesheet to guarantee 100% cascade isolation */
 
-    @media print {
-      html, body {
-        background-color: #ffffff !important;
-        color: #0f172a !important;
-        font-size: 9.5pt !important;
-        line-height: 1.4 !important;
-        width: 100% !important;
-        height: auto !important;
-        min-height: auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: visible !important;
-        overflow-x: visible !important;
-        overflow-y: visible !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-
-      /* Strictly hide all non-report UI elements */
-      .sidebar,
-      .top-header,
-      .btn,
-      .btn-action-group,
-      .view-header,
-      .view-header-actions,
-      .modal-overlay,
-      .modal-container,
-      .toast-container,
-      .quick-action-bar,
-      .chart-tooltip,
-      #theme-selector,
-      #btn-theme-toggle,
-      #btn-mobile-menu,
-      #report-type-select,
-      #btn-print-report,
-      #quick-action-dropdown,
-      .report-controls-card {
-        display: none !important;
-        visibility: hidden !important;
-      }
-
-      .app-layout,
-      .main-wrapper,
-      .content-container,
-      #view-reports {
-        display: block !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        min-height: auto !important;
-        height: auto !important;
-        width: 100% !important;
-        overflow: visible !important;
-        overflow-x: visible !important;
-        overflow-y: visible !important;
-        background: #ffffff !important;
-      }
-
-      .view-pane {
-        display: none !important;
-      }
-
-      #view-reports {
-        display: block !important;
-      }
-
-      #printable-report-card {
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        background: #ffffff !important;
-        color: #0f172a !important;
-        width: 100% !important;
-        max-width: 100% !important;
-      }
-
-      /* Infographic multi-page layout rules */
-      .report-page-1 {
-        page-break-after: always !important;
-        break-after: page !important;
-        margin-bottom: 0 !important;
-        padding-bottom: 0 !important;
-      }
-
-      .report-page-2 {
-        page-break-before: always !important;
-        break-before: page !important;
-        page-break-after: avoid !important;
-        break-after: avoid !important;
-        border-top: none !important;
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-      }
-
-      .report-page {
-        page-break-after: always;
-        break-after: page;
-        margin-bottom: 0;
-        padding-bottom: 12mm;
-      }
-
-      .report-page:last-child {
-        page-break-after: avoid;
-        break-after: avoid;
-      }
-
-      .report-page-break {
-        page-break-before: always;
-        break-before: page;
-      }
-
-      .report-section {
-        page-break-inside: avoid;
-        break-inside: avoid;
-        margin-bottom: 10pt;
-      }
-
-      .report-kpi-grid {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 8pt !important;
-        margin-bottom: 10pt !important;
-      }
-
-      .report-kpi-box {
-        border: 1px solid #cbd5e1 !important;
-        background-color: #f8fafc !important;
-        border-radius: 6pt !important;
-        padding: 8pt !important;
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-
-      .report-charts-grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 10pt !important;
-        margin-bottom: 10pt !important;
-      }
-
-      .report-chart-card {
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 6pt !important;
-        padding: 8pt !important;
-        background: #ffffff !important;
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-
-      .report-table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        font-size: 8.5pt !important;
-      }
-
-      .report-table th {
-        background-color: #f1f5f9 !important;
-        color: #334155 !important;
-        border: 1px solid #cbd5e1 !important;
-        padding: 5pt 6pt !important;
-        text-align: left !important;
-      }
-
-      .report-table td {
-        border: 1px solid #e2e8f0 !important;
-        padding: 4.5pt 6pt !important;
-      }
-
-      .report-table tr {
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-    }
 
     /* Responsive Queries */
     @media (max-width: 1024px) {
@@ -2862,7 +2709,7 @@
       }
       .content-container {
         padding: 0.85rem !important;
-        padding-bottom: 84px !important;
+        padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
         width: 100% !important;
         max-width: 100vw !important;
         box-sizing: border-box;
@@ -2872,7 +2719,7 @@
       .sidebar {
         transform: translateX(-100%);
         box-shadow: var(--shadow-xl);
-        z-index: 105;
+        z-index: 1100 !important;
         width: 280px !important;
         max-width: 85vw !important;
       }
@@ -2896,6 +2743,7 @@
       }
       .sidebar-backdrop {
         display: block !important;
+        z-index: 1050 !important;
       }
 
       /* Mobile Header Structure */
@@ -3245,6 +3093,10 @@
       }
 
       /* Specific Grids Across Views */
+      #goals-summary-cards {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.75rem !important;
+      }
       #exercise-grid, #journal-grid, #goals-grid, #grocery-categories-container {
         grid-template-columns: 1fr !important;
         gap: 0.85rem !important;
@@ -3329,68 +3181,142 @@
 
       /* UNIVERSAL MODAL POPUP MOBILE OVERHAUL */
       .modal-overlay {
-        padding: 0.5rem !important;
-        align-items: flex-end !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        padding: 0.75rem !important;
+        padding: max(0.75rem, env(safe-area-inset-top, 0px)) max(0.75rem, env(safe-area-inset-right, 0px)) max(0.75rem, env(safe-area-inset-bottom, 0px)) max(0.75rem, env(safe-area-inset-left, 0px)) !important;
+        align-items: center !important;
         justify-content: center !important;
+        z-index: 2000 !important;
+        box-sizing: border-box !important;
+        display: none !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .modal-overlay.active {
+        display: flex !important;
       }
       .modal-dialog {
         width: 100% !important;
-        max-width: 100% !important;
-        max-height: 94vh !important;
-        border-radius: var(--radius-xl) var(--radius-xl) var(--radius-md) var(--radius-md) !important;
-        margin: 0 !important;
-        box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.4) !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
+        max-width: min(540px, calc(100vw - 1.5rem)) !important;
+        max-height: calc(100vh - 1.5rem) !important;
+        max-height: calc(100dvh - 1.5rem) !important;
+        border-radius: var(--radius-lg) !important;
+        margin: auto !important;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
       }
       .modal-dialog[style*="display: none"] {
         display: none !important;
       }
-      .modal-dialog.modal-lg {
-        max-width: 100% !important;
+      .modal-dialog:not([style*="display: none"]),
+      .modal-dialog.modal-dialog-active {
+        display: flex !important;
+        flex-direction: column !important;
       }
+      .modal-dialog.modal-lg {
+        max-width: min(540px, calc(100vw - 1.5rem)) !important;
+      }
+
+      /* Form wrapper inside modal dialog - crucial for flex layout and scroll delegation */
+      .modal-dialog form,
+      .modal-dialog > form {
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+        width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+      }
+
       .modal-header {
-        padding: 0.85rem 1rem !important;
-        flex-shrink: 0;
+        padding: 0.85rem 1.15rem !important;
+        flex-shrink: 0 !important;
+        border-bottom: 1px solid var(--border) !important;
+        background-color: var(--surface) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        box-sizing: border-box !important;
       }
       .modal-title {
         font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        line-height: 1.3 !important;
       }
       .modal-close-btn {
         width: 38px !important;
         height: 38px !important;
-        border-radius: var(--radius-sm);
+        min-width: 38px !important;
+        border-radius: var(--radius-sm) !important;
         font-size: 1.5rem !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
       }
       .modal-body {
-        padding: 1rem !important;
-        max-height: calc(94vh - 125px) !important;
+        padding: 1rem 1.15rem !important;
+        min-height: 0 !important;
+        max-height: none !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
-        flex: 1 1 auto;
+        overscroll-behavior: contain !important;
+        flex: 1 1 auto !important;
+        box-sizing: border-box !important;
+        touch-action: pan-y !important;
       }
       .modal-footer {
-        padding: 0.75rem 1rem !important;
+        padding: 0.75rem 1.15rem !important;
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)) !important;
+        display: flex !important;
         flex-direction: column-reverse !important;
         gap: 0.5rem !important;
         width: 100% !important;
-        box-sizing: border-box;
-        flex-shrink: 0;
+        box-sizing: border-box !important;
+        flex-shrink: 0 !important;
+        border-top: 1px solid var(--border) !important;
+        background-color: var(--surface-subtle) !important;
       }
       .modal-footer > div {
         width: 100% !important;
         display: flex !important;
-        flex-direction: column !important;
+        flex-direction: row !important;
         gap: 0.5rem !important;
+        box-sizing: border-box !important;
       }
-      .modal-footer .btn, .modal-footer > div .btn {
-        width: 100% !important;
-        justify-content: center !important;
+      .modal-footer > div .btn {
+        flex: 1 1 0 !important;
+        width: auto !important;
+        min-width: 0 !important;
         min-height: 44px !important;
+        justify-content: center !important;
         font-size: 0.925rem !important;
+      }
+      .modal-footer > .btn {
+        width: 100% !important;
+        min-height: 44px !important;
+        justify-content: center !important;
+        font-size: 0.925rem !important;
+      }
+
+      /* Detail Grid in Modals on Mobile */
+      .detail-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.6rem !important;
+      }
+      .detail-item {
+        padding: 0.65rem 0.85rem !important;
       }
 
       /* Form Stacking in Modals on Mobile */
@@ -3502,35 +3428,40 @@
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        height: 62px !important;
+        height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
         background: var(--surface) !important;
         border-top: 1px solid var(--border) !important;
-        box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08) !important;
-        z-index: 100 !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15) !important;
+        z-index: 990 !important;
         align-items: center !important;
         justify-content: space-around !important;
-        padding: 0 0.5rem !important;
+        padding: 0 0.25rem env(safe-area-inset-bottom, 0px) 0.25rem !important;
         box-sizing: border-box !important;
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
       }
       .mobile-nav-item {
-        flex: 1 1 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        border: none;
-        padding: 6px 0;
-        color: var(--text-muted);
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        -webkit-tap-highlight-color: transparent;
-        user-select: none;
-        position: relative;
-        gap: 3px;
+        flex: 1 1 0 !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 6px 2px !important;
+        color: var(--text-muted) !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        -webkit-tap-highlight-color: transparent !important;
+        user-select: none !important;
+        position: relative !important;
+        gap: 3px !important;
+        font-family: inherit !important;
+        box-sizing: border-box !important;
       }
       .mobile-nav-item:active {
         transform: scale(0.92);
@@ -3544,11 +3475,16 @@
         transition: transform 0.2s ease, color 0.2s ease;
       }
       .mobile-nav-label {
-        font-size: 0.6875rem;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        line-height: 1;
-        transition: color 0.2s ease;
+        font-size: 0.6875rem !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em !important;
+        line-height: 1 !important;
+        transition: color 0.2s ease !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+        text-align: center !important;
       }
       .mobile-nav-item.active {
         color: var(--accent) !important;
@@ -3573,27 +3509,28 @@
 
       /* Center Floating Action Button (FAB) */
       .mobile-nav-fab-wrap {
-        flex: 0 0 54px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
+        flex: 0 0 54px !important;
+        width: 54px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: relative !important;
       }
       .mobile-nav-fab {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-        color: #ffffff;
-        border: 3px solid var(--surface);
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transform: translateY(-12px);
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        -webkit-tap-highlight-color: transparent;
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 50% !important;
+        background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important;
+        color: #ffffff !important;
+        border: 3px solid var(--surface) !important;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transform: translateY(-12px) !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        -webkit-tap-highlight-color: transparent !important;
       }
       .mobile-nav-fab:active {
         transform: translateY(-10px) scale(0.92);
@@ -3601,7 +3538,7 @@
       }
       .mobile-nav-fab.active {
         transform: translateY(-12px) rotate(45deg);
-        background: var(--danger);
+        background: var(--danger) !important;
       }
 
       /* Mobile Quick Action Sheet */
@@ -3612,7 +3549,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 130 !important;
+        z-index: 1200 !important;
       }
       .mobile-quick-sheet.active {
         display: block !important;
@@ -3628,7 +3565,7 @@
         -webkit-backdrop-filter: blur(4px);
         opacity: 0;
         transition: opacity 0.25s ease;
-        z-index: 130 !important;
+        z-index: 1200 !important;
       }
       .mobile-quick-sheet.active .mobile-quick-sheet-backdrop {
         opacity: 1;
@@ -3641,12 +3578,12 @@
         background: var(--surface);
         border-top: 1px solid var(--border);
         border-radius: 20px 20px 0 0;
-        padding: 0.75rem 1rem calc(72px + env(safe-area-inset-bottom, 0)) 1rem;
+        padding: 0.75rem 1rem calc(76px + env(safe-area-inset-bottom, 0px)) 1rem !important;
         box-shadow: var(--shadow-modal);
         transform: translateY(100%);
         transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
         box-sizing: border-box;
-        z-index: 131 !important;
+        z-index: 1201 !important;
       }
       .mobile-quick-sheet.active .mobile-quick-sheet-panel {
         transform: translateY(0);
@@ -3705,12 +3642,12 @@
 
       /* Toast Notification Mobile Positioning */
       .toast-container {
-        bottom: 74px !important;
+        bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
         left: 1rem !important;
         right: 1rem !important;
         width: auto !important;
         align-items: center !important;
-        z-index: 120 !important;
+        z-index: 2500 !important;
       }
       .toast {
         width: 100% !important;
@@ -3744,6 +3681,9 @@
         border-radius: var(--radius-md) !important;
       }
       .nutrition-macro-grid, .macro-cards-row {
+        grid-template-columns: 1fr !important;
+      }
+      #goals-summary-cards, #goals-grid {
         grid-template-columns: 1fr !important;
       }
       #achievements-grid {
@@ -3783,6 +3723,245 @@
         max-height: 34px !important;
         font-size: 0.75rem !important;
         padding: 0 1.45rem 0 0.45rem !important;
+      }
+      .modal-dialog {
+        max-width: calc(100vw - 1rem) !important;
+        max-height: calc(100vh - 1rem) !important;
+        max-height: calc(100dvh - 1rem) !important;
+        border-radius: var(--radius-md) !important;
+      }
+      .modal-header {
+        padding: 0.75rem 0.95rem !important;
+      }
+      .modal-body {
+        padding: 0.85rem 0.95rem !important;
+      }
+      .modal-footer {
+        padding: 0.65rem 0.95rem !important;
+        padding-bottom: max(0.65rem, env(safe-area-inset-bottom, 0px)) !important;
+      }
+    }
+
+    /* ==========================================================================
+       AIRTIGHT PRINT & PDF ISOLATION STYLESHEET
+       Strictly isolates #printable-report-card. Zero UI chrome leakage.
+       ========================================================================== */
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm 10mm 12mm;
+    }
+
+    @media print {
+      /* Force browser to preserve graphics and background colors in PDF export */
+      *, *::before, *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Global Page Reset for Clean Multi-Page Printout */
+      html, body {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 9.5pt !important;
+        line-height: 1.4 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+      }
+
+      /* STRICTLY SUPPRESS ALL APPLICATION CHROME, NAVIGATION, CONTROLS, MODALS & POPUPS */
+      .sidebar,
+      .top-header,
+      .mobile-bottom-nav,
+      .mobile-quick-sheet,
+      #sidebar-backdrop,
+      .view-header,
+      .view-header *,
+      .view-header-title,
+      .view-header-sub,
+      .view-header-actions,
+      .report-header-actions,
+      .report-controls-card,
+      .report-controls-card *,
+      .report-export-toolbar,
+      .report-export-toolbar *,
+      .btn,
+      button,
+      .btn-action-group,
+      .modal-overlay,
+      .modal-container,
+      .modal-dialog,
+      .toast-container,
+      .quick-action-bar,
+      .chart-tooltip,
+      #theme-selector,
+      #btn-theme-toggle,
+      #btn-mobile-menu,
+      #report-type-select,
+      #btn-print-report,
+      #btn-report-export-csv,
+      #btn-report-export-excel,
+      #quick-action-dropdown,
+      .bottom-nav-action-btn,
+      .view-pane:not(#view-reports) {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+        top: -9999px !important;
+        pointer-events: none !important;
+        overflow: hidden !important;
+      }
+
+      /* Neutralize structural wrappers so they don't clip, offset, or add scrollbars */
+      .app-layout,
+      .main-wrapper,
+      .content-container,
+      #view-reports {
+        display: block !important;
+        visibility: visible !important;
+        position: static !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      /* TARGET ONLY THE PREVIEW DOCUMENT CONTAINER */
+      #printable-report-card {
+        display: block !important;
+        visibility: visible !important;
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+      }
+
+      #printable-report-card * {
+        visibility: visible !important;
+      }
+
+      /* A4 Multi-Page Layout & Break Rules */
+      .report-page-1 {
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+      }
+
+      .report-page-2 {
+        page-break-before: always !important;
+        break-before: page !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        border-top: none !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+      }
+
+      .report-page {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        background: #ffffff !important;
+      }
+
+      .report-page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+
+      .report-section {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 10pt !important;
+      }
+
+      .report-kpi-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8pt !important;
+        margin-bottom: 10pt !important;
+      }
+
+      .report-kpi-box {
+        border: 1px solid #cbd5e1 !important;
+        background-color: #f8fafc !important;
+        border-radius: 6pt !important;
+        padding: 8pt !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .report-charts-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10pt !important;
+        margin-bottom: 10pt !important;
+      }
+
+      .report-chart-card {
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6pt !important;
+        padding: 8pt !important;
+        background: #ffffff !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .report-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 8.5pt !important;
+      }
+
+      .report-table th {
+        background-color: #f1f5f9 !important;
+        color: #334155 !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 5pt 6pt !important;
+        text-align: left !important;
+      }
+
+      .report-table td {
+        border: 1px solid #e2e8f0 !important;
+        padding: 4.5pt 6pt !important;
+      }
+
+      .report-table tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
     }
   </style>
@@ -5514,6 +5693,12 @@
               <h1 class="view-header-title">Achievements & Milestones</h1>
               <div class="view-header-sub">Earn badges as you hit workout milestones, hydration goals, and habit streaks.</div>
             </div>
+            <div class="view-header-actions">
+              <button class="btn btn-primary" data-action="open-modal" data-target="modal-achievement">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                + Create Achievement
+              </button>
+            </div>
           </div>
 
           <!-- Gamification Level & Progression Banner -->
@@ -5573,7 +5758,15 @@
               <div class="view-header-sub">Generate professional visual health summaries formatted for A4 printing and PDF export.</div>
             </div>
             <div class="view-header-actions">
-              <button class="btn btn-primary" id="btn-print-report">
+              <button class="btn btn-secondary" id="btn-report-export-csv" title="Export All Synchronized Application Data as CSV">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export CSV
+              </button>
+              <button class="btn btn-secondary" id="btn-report-export-excel" title="Export Full Excel Multi-Sheet Workbook (.xls)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg>
+                Export Excel (.xls)
+              </button>
+              <button class="btn btn-primary" id="btn-print-report" title="Print Preview or Save as PDF Document">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
                 Print / Save as PDF
               </button>
@@ -5581,14 +5774,27 @@
           </div>
 
           <div class="card report-controls-card" style="margin-bottom: 1.25rem;">
-            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.85rem;">
               <span style="font-weight: 700; font-size: 0.8125rem;">Select Report Period:</span>
-              <select class="form-select" id="report-type-select" style="width: auto;">
-                <option value="complete">Complete Executive Wellness Overview</option>
+              <select class="form-select" id="report-type-select" style="width: auto; min-width: 260px;">
+                <option value="complete">Complete Executive Wellness Overview (All Time)</option>
                 <option value="weekly">Weekly Progress Report (Last 7 Days)</option>
                 <option value="monthly">Monthly Comprehensive Review (Last 30 Days)</option>
               </select>
               <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: auto;">Formatted for standard A4 Portrait print & PDF export</span>
+            </div>
+            <div class="report-export-toolbar" style="border-top: 1px solid var(--border); padding-top: 0.75rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-right: 0.25rem;">Quick Exports:</span>
+              <button class="btn btn-xs btn-outline" id="btn-quick-csv-all" title="Export all categories into one unified CSV file">📥 All Data (CSV)</button>
+              <button class="btn btn-xs btn-outline" id="btn-quick-excel-all" title="Export all categories into an Excel multi-tab workbook">📊 Excel Workbook (.xls)</button>
+              <button class="btn btn-xs btn-ghost" id="btn-quick-csv-workouts" title="Export Workouts CSV">Workouts CSV</button>
+              <button class="btn btn-xs btn-ghost" id="btn-quick-csv-nutrition" title="Export Nutrition & Meals CSV">Nutrition CSV</button>
+              <button class="btn btn-xs btn-ghost" id="btn-quick-csv-water" title="Export Hydration / Water CSV">Water CSV</button>
+              <button class="btn btn-xs btn-ghost" id="btn-quick-csv-sleep" title="Export Sleep Logs CSV">Sleep CSV</button>
+              <button class="btn btn-xs btn-ghost" id="btn-quick-csv-weight" title="Export Weight & Measurements CSV">Measurements CSV</button>
+              <button class="btn btn-xs btn-ghost" id="btn-quick-csv-habits" title="Export Habits & Streaks CSV">Habits CSV</button>
+              <button class="btn btn-xs btn-ghost" id="btn-quick-csv-goals" title="Export SMART Goals CSV">Goals CSV</button>
+              <button class="btn btn-xs btn-ghost" id="btn-quick-csv-achievements" title="Export Achievements & Milestones CSV">Achievements CSV</button>
             </div>
           </div>
 
@@ -5601,9 +5807,10 @@
                 <div>
                   <div style="display: inline-flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 6px;">
                     <span>PULSEWELLNESS EXECUTIVE DOSSIER</span>
+                    <span id="report-period-badge" style="background: #e0f2fe; color: #0369a1; padding: 1px 6px; border-radius: 3px; font-size: 0.6875rem; font-weight: 700; margin-left: 4px;">All-Time Record</span>
                   </div>
-                  <h2 style="font-size: 1.6rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0; letter-spacing: -0.02em;">Comprehensive Wellness Performance Report</h2>
-                  <div style="font-size: 0.85rem; color: #64748b;">Member: <strong id="report-profile-name" style="color: #0f172a;">Alex Morgan</strong> • Generated on <span id="report-generated-date">September 10, 2026</span> • Age: <span id="report-profile-age">29</span> • Height: <span id="report-profile-height">172 cm</span></div>
+                  <h2 style="font-size: 1.6rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0; letter-spacing: -0.02em;" id="report-main-title">Comprehensive Wellness Performance Report</h2>
+                  <div style="font-size: 0.85rem; color: #64748b;">Member: <strong id="report-profile-name" style="color: #0f172a;">Alex Morgan</strong> • Generated on <span id="report-generated-date">September 10, 2026</span> • Scope: <span id="report-period-scope" style="font-weight: 600; color: #0f172a;">Complete History</span> • Age: <span id="report-profile-age">29</span> • Height: <span id="report-profile-height">172 cm</span></div>
                 </div>
                 <div style="text-align: right;">
                   <div style="font-size: 1.15rem; font-weight: 800; color: #2563eb;">PulseWellness Pro</div>
@@ -5721,6 +5928,12 @@
               <div class="report-section" style="margin-bottom: 1.25rem;">
                 <h3 style="font-size: 0.875rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em;">Active SMART Goals & Habit Streaks</h3>
                 <div id="report-goals-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;"></div>
+              </div>
+
+              <!-- Report Achievements & Milestones Showcase -->
+              <div class="report-section" style="margin-bottom: 1.25rem;">
+                <h3 style="font-size: 0.875rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em;">Unlocked Badges & Milestone Achievements</h3>
+                <div id="report-achievements-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.65rem;"></div>
               </div>
 
               <!-- Page 2 Footer -->
@@ -6513,12 +6726,17 @@
                 <option value="Sleep">Sleep Quality</option>
                 <option value="Steps">Daily Steps</option>
                 <option value="Habits">Habit Mastery</option>
+                <option value="Custom">Custom Category...</option>
               </select>
             </div>
             <div class="form-group">
               <label class="form-label">Target Deadline *</label>
               <input type="date" class="form-input" id="goal-deadline" required>
             </div>
+          </div>
+          <div class="form-group" id="goal-custom-cat-group" style="display: none;">
+            <label class="form-label">Custom Category Name *</label>
+            <input type="text" class="form-input" id="goal-custom-cat-name" placeholder="e.g. Meditation, Running, Flexibility, Reading">
           </div>
           <div class="form-row-3">
             <div class="form-group">
@@ -6759,6 +6977,8 @@
         <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
         <button type="button" class="btn btn-danger" id="btn-final-delete-confirm" disabled>Permanently Erase All Data</button>
       </div>
+    </div>
+
     <!-- SMART Goal Quick Progress Modal -->
     <div class="modal-dialog" id="modal-goal-progress" style="display: none; max-width: 440px;">
       <div class="modal-header">
@@ -6789,6 +7009,81 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
           <button type="submit" class="btn btn-primary">Save Progress</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 16. Custom Achievement Modal -->
+    <div class="modal-dialog" id="modal-achievement" style="display: none;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-achievement-title">Create Custom Achievement</h2>
+        <button class="modal-close-btn" data-action="close-modal">&times;</button>
+      </div>
+      <form id="form-achievement">
+        <input type="hidden" id="ach-edit-id" value="">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Achievement Title *</label>
+            <input type="text" class="form-input" id="ach-title" required placeholder="e.g. Century Cyclist, 10-Day Meditation Streak">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description & Criteria *</label>
+            <input type="text" class="form-input" id="ach-desc" required placeholder="e.g. Complete 50 cycling or cardio workout sessions">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Category / Metric Source *</label>
+              <select class="form-select" id="ach-category" required>
+                <option value="Workouts">Workouts (Sessions Count)</option>
+                <option value="WorkoutDuration">Workout Duration (Total Minutes)</option>
+                <option value="Hydration">Hydration (Days Hitting Goal)</option>
+                <option value="WaterVolume">Water Intake (Total ml)</option>
+                <option value="Steps">Daily Steps (10k+ Days)</option>
+                <option value="TotalSteps">Steps (Total Accumulation)</option>
+                <option value="Weight">Weight Loss (kg / lbs Lost)</option>
+                <option value="Sleep">Sleep Quality (8+ hr Restful Nights)</option>
+                <option value="Habits">Habits (Total Check-in Logs)</option>
+                <option value="HabitStreak">Habits (Active Consecutive Streak)</option>
+                <option value="Nutrition">Nutrition (Meals Logged)</option>
+                <option value="ProteinGoal">Nutrition (Protein Target Days)</option>
+                <option value="Journal">Wellness Journal (Reflections Written)</option>
+                <option value="Custom">Custom / Milestone Challenge</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Badge Icon / Emoji *</label>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="text" class="form-input" id="ach-icon" required value="🏆" style="font-size: 1.25rem; width: 60px; text-align: center;">
+                <div style="display: flex; gap: 0.25rem; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-sm btn-secondary ach-quick-icon" style="padding: 0.25rem 0.45rem; font-size: 1rem;">🏆</button>
+                  <button type="button" class="btn btn-sm btn-secondary ach-quick-icon" style="padding: 0.25rem 0.45rem; font-size: 1rem;">🥇</button>
+                  <button type="button" class="btn btn-sm btn-secondary ach-quick-icon" style="padding: 0.25rem 0.45rem; font-size: 1rem;">🏃</button>
+                  <button type="button" class="btn btn-sm btn-secondary ach-quick-icon" style="padding: 0.25rem 0.45rem; font-size: 1rem;">💧</button>
+                  <button type="button" class="btn btn-sm btn-secondary ach-quick-icon" style="padding: 0.25rem 0.45rem; font-size: 1rem;">🏋️</button>
+                  <button type="button" class="btn btn-sm btn-secondary ach-quick-icon" style="padding: 0.25rem 0.45rem; font-size: 1rem;">🧘</button>
+                  <button type="button" class="btn btn-sm btn-secondary ach-quick-icon" style="padding: 0.25rem 0.45rem; font-size: 1rem;">⚡</button>
+                  <button type="button" class="btn btn-sm btn-secondary ach-quick-icon" style="padding: 0.25rem 0.45rem; font-size: 1rem;">🎯</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Target Milestone Value *</label>
+              <input type="number" step="0.1" class="form-input" id="ach-target" min="1" required placeholder="50">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Metric Unit Label *</label>
+              <input type="text" class="form-input" id="ach-unit" required placeholder="workouts, days, kg, mins">
+            </div>
+          </div>
+          <div class="card" style="background: var(--surface-subtle); padding: 0.75rem 1rem; border: 1px dashed var(--border); font-size: 0.8125rem; color: var(--text-muted); line-height: 1.5;">
+            💡 <strong>Smart Live Synchronization:</strong> This achievement will automatically sync with your logged entries in real-time. When your tracked progress reaches the target, the badge unlocks with celebration!
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-action="close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Achievement</button>
         </div>
       </form>
     </div>
@@ -7413,29 +7708,108 @@
         appData.dailyStats.habitPct = habitPct;
         appData.dailyStats.habitsCompleted = habitsCompletedToday;
 
-        // 6. Cross-Screen SMART Goals Synchronization
+        // 6. Cross-Screen SMART Goals Universal Synchronization
         const thisMonthPrefix = todayStr.substring(0, 7);
         const monthlyWorkoutsCount = (appData.workouts || []).filter(w => w.date && w.date.startsWith(thisMonthPrefix)).length;
         const totalWorkoutsCount = (appData.workouts || []).length;
+        const totalWorkoutMins = (appData.workouts || []).reduce((sum, w) => sum + (Number(w.duration) || 0), 0);
+        const totalWorkoutDist = (appData.workouts || []).reduce((sum, w) => sum + (Number(w.distance) || 0), 0);
+
         const waterTarget = (appData.profile && appData.profile.waterGoal) || 2500;
         const waterByDate = {};
         (appData.waterLogs || []).forEach(w => {
           waterByDate[w.date] = (waterByDate[w.date] || 0) + (Number(w.amount) || 0);
         });
         const hydrationDaysCount = Object.values(waterByDate).filter(amt => amt >= waterTarget).length;
+        const totalWaterLogged = (appData.waterLogs || []).reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
+
+        const totalMealsCount = (appData.meals || []).length;
+        const proteinTarget = (appData.profile && appData.profile.proteinGoal) || 140;
+        const proteinByDate = {};
+        (appData.meals || []).forEach(m => {
+          proteinByDate[m.date] = (proteinByDate[m.date] || 0) + (Number(m.protein) || 0);
+        });
+        const proteinDaysCount = Object.values(proteinByDate).filter(p => p >= proteinTarget).length;
+
+        const totalStepsCount = (appData.stepsLogs || []).reduce((sum, s) => sum + (Number(s.steps) || 0), 0);
+        const steps10kDaysCount = (appData.stepsLogs || []).filter(s => (Number(s.steps) || 0) >= 10000).length;
+
+        const totalSleepHours = (appData.sleepLogs || []).reduce((sum, s) => sum + (Number(s.durationHours) || 0), 0);
+        const avgSleepHours = (appData.sleepLogs || []).length ? +(totalSleepHours / appData.sleepLogs.length).toFixed(1) : 0;
+        const goodSleepNightsCount = (appData.sleepLogs || []).filter(s => Number(s.durationHours) >= 8 && Number(s.quality) >= 4).length;
+
+        let totalHabitLogsCount = 0;
+        (appData.habits || []).forEach(h => {
+          if (h.logs) {
+            Object.values(h.logs).forEach(v => {
+              if (v === true) totalHabitLogsCount++;
+            });
+          }
+        });
+        const activeHabitStreak = Math.max(
+          (appData.profile && appData.profile.streakDays) || 0,
+          ...((appData.habits || []).map(h => h.streak || 0)),
+          0
+        );
 
         (appData.goals || []).forEach(g => {
-          if (g.category === 'Fitness' && (g.unit === 'workouts' || g.unit === 'sessions')) {
-            if (g.title.toLowerCase().includes('month')) {
-              g.currentValue = monthlyWorkoutsCount;
-            } else {
-              g.currentValue = totalWorkoutsCount;
+          const unitLower = (g.unit || '').toLowerCase();
+          const titleLower = (g.title || '').toLowerCase();
+          let calculatedVal = g.currentValue;
+
+          if (g.category === 'Weight') {
+            if (currWeight > 0) {
+              calculatedVal = currWeight;
             }
-            g.progress = Math.min(100, Math.round(((g.currentValue - g.startValue) / (g.targetValue - g.startValue || 1)) * 100));
-          } else if (g.category === 'Hydration' && g.unit === 'days') {
-            g.currentValue = hydrationDaysCount;
-            g.progress = Math.min(100, Math.round(((g.currentValue - g.startValue) / (g.targetValue - g.startValue || 1)) * 100));
+          } else if (g.category === 'Fitness') {
+            if (unitLower.includes('min') || unitLower.includes('hour')) {
+              calculatedVal = unitLower.includes('hour') ? +(totalWorkoutMins / 60).toFixed(1) : totalWorkoutMins;
+            } else if (unitLower.includes('km') || unitLower.includes('mi')) {
+              calculatedVal = +totalWorkoutDist.toFixed(1);
+            } else {
+              calculatedVal = titleLower.includes('month') ? monthlyWorkoutsCount : totalWorkoutsCount;
+            }
+          } else if (g.category === 'Hydration') {
+            if (unitLower.includes('day')) {
+              calculatedVal = hydrationDaysCount;
+            } else if (unitLower.includes('ml') || unitLower.includes('l')) {
+              calculatedVal = unitLower === 'l' || unitLower === 'liters' ? +(totalWaterLogged / 1000).toFixed(1) : totalWaterLogged;
+            }
+          } else if (g.category === 'Nutrition') {
+            if (unitLower.includes('meal') || unitLower.includes('log')) {
+              calculatedVal = totalMealsCount;
+            } else if (unitLower.includes('protein') || unitLower === 'g' || unitLower.includes('day')) {
+              calculatedVal = proteinDaysCount;
+            } else if (unitLower.includes('cal')) {
+              calculatedVal = totalCal;
+            }
+          } else if (g.category === 'Steps') {
+            if (unitLower.includes('day')) {
+              calculatedVal = steps10kDaysCount;
+            } else {
+              calculatedVal = totalStepsCount;
+            }
+          } else if (g.category === 'Sleep') {
+            if (unitLower.includes('night') || unitLower.includes('day')) {
+              calculatedVal = goodSleepNightsCount;
+            } else {
+              calculatedVal = avgSleepHours;
+            }
+          } else if (g.category === 'Habits') {
+            if (unitLower.includes('streak') || titleLower.includes('streak')) {
+              calculatedVal = activeHabitStreak;
+            } else {
+              calculatedVal = totalHabitLogsCount;
+            }
           }
+
+          if (calculatedVal !== undefined && calculatedVal !== null) {
+            g.currentValue = calculatedVal;
+          }
+
+          const span = Math.abs(g.targetValue - g.startValue) || 1;
+          const diff = Math.abs(g.currentValue - g.startValue);
+          g.progress = Math.min(100, Math.max(0, Math.round((diff / span) * 100)));
         });
 
         // 7. Dynamic 16-Achievement Evaluator
@@ -7522,70 +7896,137 @@
           let meetsReq = false;
           let calculatedProg = 0;
 
-          switch (ach.key) {
-            case 'first_workout':
-              meetsReq = totalWorkouts >= 1;
-              calculatedProg = totalWorkouts >= 1 ? 100 : 0;
-              break;
-            case 'workouts_10':
-              meetsReq = totalWorkouts >= 10;
-              calculatedProg = Math.min(100, Math.round((totalWorkouts / 10) * 100));
-              break;
-            case 'workouts_50':
-              meetsReq = totalWorkouts >= 50;
-              calculatedProg = Math.min(100, Math.round((totalWorkouts / 50) * 100));
-              break;
-            case 'streak_7':
-              meetsReq = activeStreak >= 7;
-              calculatedProg = Math.min(100, Math.round((activeStreak / 7) * 100));
-              break;
-            case 'streak_30':
-              meetsReq = activeStreak >= 30;
-              calculatedProg = Math.min(100, Math.round((activeStreak / 30) * 100));
-              break;
-            case 'hydration_hero':
-              meetsReq = hydrationDays >= 7;
-              calculatedProg = Math.min(100, Math.round((hydrationDays / 7) * 100));
-              break;
-            case 'steps_10k':
-              meetsReq = steps10kDays >= 10;
-              calculatedProg = Math.min(100, Math.round((steps10kDays / 10) * 100));
-              break;
-            case 'weight_milestone':
-              meetsReq = weightGoalPct >= 50;
-              calculatedProg = Math.min(100, Math.round(weightGoalPct * 2));
-              break;
-            case 'habit_master':
-              meetsReq = habitPioneer;
-              calculatedProg = habitPioneer ? 100 : (appData.dailyStats?.habitPct || 0);
-              break;
-            case 'sleep_champion':
-              meetsReq = sleepChampion;
-              calculatedProg = sleepChampion ? 100 : 50;
-              break;
-            case 'nutrition_guru':
-              meetsReq = nutritionGuru;
-              calculatedProg = nutritionGuru ? 100 : 65;
-              break;
-            case 'mindful_wellness':
-              meetsReq = mindfulWellness;
-              calculatedProg = mindfulWellness ? 100 : 60;
-              break;
-            case 'century_habits':
-              meetsReq = totalHabitCheckins >= 100;
-              calculatedProg = Math.min(100, Math.round((totalHabitCheckins / 100) * 100));
-              break;
-            case 'perfect_week':
-              meetsReq = perfectWeek;
-              calculatedProg = Math.min(100, Math.round((maxConsec / 7) * 100));
-              break;
-            case 'journal_keeper':
-              meetsReq = journalCount >= 10;
-              calculatedProg = Math.min(100, Math.round((journalCount / 10) * 100));
-              break;
-            case 'all_star':
-              // Evaluated after others below
-              break;
+          if (ach.isCustom) {
+            let currentVal = 0;
+            const targetVal = Number(ach.targetValue) || 1;
+            switch (ach.category) {
+              case 'Workouts':
+                currentVal = totalWorkouts;
+                break;
+              case 'WorkoutDuration':
+                currentVal = (appData.workouts || []).reduce((acc, w) => acc + (Number(w.duration) || 0), 0);
+                break;
+              case 'Hydration':
+                currentVal = hydrationDays;
+                break;
+              case 'WaterVolume':
+                currentVal = (appData.waterLogs || []).reduce((acc, w) => acc + (Number(w.amount) || 0), 0);
+                break;
+              case 'Steps':
+                currentVal = steps10kDays;
+                break;
+              case 'TotalSteps':
+                currentVal = (appData.stepsLogs || []).reduce((acc, s) => acc + (Number(s.steps) || 0), 0);
+                break;
+              case 'Weight': {
+                const logs = (appData.weightLogs || []).slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+                if (logs.length >= 2) {
+                  const initial = Number(logs[0].weight) || 0;
+                  const current = Number(logs[logs.length - 1].weight) || 0;
+                  currentVal = Math.max(0, Math.round(Math.abs(initial - current) * 10) / 10);
+                } else {
+                  currentVal = 0;
+                }
+                break;
+              }
+              case 'Sleep':
+                currentVal = (appData.sleepLogs || []).filter(s => Number(s.durationHours) >= 8).length;
+                break;
+              case 'Habits':
+                currentVal = totalHabitCheckins;
+                break;
+              case 'HabitStreak':
+                currentVal = activeStreak;
+                break;
+              case 'Nutrition':
+                currentVal = (appData.meals || []).length;
+                break;
+              case 'ProteinGoal': {
+                const pTarget = (appData.profile && appData.profile.proteinGoal) || 140;
+                const pByDate = {};
+                (appData.meals || []).forEach(m => {
+                  pByDate[m.date] = (pByDate[m.date] || 0) + (Number(m.protein) || 0);
+                });
+                currentVal = Object.values(pByDate).filter(p => p >= pTarget).length;
+                break;
+              }
+              case 'Journal':
+                currentVal = journalCount;
+                break;
+              case 'Custom':
+              default:
+                currentVal = Number(ach.currentValue) || 0;
+                break;
+            }
+            ach.currentValue = Math.round(currentVal * 10) / 10;
+            meetsReq = ach.currentValue >= targetVal;
+            calculatedProg = Math.min(100, Math.round((ach.currentValue / targetVal) * 100));
+          } else {
+            switch (ach.key) {
+              case 'first_workout':
+                meetsReq = totalWorkouts >= 1;
+                calculatedProg = totalWorkouts >= 1 ? 100 : 0;
+                break;
+              case 'workouts_10':
+                meetsReq = totalWorkouts >= 10;
+                calculatedProg = Math.min(100, Math.round((totalWorkouts / 10) * 100));
+                break;
+              case 'workouts_50':
+                meetsReq = totalWorkouts >= 50;
+                calculatedProg = Math.min(100, Math.round((totalWorkouts / 50) * 100));
+                break;
+              case 'streak_7':
+                meetsReq = activeStreak >= 7;
+                calculatedProg = Math.min(100, Math.round((activeStreak / 7) * 100));
+                break;
+              case 'streak_30':
+                meetsReq = activeStreak >= 30;
+                calculatedProg = Math.min(100, Math.round((activeStreak / 30) * 100));
+                break;
+              case 'hydration_hero':
+                meetsReq = hydrationDays >= 7;
+                calculatedProg = Math.min(100, Math.round((hydrationDays / 7) * 100));
+                break;
+              case 'steps_10k':
+                meetsReq = steps10kDays >= 10;
+                calculatedProg = Math.min(100, Math.round((steps10kDays / 10) * 100));
+                break;
+              case 'weight_milestone':
+                meetsReq = weightGoalPct >= 50;
+                calculatedProg = Math.min(100, Math.round(weightGoalPct * 2));
+                break;
+              case 'habit_master':
+                meetsReq = habitPioneer;
+                calculatedProg = habitPioneer ? 100 : (appData.dailyStats?.habitPct || 0);
+                break;
+              case 'sleep_champion':
+                meetsReq = sleepChampion;
+                calculatedProg = sleepChampion ? 100 : 50;
+                break;
+              case 'nutrition_guru':
+                meetsReq = nutritionGuru;
+                calculatedProg = nutritionGuru ? 100 : 65;
+                break;
+              case 'mindful_wellness':
+                meetsReq = mindfulWellness;
+                calculatedProg = mindfulWellness ? 100 : 60;
+                break;
+              case 'century_habits':
+                meetsReq = totalHabitCheckins >= 100;
+                calculatedProg = Math.min(100, Math.round((totalHabitCheckins / 100) * 100));
+                break;
+              case 'perfect_week':
+                meetsReq = perfectWeek;
+                calculatedProg = Math.min(100, Math.round((maxConsec / 7) * 100));
+                break;
+              case 'journal_keeper':
+                meetsReq = journalCount >= 10;
+                calculatedProg = Math.min(100, Math.round((journalCount / 10) * 100));
+                break;
+              case 'all_star':
+                // Evaluated after others below
+                break;
+            }
           }
 
           if (ach.key !== 'all_star') {
@@ -7698,11 +8139,15 @@
         const container = document.getElementById('modal-container');
         if (!container) return;
         const allDialogs = container.querySelectorAll('.modal-dialog');
-        allDialogs.forEach(d => d.style.display = 'none');
+        allDialogs.forEach(d => {
+          d.style.display = 'none';
+          d.classList.remove('modal-dialog-active');
+        });
 
         const targetDialog = document.getElementById(modalId);
         if (targetDialog) {
           targetDialog.style.display = 'block';
+          targetDialog.classList.add('modal-dialog-active');
           container.style.display = 'flex';
           container.classList.add('active');
           // Autofocus first input
@@ -7717,7 +8162,10 @@
         container.classList.remove('active');
         container.style.display = 'none';
         const allDialogs = container.querySelectorAll('.modal-dialog');
-        allDialogs.forEach(d => d.style.display = 'none');
+        allDialogs.forEach(d => {
+          d.style.display = 'none';
+          d.classList.remove('modal-dialog-active');
+        });
       }
 
       function resetModalForCreation(modalId) {
@@ -7738,6 +8186,7 @@
           'modal-wellness': 'Daily Wellness Check-in',
           'modal-journal': 'New Mood Journal Entry',
           'modal-goal': 'Create SMART Goal',
+          'modal-achievement': 'Create Custom Achievement',
           'modal-exercise': 'Add Custom Exercise',
           'modal-plan-meal': 'Plan Meal',
           'modal-grocery': 'Add Grocery Item',
@@ -7750,6 +8199,16 @@
         if (modalId === 'modal-plan-meal') {
           const sBtn = document.getElementById('btn-submit-plan-meal');
           if (sBtn) sBtn.textContent = 'Add to Plan';
+        }
+        if (modalId === 'modal-goal') {
+          if (typeof updateGoalFormForCategory === 'function') {
+            updateGoalFormForCategory('Weight');
+          }
+        }
+        if (modalId === 'modal-achievement') {
+          if (typeof updateAchievementFormForCategory === 'function') {
+            updateAchievementFormForCategory('Workouts');
+          }
         }
       }
 
@@ -8066,12 +8525,15 @@
             subtitle = `Achievement Badge • ${item.unlocked ? 'Unlocked on ' + (item.unlockedAt || 'Recently') : 'In Progress'}`;
             badgesHtml = `
               <span class="kpi-badge ${item.unlocked ? 'positive' : 'neutral'}">${item.unlocked ? '✓ Unlocked' : 'In Progress (' + (item.progress || 0) + '%)'}</span>
+              ${item.isCustom ? `<span class="schedule-category-chip">${item.category || 'Custom'}</span>` : ''}
             `;
             gridItems = [
               { label: 'Badge Title', val: item.title },
               { label: 'Status', val: item.unlocked ? '✓ Unlocked & Earned' : '🔒 Locked / In Progress' },
               { label: 'Date Earned', val: item.unlocked ? (item.unlockedAt || 'Recently') : 'Not yet earned' },
-              { label: 'Live Completion Progress', val: `${item.progress || 0}%` }
+              { label: 'Target Milestone', val: item.targetValue !== undefined ? `${item.targetValue} ${item.unit || ''}` : 'Milestone criteria' },
+              { label: 'Live Logged Progress', val: item.currentValue !== undefined ? `${item.currentValue} ${item.unit || ''}` : `${item.progress || 0}%` },
+              { label: 'Overall Completion', val: `${item.progress || 0}%` }
             ];
             notesText = item.description || '';
             break;
@@ -8170,7 +8632,7 @@
 
         const editBtn = document.getElementById('btn-detail-edit');
         if (editBtn) {
-          editBtn.style.display = (type === 'achievement') ? 'none' : 'inline-flex';
+          editBtn.style.display = (type === 'achievement' && (!item || !item.isCustom)) ? 'none' : 'inline-flex';
           editBtn.onclick = () => {
             closeModal();
             setTimeout(() => editEntry(type, id), 150);
@@ -8179,7 +8641,7 @@
 
         const delBtn = document.getElementById('btn-detail-delete');
         if (delBtn) {
-          delBtn.style.display = (type === 'achievement') ? 'none' : 'inline-flex';
+          delBtn.style.display = (type === 'achievement' && (!item || !item.isCustom)) ? 'none' : 'inline-flex';
           delBtn.onclick = () => {
             if (confirm(`Delete "${title}"? This cannot be undone.`)) {
               deleteEntry(type, id);
@@ -8419,7 +8881,19 @@
             if (title) title.textContent = 'Edit SMART Goal';
 
             if (document.getElementById('goal-name')) document.getElementById('goal-name').value = gl.title;
-            if (document.getElementById('goal-category')) document.getElementById('goal-category').value = gl.category;
+            const catSelect = document.getElementById('goal-category');
+            const customGroup = document.getElementById('goal-custom-cat-group');
+            const customCatInput = document.getElementById('goal-custom-cat-name');
+            const standardCats = ['Weight', 'Fitness', 'Nutrition', 'Hydration', 'Sleep', 'Steps', 'Habits'];
+            if (standardCats.includes(gl.category)) {
+              if (catSelect) catSelect.value = gl.category;
+              if (customGroup) customGroup.style.display = 'none';
+              if (customCatInput) customCatInput.value = '';
+            } else {
+              if (catSelect) catSelect.value = 'Custom';
+              if (customGroup) customGroup.style.display = 'block';
+              if (customCatInput) customCatInput.value = gl.category;
+            }
             if (document.getElementById('goal-start')) document.getElementById('goal-start').value = gl.startValue;
             if (document.getElementById('goal-target')) document.getElementById('goal-target').value = gl.targetValue;
             if (document.getElementById('goal-unit')) document.getElementById('goal-unit').value = gl.unit;
@@ -8427,6 +8901,24 @@
             if (document.getElementById('goal-notes')) document.getElementById('goal-notes').value = gl.notes || '';
 
             openModal('modal-goal');
+            break;
+          }
+          case 'achievement': {
+            const ach = (appData.achievements || []).find(x => x.id === id || x.key === id);
+            if (!ach || !ach.isCustom) return;
+            const editId = document.getElementById('ach-edit-id');
+            if (editId) editId.value = id;
+            const title = document.getElementById('modal-achievement-title');
+            if (title) title.textContent = 'Edit Custom Achievement';
+
+            if (document.getElementById('ach-title')) document.getElementById('ach-title').value = ach.title;
+            if (document.getElementById('ach-desc')) document.getElementById('ach-desc').value = ach.description;
+            if (document.getElementById('ach-category')) document.getElementById('ach-category').value = ach.category;
+            if (document.getElementById('ach-icon')) document.getElementById('ach-icon').value = ach.icon || '🏆';
+            if (document.getElementById('ach-target')) document.getElementById('ach-target').value = ach.targetValue;
+            if (document.getElementById('ach-unit')) document.getElementById('ach-unit').value = ach.unit;
+
+            openModal('modal-achievement');
             break;
           }
           case 'exercise': {
@@ -8507,6 +8999,7 @@
             case 'journal': d.moodJournal = d.moodJournal.filter(x => x.id !== id); break;
             case 'habit': d.habits = d.habits.filter(x => x.id !== id); break;
             case 'goal': d.goals = d.goals.filter(x => x.id !== id); break;
+            case 'achievement': d.achievements = (d.achievements || []).filter(x => x.id !== id); break;
             case 'exercise': d.exercises = d.exercises.filter(x => x.id !== id); break;
             case 'mealPlan':
             case 'plan-meal': d.mealPlans = d.mealPlans.filter(x => x.id !== id && `mp-${(x.day||'').toLowerCase()}-${(x.slot||'').toLowerCase()}` !== id); break;
@@ -10932,7 +11425,22 @@
 
       // --- GOALS RENDERER ---
       function renderGoals() {
-        const cat = document.getElementById('goals-category-filter') ? document.getElementById('goals-category-filter').value : 'ALL';
+        const catFilterEl = document.getElementById('goals-category-filter');
+        if (catFilterEl) {
+          const currentVal = catFilterEl.value;
+          const existingOptions = Array.from(catFilterEl.options).map(o => o.value);
+          const allGoalCats = new Set((appData.goals || []).map(g => g.category).filter(Boolean));
+          allGoalCats.forEach(c => {
+            if (!existingOptions.includes(c)) {
+              const opt = document.createElement('option');
+              opt.value = c;
+              opt.textContent = c;
+              catFilterEl.appendChild(opt);
+            }
+          });
+          catFilterEl.value = currentVal;
+        }
+        const cat = catFilterEl ? catFilterEl.value : 'ALL';
         const sortMode = document.getElementById('goals-sort-select') ? document.getElementById('goals-sort-select').value : 'progress-desc';
         const grid = document.getElementById('goals-grid');
         const summaryContainer = document.getElementById('goals-summary-cards');
@@ -11531,20 +12039,25 @@
             <div class="empty-state" style="grid-column: 1/-1;">
               <div class="empty-icon">🏆</div>
               <div class="empty-title">No badges matching this filter</div>
-              <div class="empty-desc">Switch back to "All" to browse all 16 available milestone challenges.</div>
+              <div class="empty-desc">Switch back to "All" to browse all available milestone challenges, or create your own custom challenge!</div>
+              <button class="btn btn-primary btn-sm" data-action="open-modal" data-target="modal-achievement" style="margin-top: 0.75rem;">+ Create Achievement</button>
             </div>
           `;
           return;
         }
 
         grid.innerHTML = list.map(a => `
-          <div class="card table-clickable-row achievement-card ${a.unlocked ? 'unlocked' : ''}" data-ach-id="${a.id}" style="opacity: ${a.unlocked ? '1' : '0.85'}; cursor: pointer;">
+          <div class="card table-clickable-row achievement-card ${a.unlocked ? 'unlocked' : ''} ${a.isCustom ? 'custom-achievement' : ''}" data-ach-id="${a.id}" style="opacity: ${a.unlocked ? '1' : '0.85'}; cursor: pointer;">
             <div>
-              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.65rem;">
+              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.65rem;">
                 <span style="font-size: 2.25rem; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">${a.icon}</span>
-                <span class="kpi-badge ${a.unlocked ? 'positive' : 'neutral'}" style="white-space: nowrap;">
-                  ${a.unlocked ? '✓ Unlocked' : `${a.progress || 0}% Progress`}
-                </span>
+                <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; justify-content: flex-end;">
+                  ${a.isCustom ? `<span class="kpi-badge neutral" style="font-size: 0.65rem; padding: 0.15rem 0.45rem; background: rgba(59, 130, 246, 0.12); color: var(--accent); border: 1px solid rgba(59, 130, 246, 0.25);">Custom</span>` : ''}
+                  <span class="kpi-badge ${a.unlocked ? 'positive' : 'neutral'}" style="white-space: nowrap;">
+                    ${a.unlocked ? '✓ Unlocked' : `${a.progress || 0}% Progress`}
+                  </span>
+                  ${a.isCustom ? `<button type="button" class="ach-delete-btn" data-delete-ach="${a.id}" title="Delete Custom Achievement" aria-label="Delete Custom Achievement" style="background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; padding: 2px 5px; border-radius: var(--radius-sm); line-height: 1;">&times;</button>` : ''}
+                </div>
               </div>
               <h3 style="font-size: 0.9375rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; line-height: 1.3;">${a.title}</h3>
               <p style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 0.75rem;">${a.description}</p>
@@ -11559,7 +12072,7 @@
                     <div class="progress-fill" style="width: ${a.progress || 0}%;"></div>
                   </div>
                   <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted);">
-                    <span>Live Tracking</span>
+                    <span>${a.isCustom && a.targetValue !== undefined ? `Current: ${a.currentValue !== undefined ? a.currentValue : (a.progress || 0)} / ${a.targetValue} ${a.unit || ''}` : 'Live Tracking'}</span>
                     <strong>${a.progress || 0}%</strong>
                   </div>
                 </div>`}
@@ -11569,9 +12082,23 @@
 
         // Card Click Handler -> showEntryDetails
         grid.querySelectorAll('.achievement-card').forEach(card => {
-          card.addEventListener('click', () => {
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('.ach-delete-btn')) return;
             const achId = card.getAttribute('data-ach-id');
             showEntryDetails('achievement', achId);
+          });
+        });
+
+        // Delete Custom Achievement Handler
+        grid.querySelectorAll('.ach-delete-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const achId = btn.getAttribute('data-delete-ach');
+            const targetAch = (appData.achievements || []).find(x => x.id === achId);
+            const title = targetAch ? targetAch.title : 'this achievement';
+            if (confirm(`Delete custom achievement "${title}"? This cannot be undone.`)) {
+              deleteEntry('achievement', achId);
+            }
           });
         });
       }
@@ -11655,13 +12182,48 @@
 
       // --- REPORTS RENDERER (A4 INFOGRAPHIC MULTI-PAGE) ---
       function renderReports() {
+        if (!appData) return;
+        recalculateMetrics();
+
         const profile = appData.profile || {};
-        const currW = profile.currentWeight || 70.0;
-        const startW = profile.startWeight || 70.0;
         const unit = profile.units === 'imperial' ? 'lb' : 'kg';
         const heightM = (profile.height || 172) / 100;
 
-        // Page 1 Header Metadata
+        // 1. Detect Selected Report Period
+        const periodSelect = document.getElementById('report-type-select');
+        const period = (periodSelect && periodSelect.value) || 'complete';
+
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        let cutoffStr = null;
+        let periodBadgeText = 'All-Time Record';
+        let reportTitleText = 'Comprehensive Wellness Performance Report';
+        let scopeLabelText = 'Complete History (All Time)';
+
+        if (period === 'weekly') {
+          const d = new Date();
+          d.setDate(d.getDate() - 7);
+          cutoffStr = d.toISOString().split('T')[0];
+          periodBadgeText = 'Weekly Progress (7D)';
+          reportTitleText = 'Weekly Progress Performance Report';
+          scopeLabelText = `Last 7 Days (${cutoffStr} to ${todayStr})`;
+        } else if (period === 'monthly') {
+          const d = new Date();
+          d.setDate(d.getDate() - 30);
+          cutoffStr = d.toISOString().split('T')[0];
+          periodBadgeText = 'Monthly Review (30D)';
+          reportTitleText = 'Monthly Comprehensive Performance Review';
+          scopeLabelText = `Last 30 Days (${cutoffStr} to ${todayStr})`;
+        }
+
+        // 2. Page 1 Header Metadata
+        const badgeEl = document.getElementById('report-period-badge');
+        if (badgeEl) badgeEl.textContent = periodBadgeText;
+        const mainTitleEl = document.getElementById('report-main-title');
+        if (mainTitleEl) mainTitleEl.textContent = reportTitleText;
+        const scopeEl = document.getElementById('report-period-scope');
+        if (scopeEl) scopeEl.textContent = scopeLabelText;
+
         const nameEl = document.getElementById('report-profile-name');
         if (nameEl) nameEl.textContent = profile.name || 'Member';
         const page2Name = document.getElementById('report-page2-name');
@@ -11671,81 +12233,109 @@
         const heightEl = document.getElementById('report-profile-height');
         if (heightEl) heightEl.textContent = `${profile.height || 172} cm`;
         const genDate = document.getElementById('report-generated-date');
-        if (genDate) genDate.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        if (genDate) genDate.textContent = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-        // 4 KPI Highlights
+        // 3. Filtered Data Collections
+        const allSortedWeights = [...(appData.weightLogs || [])].sort((a, b) => a.date.localeCompare(b.date));
+        const filteredWeights = cutoffStr ? allSortedWeights.filter(w => w.date >= cutoffStr) : allSortedWeights;
+        const currW = allSortedWeights.length ? allSortedWeights[allSortedWeights.length - 1].weight : (profile.currentWeight || 70.0);
+        const baselineW = (filteredWeights.length > 1) 
+          ? filteredWeights[0].weight 
+          : (allSortedWeights.length ? allSortedWeights[0].weight : (profile.startWeight || 70.0));
+
+        const workouts = cutoffStr ? (appData.workouts || []).filter(w => w.date >= cutoffStr) : (appData.workouts || []);
+        const meals = cutoffStr ? (appData.meals || []).filter(m => m.date >= cutoffStr) : (appData.meals || []);
+        const sleepLogs = cutoffStr ? (appData.sleepLogs || []).filter(s => s.date >= cutoffStr) : (appData.sleepLogs || []);
+        const wellnessLogs = cutoffStr ? (appData.wellnessLogs || []).filter(w => w.date >= cutoffStr) : (appData.wellnessLogs || []);
+        const waterLogs = cutoffStr ? (appData.waterLogs || []).filter(w => w.date >= cutoffStr) : (appData.waterLogs || []);
+
+        // 4. KPI Highlights
+        // KPI 1: Weight
         const rW = document.getElementById('report-weight-val');
         if (rW) rW.textContent = `${currW} ${unit}`;
         const rWDelta = document.getElementById('report-weight-delta');
         if (rWDelta) {
-          const diff = (startW - currW).toFixed(1);
-          rWDelta.textContent = `${diff >= 0 ? '↓' : '↑'} ${Math.abs(diff)} ${unit} from start (${startW} ${unit})`;
+          const diff = +(baselineW - currW).toFixed(1);
+          const baselineLabel = period === 'complete' ? `start (${baselineW} ${unit})` : `period start (${baselineW} ${unit})`;
+          rWDelta.textContent = `${diff >= 0 ? '↓' : '↑'} ${Math.abs(diff)} ${unit} from ${baselineLabel}`;
+          rWDelta.style.color = diff >= 0 ? '#10b981' : '#f59e0b';
         }
 
+        // KPI 2: Workouts
         const rWo = document.getElementById('report-workouts-val');
-        if (rWo) rWo.textContent = `${appData.workouts.length} Sessions`;
+        if (rWo) rWo.textContent = `${workouts.length} Sessions`;
         const rWoSub = document.getElementById('report-workouts-sub');
         if (rWoSub) {
-          const totalVol = appData.workouts.reduce((sum, w) => sum + ((w.sets||0)*(w.reps||0)*(w.weight||0)), 0);
-          rWoSub.textContent = totalVol > 0 ? `${totalVol.toLocaleString()} kg total volume` : `${appData.workouts.length} logged`;
+          const totalVol = workouts.reduce((sum, w) => sum + ((w.sets||0)*(w.reps||0)*(w.weight||0)), 0);
+          const totalMins = workouts.reduce((sum, w) => sum + (Number(w.duration)||0), 0);
+          if (totalVol > 0) {
+            rWoSub.textContent = `${totalVol.toLocaleString()} kg load • ${totalMins} mins`;
+          } else {
+            rWoSub.textContent = `${totalMins} total mins trained`;
+          }
         }
 
+        // KPI 3: Sleep
         const rSleep = document.getElementById('report-sleep-val');
         const rSleepSub = document.getElementById('report-sleep-sub');
-        const sleepLogs = appData.sleepLogs || [];
         if (sleepLogs.length > 0) {
-          const avgDur = sleepLogs.reduce((acc, s) => acc + (s.durationHours || 0), 0) / sleepLogs.length;
-          const avgQ = sleepLogs.reduce((acc, s) => acc + (s.quality || 0), 0) / sleepLogs.length;
+          const avgDur = sleepLogs.reduce((acc, s) => acc + (Number(s.durationHours) || 0), 0) / sleepLogs.length;
+          const avgQ = sleepLogs.reduce((acc, s) => acc + (Number(s.quality) || 0), 0) / sleepLogs.length;
           if (rSleep) rSleep.textContent = `${Math.floor(avgDur)}h ${Math.round((avgDur % 1) * 60)}m`;
-          if (rSleepSub) rSleepSub.textContent = `★ ${avgQ.toFixed(1)}/5 Quality Avg`;
+          if (rSleepSub) rSleepSub.textContent = `★ ${avgQ.toFixed(1)}/5 Quality (${sleepLogs.length} logs)`;
         } else {
           if (rSleep) rSleep.textContent = '—';
-          if (rSleepSub) rSleepSub.textContent = 'No logs recorded';
+          if (rSleepSub) rSleepSub.textContent = 'No logs in period';
         }
 
+        // KPI 4: Vitality / Wellness Score
         const rVit = document.getElementById('report-vitality-val');
         const rVitSub = document.getElementById('report-vitality-sub');
-        const wellnessLogs = appData.wellnessLogs || [];
         if (wellnessLogs.length > 0) {
-          const avgScore = Math.round(wellnessLogs.reduce((acc, w) => acc + (w.overallScore || 80), 0) / wellnessLogs.length);
+          const avgScore = Math.round(wellnessLogs.reduce((acc, w) => acc + (Number(w.overallScore) || 80), 0) / wellnessLogs.length);
           if (rVit) rVit.textContent = `${avgScore} / 100`;
-          if (rVitSub) rVitSub.textContent = avgScore >= 80 ? 'Optimal Vitality' : 'Fair Recovery';
+          if (rVitSub) rVitSub.textContent = avgScore >= 80 ? 'Optimal Vitality' : avgScore >= 65 ? 'Moderate Vitality' : 'Recovery Needed';
         } else {
-          if (rVit) rVit.textContent = '—';
-          if (rVitSub) rVitSub.textContent = 'No check-ins recorded';
+          if (rVit) rVit.textContent = '85 / 100';
+          if (rVitSub) rVitSub.textContent = 'Standard Vitality Baseline';
         }
 
-        // Dynamic Narrative Summary
+        // 5. Dynamic Executive Narrative Summary
         const narrativeEl = document.getElementById('report-narrative-text');
         if (narrativeEl) {
-          const totalLost = (startW - currW).toFixed(1);
-          const weightStatus = totalLost > 0 ? `achieved a net reduction of ${totalLost} ${unit}` : `maintained steady body mass near baseline`;
+          const totalDiff = +(baselineW - currW).toFixed(1);
+          const weightStatus = totalDiff > 0 
+            ? `achieved a progressive reduction of ${totalDiff} ${unit}` 
+            : totalDiff < 0 
+            ? `experienced a body mass gain of ${Math.abs(totalDiff)} ${unit}` 
+            : `maintained steady body mass`;
+          const periodWord = period === 'weekly' ? '7-day cycle' : period === 'monthly' ? '30-day period' : 'overall tracking period';
+
           narrativeEl.textContent = `
-            ${profile.name || 'The member'} has recorded ${appData.workouts.length} total workout sessions to date, with an active routine emphasizing physical consistency. Weigh-in monitoring reflects that the member has ${weightStatus}. Nutritional compliance across tracked meals exhibits consistent dietary adherence, supporting metabolic efficiency and steady recovery.
+            ${profile.name || 'The member'} has completed ${workouts.length} recorded training session${workouts.length === 1 ? '' : 's'} across the ${periodWord}. Body weight metrics indicate that the member has ${weightStatus}, currently tracking at ${currW} ${unit} against a target goal of ${profile.goalWeight || 65} ${unit}. Dietary tracking comprises ${meals.length} logged meals with an active nutritional distribution supporting physical output and metabolic recovery. Fluid intake and sleep patterns indicate consistent biometric stabilization.
           `.trim();
         }
 
-        // Infographic Visual SVG Charts:
-        // Chart 1: Weight Chart (Ascending: Left to Right)
+        // 6. Infographic Visual SVG Charts:
+        // Chart 1: Weight Chart
         const wSvg = document.getElementById('report-weight-svg');
         if (wSvg) {
-          const sortedWeights = [...(appData.weightLogs || [])].sort((a, b) => a.date.localeCompare(b.date));
-          const pts = sortedWeights.map(w => ({
+          const chartPoints = (filteredWeights.length >= 2 ? filteredWeights : allSortedWeights).map(w => ({
             label: w.date.substring(5),
             val: w.weight
           }));
-          renderLineChart(wSvg, pts, {
+          renderLineChart(wSvg, chartPoints, {
             id: 'rep-weight',
             targetVal: profile.goalWeight || 65.0,
             color: '#2563eb'
           });
         }
 
-        // Chart 2: Macronutrient & Caloric Intake (High-Resolution Vector Infographic)
+        // Chart 2: Macronutrient & Caloric Intake Donut
         const mSvg = document.getElementById('report-macros-svg');
         if (mSvg) {
           let totalP = 0, totalC = 0, totalF = 0;
-          (appData.meals || []).forEach(m => {
+          meals.forEach(m => {
             totalP += Number(m.protein) || 0;
             totalC += Number(m.carbs) || 0;
             totalF += Number(m.fat) || 0;
@@ -11764,7 +12354,7 @@
               <circle cx="80" cy="80" r="50" fill="transparent" stroke="#e2e8f0" stroke-width="16" stroke-dasharray="6 4"/>
               <text x="80" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#94a3b8">0</text>
               <text x="80" y="93" text-anchor="middle" font-size="8.5" font-weight="700" fill="#94a3b8">KCAL</text>
-              <text x="220" y="85" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">No meal logs recorded</text>
+              <text x="220" y="85" text-anchor="middle" font-size="11" font-weight="600" fill="#94a3b8">No meals in period</text>
             `;
           } else {
             const pPct = Math.round((pCal / totalCal) * 100);
@@ -11813,14 +12403,14 @@
           }
         }
 
-        // PAGE 2: Workouts Table (Sorted Descending: Top to Bottom)
+        // 7. PAGE 2: Workouts Table (Descending by Date)
         const wTbody = document.getElementById('report-workout-tbody');
         if (wTbody) {
-          const sortedWorkouts = [...(appData.workouts || [])].sort((a, b) => b.date.localeCompare(a.date));
+          const sortedWorkouts = [...workouts].sort((a, b) => b.date.localeCompare(a.date));
           if (sortedWorkouts.length === 0) {
-            wTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 1rem; color: #64748b;">No workout sessions recorded.</td></tr>`;
+            wTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 1rem; color: #64748b;">No workout sessions recorded for the selected period.</td></tr>`;
           } else {
-            wTbody.innerHTML = sortedWorkouts.slice(0, 10).map(w => `
+            wTbody.innerHTML = sortedWorkouts.slice(0, 8).map(w => `
               <tr style="border-bottom: 1px solid #f1f5f9;">
                 <td style="padding: 5px 8px; font-weight: 600;">${w.date}</td>
                 <td style="padding: 5px 8px;"><strong>${w.name}</strong></td>
@@ -11833,7 +12423,7 @@
           }
         }
 
-        // PAGE 2: Weigh-in Progression & Circumference Table (Sorted Descending: Top to Bottom)
+        // 8. PAGE 2: Weigh-in Progression & Circumference Table (Descending by Date)
         const repWeightTbody = document.getElementById('report-weight-tbody');
         if (repWeightTbody) {
           const mapByDate = new Map();
@@ -11854,11 +12444,15 @@
             }
           });
 
-          const sortedRows = [...mapByDate.values()].sort((a, b) => b.date.localeCompare(a.date));
-          if (sortedRows.length === 0) {
+          const sortedRows = [...mapByDate.values()]
+            .filter(r => !cutoffStr || r.date >= cutoffStr)
+            .sort((a, b) => b.date.localeCompare(a.date));
+          const rowsToRender = sortedRows.length > 0 ? sortedRows : [...mapByDate.values()].sort((a, b) => b.date.localeCompare(a.date));
+
+          if (rowsToRender.length === 0) {
             repWeightTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 1rem; color: #64748b;">No weigh-in or body measurement records.</td></tr>`;
           } else {
-            repWeightTbody.innerHTML = sortedRows.slice(0, 8).map(m => {
+            repWeightTbody.innerHTML = rowsToRender.slice(0, 6).map(m => {
               const bmiVal = (m.weight && heightM > 0) ? (m.weight / (heightM * heightM)).toFixed(1) : '—';
               return `
                 <tr style="border-bottom: 1px solid #f1f5f9;">
@@ -11876,29 +12470,48 @@
           }
         }
 
-        // PAGE 2: SMART Goals Container
+        // 9. PAGE 2: Active SMART Goals Container
         const goalsCont = document.getElementById('report-goals-container');
         if (goalsCont) {
           const goals = appData.goals || [];
           if (goals.length === 0) {
-            goalsCont.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #64748b; font-size: 0.8125rem; padding: 1rem;">No SMART goals currently defined.</div>`;
+            goalsCont.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #64748b; font-size: 0.8125rem; padding: 0.75rem;">No SMART goals currently defined.</div>`;
           } else {
             goalsCont.innerHTML = goals.slice(0, 6).map(g => {
               const isDone = g.progress >= 100;
               return `
-                <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; background: #f8fafc;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.65rem; background: #f8fafc;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
                     <span style="font-size: 0.65rem; font-weight: 700; color: #475569; text-transform: uppercase;">${g.category}</span>
-                    <span style="font-size: 0.65rem; font-weight: 700; color: ${isDone ? '#059669' : '#2563eb'};">${isDone ? 'Achieved' : g.progress + '%'}</span>
+                    <span style="font-size: 0.65rem; font-weight: 700; color: ${isDone ? '#059669' : '#2563eb'};">${isDone ? '✓ Achieved' : g.progress + '%'}</span>
                   </div>
-                  <div style="font-size: 0.8rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">${g.title}</div>
-                  <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 0.5rem;">Target: ${g.targetValue} ${g.unit} • Current: ${g.currentValue} ${g.unit}</div>
-                  <div style="background: #e2e8f0; border-radius: 4px; height: 6px; overflow: hidden;">
+                  <div style="font-size: 0.775rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem;">${g.title}</div>
+                  <div style="font-size: 0.6875rem; color: #64748b; margin-bottom: 0.35rem;">Target: ${g.targetValue} ${g.unit} • Current: ${g.currentValue} ${g.unit}</div>
+                  <div style="background: #e2e8f0; border-radius: 3px; height: 5px; overflow: hidden;">
                     <div style="background: ${isDone ? '#10b981' : '#2563eb'}; height: 100%; width: ${Math.min(100, g.progress)}%;"></div>
                   </div>
                 </div>
               `;
             }).join('');
+          }
+        }
+
+        // 10. PAGE 2: Unlocked Badges & Milestones Showcase
+        const achCont = document.getElementById('report-achievements-container');
+        if (achCont) {
+          const unlockedAchs = (appData.achievements || []).filter(a => a.unlocked);
+          if (unlockedAchs.length === 0) {
+            achCont.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #64748b; font-size: 0.8125rem; padding: 0.75rem;">No achievements unlocked yet. Continue logging activities to earn badges!</div>`;
+          } else {
+            achCont.innerHTML = unlockedAchs.slice(0, 6).map(a => `
+              <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.65rem; background: #f8fafc; display: flex; align-items: center; gap: 0.5rem;">
+                <div style="font-size: 1.5rem; line-height: 1; flex-shrink: 0;">${a.icon || '🏆'}</div>
+                <div style="min-width: 0; flex: 1;">
+                  <div style="font-size: 0.775rem; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${a.title}</div>
+                  <div style="font-size: 0.65rem; color: #64748b; line-height: 1.2;">${a.unlockedAt ? 'Earned ' + a.unlockedAt : 'Completed'}</div>
+                </div>
+              </div>
+            `).join('');
           }
         }
       }
@@ -11989,36 +12602,524 @@
         reader.readAsText(file);
       }
 
-      function exportCSVData() {
-        if (!appData) return;
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "MODULE,DATE,NAME_OR_TITLE,CATEGORY_OR_SLOT,VALUE,NOTES\n";
+      // --- ROBUST DATA EXPORT & EXCEL SPREADSHEET ENGINE ---
+      function escapeCsvField(val) {
+        if (val === null || val === undefined) return '""';
+        const str = String(val).replace(/"/g, '""');
+        return `"${str}"`;
+      }
 
-        appData.workouts.forEach(w => {
-          csvContent += `Workout,"${w.date}","${w.name}","${w.category}","${w.duration} mins / ${w.calories} kcal","${(w.notes||'').replace(/"/g, '""')}"\n`;
-        });
-        appData.meals.forEach(m => {
-          csvContent += `Nutrition,"${m.date}","${m.foodName}","${m.slot}","${m.calories} kcal (P:${m.protein}g C:${m.carbs}g F:${m.fat}g)","${m.quantity||''}"\n`;
-        });
-        appData.weightLogs.forEach(w => {
-          csvContent += `Weight,"${w.date}","Weigh-in","Body Weight","${w.weight} kg","${(w.notes||'').replace(/"/g, '""')}"\n`;
-        });
-        appData.stepsLogs.forEach(s => {
-          csvContent += `Activity,"${s.date}","Steps Walked","Steps","${s.steps} steps (${s.distance} km)",""\n`;
-        });
-
-        const encodedUri = encodeURI(csvContent);
+      function downloadBlob(content, filename, mimeType) {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `PulseWellness-Data-${new Date().toISOString().split('T')[0]}.csv`);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
         document.body.appendChild(link);
         link.click();
         link.remove();
-        showToast('All application data exported as CSV.', 'success');
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      function escapeXml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&apos;');
+      }
+
+      function exportCSVData(category = 'all') {
+        if (!appData) return;
+        recalculateMetrics();
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        const profile = appData.profile || {};
+        const unit = profile.units === 'imperial' ? 'lb' : 'kg';
+        const heightM = (profile.height || 172) / 100;
+
+        let csvContent = "";
+        let filename = `PulseWellness-Data-${todayStr}.csv`;
+
+        if (category === 'workouts') {
+          filename = `PulseWellness-Workouts-${todayStr}.csv`;
+          csvContent += "DATE,WORKOUT_NAME,CATEGORY,DURATION_MINS,SETS,REPS,WEIGHT_KG,DISTANCE_KM,CALORIES_KCAL,REST_SEC,NOTES\n";
+          (appData.workouts || []).forEach(w => {
+            csvContent += [
+              escapeCsvField(w.date),
+              escapeCsvField(w.name),
+              escapeCsvField(w.category),
+              w.duration || 0,
+              w.sets || 0,
+              w.reps || 0,
+              w.weight || 0,
+              w.distance || 0,
+              w.calories || 0,
+              w.restTime || 0,
+              escapeCsvField(w.notes || '')
+            ].join(',') + '\n';
+          });
+          showToast(`Exported ${(appData.workouts || []).length} workouts as CSV.`, 'success');
+        } else if (category === 'nutrition') {
+          filename = `PulseWellness-Nutrition-${todayStr}.csv`;
+          csvContent += "DATE,MEAL_SLOT,FOOD_NAME,PORTION_QUANTITY,CALORIES_KCAL,PROTEIN_G,CARBS_G,FAT_G,FIBER_G,NOTES\n";
+          (appData.meals || []).forEach(m => {
+            csvContent += [
+              escapeCsvField(m.date),
+              escapeCsvField(m.slot),
+              escapeCsvField(m.foodName),
+              escapeCsvField(m.quantity || ''),
+              m.calories || 0,
+              m.protein || 0,
+              m.carbs || 0,
+              m.fat || 0,
+              m.fiber || 0,
+              escapeCsvField(m.notes || '')
+            ].join(',') + '\n';
+          });
+          showToast(`Exported ${(appData.meals || []).length} meal entries as CSV.`, 'success');
+        } else if (category === 'water') {
+          filename = `PulseWellness-Hydration-${todayStr}.csv`;
+          csvContent += "DATE,TIME,AMOUNT_ML,DAILY_TARGET_ML\n";
+          const target = profile.waterGoal || 2500;
+          (appData.waterLogs || []).forEach(w => {
+            csvContent += [
+              escapeCsvField(w.date),
+              escapeCsvField(w.time || ''),
+              w.amount || 0,
+              target
+            ].join(',') + '\n';
+          });
+          showToast(`Exported ${(appData.waterLogs || []).length} hydration logs as CSV.`, 'success');
+        } else if (category === 'sleep') {
+          filename = `PulseWellness-Sleep-${todayStr}.csv`;
+          csvContent += "DATE,BEDTIME,WAKE_TIME,DURATION_HOURS,QUALITY_RATING,INTERRUPTIONS,NOTES\n";
+          (appData.sleepLogs || []).forEach(s => {
+            csvContent += [
+              escapeCsvField(s.date),
+              escapeCsvField(s.bedtime || ''),
+              escapeCsvField(s.wakeTime || ''),
+              s.durationHours || 0,
+              s.quality || 0,
+              s.interruptions || 0,
+              escapeCsvField(s.notes || '')
+            ].join(',') + '\n';
+          });
+          showToast(`Exported ${(appData.sleepLogs || []).length} sleep logs as CSV.`, 'success');
+        } else if (category === 'weight') {
+          filename = `PulseWellness-BodyMeasurements-${todayStr}.csv`;
+          csvContent += "DATE,WEIGHT_KG,BMI,WAIST_CM,CHEST_CM,HIPS_CM,ARMS_CM,THIGHS_CM,NECK_CM,NOTES\n";
+          const mapByDate = new Map();
+          (appData.weightLogs || []).forEach(w => {
+            mapByDate.set(w.date, { date: w.date, weight: w.weight, waist: '', chest: '', hips: '', arms: '', thighs: '', neck: '', notes: w.notes || '' });
+          });
+          (appData.bodyMeasurements || []).forEach(m => {
+            if (mapByDate.has(m.date)) {
+              const item = mapByDate.get(m.date);
+              if (m.weight) item.weight = m.weight;
+              if (m.waist) item.waist = m.waist;
+              if (m.chest) item.chest = m.chest;
+              if (m.hips) item.hips = m.hips;
+              if (m.arms) item.arms = m.arms;
+              if (m.thighs) item.thighs = m.thighs;
+              if (m.neck) item.neck = m.neck;
+            } else {
+              mapByDate.set(m.date, { date: m.date, weight: m.weight || '', waist: m.waist || '', chest: m.chest || '', hips: m.hips || '', arms: m.arms || '', thighs: m.thighs || '', neck: m.neck || '', notes: '' });
+            }
+          });
+          [...mapByDate.values()].sort((a, b) => b.date.localeCompare(a.date)).forEach(row => {
+            const bmiVal = (row.weight && heightM > 0) ? (row.weight / (heightM * heightM)).toFixed(1) : '';
+            csvContent += [
+              escapeCsvField(row.date),
+              row.weight || '',
+              bmiVal,
+              row.waist || '',
+              row.chest || '',
+              row.hips || '',
+              row.arms || '',
+              row.thighs || '',
+              row.neck || '',
+              escapeCsvField(row.notes || '')
+            ].join(',') + '\n';
+          });
+          showToast(`Exported body weight and circumference records as CSV.`, 'success');
+        } else if (category === 'habits') {
+          filename = `PulseWellness-Habits-${todayStr}.csv`;
+          csvContent += "HABIT_NAME,CATEGORY,TARGET_FREQUENCY_PER_WEEK,CURRENT_STREAK_DAYS,BEST_STREAK_DAYS,TOTAL_COMPLETIONS\n";
+          (appData.habits || []).forEach(h => {
+            const completions = h.logs ? Object.values(h.logs).filter(v => v === true).length : 0;
+            csvContent += [
+              escapeCsvField(h.name),
+              escapeCsvField(h.category),
+              h.targetFrequency || 7,
+              h.streak || 0,
+              h.bestStreak || 0,
+              completions
+            ].join(',') + '\n';
+          });
+          showToast(`Exported habits tracking data as CSV.`, 'success');
+        } else if (category === 'goals') {
+          filename = `PulseWellness-SMARTGoals-${todayStr}.csv`;
+          csvContent += "GOAL_TITLE,CATEGORY,START_VALUE,CURRENT_VALUE,TARGET_VALUE,UNIT,PROGRESS_PERCENT,STATUS,DEADLINE,NOTES\n";
+          (appData.goals || []).forEach(g => {
+            csvContent += [
+              escapeCsvField(g.title),
+              escapeCsvField(g.category),
+              g.startValue,
+              g.currentValue,
+              g.targetValue,
+              escapeCsvField(g.unit || ''),
+              g.progress || 0,
+              escapeCsvField(g.progress >= 100 ? 'Achieved' : 'In Progress'),
+              escapeCsvField(g.deadline || ''),
+              escapeCsvField(g.notes || '')
+            ].join(',') + '\n';
+          });
+          showToast(`Exported SMART goals data as CSV.`, 'success');
+        } else if (category === 'achievements') {
+          filename = `PulseWellness-Achievements-${todayStr}.csv`;
+          csvContent += "ACHIEVEMENT_TITLE,DESCRIPTION,CATEGORY,IS_UNLOCKED,UNLOCKED_DATE,PROGRESS_PERCENT,BADGE_ICON\n";
+          (appData.achievements || []).forEach(a => {
+            csvContent += [
+              escapeCsvField(a.title),
+              escapeCsvField(a.description),
+              escapeCsvField(a.category || 'System Milestone'),
+              escapeCsvField(a.unlocked ? 'Yes' : 'No'),
+              escapeCsvField(a.unlockedAt || ''),
+              a.progress || (a.unlocked ? 100 : 0),
+              escapeCsvField(a.icon || '🏆')
+            ].join(',') + '\n';
+          });
+          showToast(`Exported achievements and badges as CSV.`, 'success');
+        } else {
+          // Comprehensive Master Unified CSV
+          filename = `PulseWellness-CompleteData-${todayStr}.csv`;
+          csvContent += "MODULE,DATE,TITLE_OR_NAME,CATEGORY_OR_SLOT,VALUE_OR_METRIC,TARGET_OR_SECONDARY,STATUS_OR_PROGRESS,NOTES\n";
+
+          // 1. Profile Summary Row
+          csvContent += [
+            escapeCsvField('Profile'),
+            escapeCsvField(todayStr),
+            escapeCsvField(profile.name || 'Member'),
+            escapeCsvField('Demographics'),
+            escapeCsvField(`Current Weight: ${profile.currentWeight || 70} ${unit}`),
+            escapeCsvField(`Goal: ${profile.goalWeight || 65} ${unit}`),
+            escapeCsvField(`Height: ${profile.height || 172} cm • Age: ${profile.age || 29}`),
+            escapeCsvField(`Units: ${profile.units || 'metric'}`)
+          ].join(',') + '\n';
+
+          // 2. Workouts
+          (appData.workouts || []).forEach(w => {
+            csvContent += [
+              escapeCsvField('Workouts'),
+              escapeCsvField(w.date),
+              escapeCsvField(w.name),
+              escapeCsvField(w.category),
+              escapeCsvField(`${w.duration} mins • ${w.calories} kcal`),
+              escapeCsvField(w.weight > 0 ? `${w.sets}x${w.reps} @ ${w.weight}kg` : w.distance > 0 ? `${w.distance} km` : 'Bodyweight'),
+              escapeCsvField('Completed'),
+              escapeCsvField(w.notes || '')
+            ].join(',') + '\n';
+          });
+
+          // 3. Nutrition
+          (appData.meals || []).forEach(m => {
+            csvContent += [
+              escapeCsvField('Nutrition'),
+              escapeCsvField(m.date),
+              escapeCsvField(m.foodName),
+              escapeCsvField(m.slot),
+              escapeCsvField(`${m.calories} kcal`),
+              escapeCsvField(`P:${m.protein}g C:${m.carbs}g F:${m.fat}g Fib:${m.fiber||0}g`),
+              escapeCsvField(m.quantity || '1 portion'),
+              escapeCsvField(m.notes || '')
+            ].join(',') + '\n';
+          });
+
+          // 4. Hydration
+          (appData.waterLogs || []).forEach(w => {
+            csvContent += [
+              escapeCsvField('Hydration'),
+              escapeCsvField(w.date),
+              escapeCsvField('Water Intake Log'),
+              escapeCsvField('Fluid Tracker'),
+              escapeCsvField(`${w.amount} ml`),
+              escapeCsvField(`Daily Target: ${profile.waterGoal || 2500} ml`),
+              escapeCsvField(w.time || 'All Day'),
+              escapeCsvField('')
+            ].join(',') + '\n';
+          });
+
+          // 5. Steps
+          (appData.stepsLogs || []).forEach(s => {
+            csvContent += [
+              escapeCsvField('Activity'),
+              escapeCsvField(s.date),
+              escapeCsvField('Daily Steps'),
+              escapeCsvField('Pedometer'),
+              escapeCsvField(`${s.steps} steps`),
+              escapeCsvField(`${s.distance || 0} km • ${s.activeMinutes || 0} active mins`),
+              escapeCsvField(`${s.calories || 0} kcal burn`),
+              escapeCsvField('')
+            ].join(',') + '\n';
+          });
+
+          // 6. Sleep
+          (appData.sleepLogs || []).forEach(s => {
+            csvContent += [
+              escapeCsvField('Sleep'),
+              escapeCsvField(s.date),
+              escapeCsvField('Nightly Sleep Session'),
+              escapeCsvField('Recovery'),
+              escapeCsvField(`${s.durationHours} hours`),
+              escapeCsvField(`★ ${s.quality}/5 Quality Rating`),
+              escapeCsvField(`Bed: ${s.bedtime || '—'} • Wake: ${s.wakeTime || '—'}`),
+              escapeCsvField(s.notes || '')
+            ].join(',') + '\n';
+          });
+
+          // 7. Weight & Circumferences
+          (appData.weightLogs || []).forEach(w => {
+            csvContent += [
+              escapeCsvField('Weight'),
+              escapeCsvField(w.date),
+              escapeCsvField('Body Weight Scale Check-in'),
+              escapeCsvField('Body Composition'),
+              escapeCsvField(`${w.weight} ${unit}`),
+              escapeCsvField(`Target: ${profile.goalWeight || 65} ${unit}`),
+              escapeCsvField(heightM > 0 ? `BMI: ${(w.weight / (heightM * heightM)).toFixed(1)}` : 'Logged'),
+              escapeCsvField(w.notes || '')
+            ].join(',') + '\n';
+          });
+
+          // 8. Habits
+          (appData.habits || []).forEach(h => {
+            const count = h.logs ? Object.values(h.logs).filter(v => v === true).length : 0;
+            csvContent += [
+              escapeCsvField('Habits'),
+              escapeCsvField(todayStr),
+              escapeCsvField(h.name),
+              escapeCsvField(h.category),
+              escapeCsvField(`Current Streak: ${h.streak || 0} days`),
+              escapeCsvField(`Best Streak: ${h.bestStreak || 0} days`),
+              escapeCsvField(`${count} total check-ins`),
+              escapeCsvField(`Target: ${h.targetFrequency || 7}x per week`)
+            ].join(',') + '\n';
+          });
+
+          // 9. SMART Goals
+          (appData.goals || []).forEach(g => {
+            csvContent += [
+              escapeCsvField('SMART Goals'),
+              escapeCsvField(g.deadline || todayStr),
+              escapeCsvField(g.title),
+              escapeCsvField(g.category),
+              escapeCsvField(`Current: ${g.currentValue} ${g.unit}`),
+              escapeCsvField(`Target: ${g.targetValue} ${g.unit}`),
+              escapeCsvField(`${g.progress || 0}% (${g.progress >= 100 ? 'Achieved' : 'In Progress'})`),
+              escapeCsvField(g.notes || '')
+            ].join(',') + '\n';
+          });
+
+          // 10. Achievements
+          (appData.achievements || []).forEach(a => {
+            csvContent += [
+              escapeCsvField('Achievements'),
+              escapeCsvField(a.unlockedAt || todayStr),
+              escapeCsvField(a.title),
+              escapeCsvField(a.category || 'Milestone Badge'),
+              escapeCsvField(a.unlocked ? 'Unlocked ✓' : 'In Progress'),
+              escapeCsvField(`${a.progress || (a.unlocked ? 100 : 0)}% completed`),
+              escapeCsvField(a.icon || '🏆'),
+              escapeCsvField(a.description || '')
+            ].join(',') + '\n';
+          });
+
+          // 11. Wellness Check-ins
+          (appData.wellnessLogs || []).forEach(w => {
+            csvContent += [
+              escapeCsvField('Wellness'),
+              escapeCsvField(w.date),
+              escapeCsvField('Daily Vitality Check-in'),
+              escapeCsvField('Biometrics'),
+              escapeCsvField(`Vitality Score: ${w.overallScore || 80}/100`),
+              escapeCsvField(`Mood: ${w.mood || 4}/5 • Energy: ${w.energy || 4}/5`),
+              escapeCsvField(`Stress: ${w.stress || 2}/5 • Focus: ${w.focus || 4}/5`),
+              escapeCsvField(w.notes || '')
+            ].join(',') + '\n';
+          });
+
+          showToast('Complete synchronized application dataset exported as CSV.', 'success');
+        }
+
+        downloadBlob(csvContent, filename, 'text/csv;charset=utf-8;');
       }
 
       function exportExcelWorkbook() {
         if (!appData) return;
+        recalculateMetrics();
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        const profile = appData.profile || {};
+        const unit = profile.units === 'imperial' ? 'lb' : 'kg';
+        const heightM = (profile.height || 172) / 100;
+
+        // 1. Profile Rows
+        const profileRows = `
+    <Row><Cell><Data ss:Type="String">Member Name</Data></Cell><Cell><Data ss:Type="String">${escapeXml(profile.name || 'Member')}</Data></Cell><Cell><Data ss:Type="String">—</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Age</Data></Cell><Cell><Data ss:Type="Number">${profile.age || 29}</Data></Cell><Cell><Data ss:Type="String">Years</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Height</Data></Cell><Cell><Data ss:Type="Number">${profile.height || 172}</Data></Cell><Cell><Data ss:Type="String">cm</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Current Body Weight</Data></Cell><Cell><Data ss:Type="Number">${profile.currentWeight || 70}</Data></Cell><Cell><Data ss:Type="String">${escapeXml(unit)}</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Goal Body Weight</Data></Cell><Cell><Data ss:Type="Number">${profile.goalWeight || 65}</Data></Cell><Cell><Data ss:Type="String">${escapeXml(unit)}</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Start Body Weight</Data></Cell><Cell><Data ss:Type="Number">${profile.startWeight || 74}</Data></Cell><Cell><Data ss:Type="String">${escapeXml(unit)}</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Daily Calorie Target</Data></Cell><Cell><Data ss:Type="Number">${appData.settings?.dailyTargets?.calories || 2100}</Data></Cell><Cell><Data ss:Type="String">kcal</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Daily Water Target</Data></Cell><Cell><Data ss:Type="Number">${profile.waterGoal || 2500}</Data></Cell><Cell><Data ss:Type="String">ml</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Daily Step Target</Data></Cell><Cell><Data ss:Type="Number">${appData.settings?.dailyTargets?.steps || 10000}</Data></Cell><Cell><Data ss:Type="String">steps</Data></Cell></Row>
+    <Row><Cell><Data ss:Type="String">Report Export Date</Data></Cell><Cell><Data ss:Type="String">${todayStr}</Data></Cell><Cell><Data ss:Type="String">PulseWellness Pro</Data></Cell></Row>`;
+
+        // 2. Workout Rows
+        const workoutRows = (appData.workouts || []).map(w => `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(w.date)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(w.name)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(w.category)}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.duration || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.sets || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.reps || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.weight || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.distance || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.calories || 0}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(w.notes || '')}</Data></Cell>
+    </Row>`).join('');
+
+        // 3. Meal Rows
+        const mealRows = (appData.meals || []).map(m => `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(m.date)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(m.slot)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(m.foodName)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(m.quantity || '')}</Data></Cell>
+     <Cell><Data ss:Type="Number">${m.calories || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${m.protein || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${m.carbs || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${m.fat || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${m.fiber || 0}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(m.notes || '')}</Data></Cell>
+    </Row>`).join('');
+
+        // 4. Hydration Rows
+        const waterRows = (appData.waterLogs || []).map(w => `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(w.date)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(w.time || '—')}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.amount || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${profile.waterGoal || 2500}</Data></Cell>
+    </Row>`).join('');
+
+        // 5. Sleep Rows
+        const sleepRows = (appData.sleepLogs || []).map(s => `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(s.date)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(s.bedtime || '—')}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(s.wakeTime || '—')}</Data></Cell>
+     <Cell><Data ss:Type="Number">${s.durationHours || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${s.quality || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${s.interruptions || 0}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(s.notes || '')}</Data></Cell>
+    </Row>`).join('');
+
+        // 6. Body Measurements Rows
+        const mapByDate = new Map();
+        (appData.weightLogs || []).forEach(w => {
+          mapByDate.set(w.date, { date: w.date, weight: w.weight, waist: '', chest: '', hips: '', arms: '', thighs: '', neck: '', notes: w.notes || '' });
+        });
+        (appData.bodyMeasurements || []).forEach(m => {
+          if (mapByDate.has(m.date)) {
+            const item = mapByDate.get(m.date);
+            if (m.weight) item.weight = m.weight;
+            if (m.waist) item.waist = m.waist;
+            if (m.chest) item.chest = m.chest;
+            if (m.hips) item.hips = m.hips;
+            if (m.arms) item.arms = m.arms;
+            if (m.thighs) item.thighs = m.thighs;
+            if (m.neck) item.neck = m.neck;
+          } else {
+            mapByDate.set(m.date, { date: m.date, weight: m.weight || '', waist: m.waist || '', chest: m.chest || '', hips: m.hips || '', arms: m.arms || '', thighs: m.thighs || '', neck: m.neck || '', notes: '' });
+          }
+        });
+        const measurementRows = [...mapByDate.values()].sort((a, b) => b.date.localeCompare(a.date)).map(m => {
+          const bmiVal = (m.weight && heightM > 0) ? (m.weight / (heightM * heightM)).toFixed(1) : '';
+          return `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(m.date)}</Data></Cell>
+     <Cell><Data ss:Type="${m.weight ? 'Number' : 'String'}">${m.weight || '—'}</Data></Cell>
+     <Cell><Data ss:Type="${bmiVal ? 'Number' : 'String'}">${bmiVal || '—'}</Data></Cell>
+     <Cell><Data ss:Type="${m.waist ? 'Number' : 'String'}">${m.waist || '—'}</Data></Cell>
+     <Cell><Data ss:Type="${m.chest ? 'Number' : 'String'}">${m.chest || '—'}</Data></Cell>
+     <Cell><Data ss:Type="${m.hips ? 'Number' : 'String'}">${m.hips || '—'}</Data></Cell>
+     <Cell><Data ss:Type="${m.arms ? 'Number' : 'String'}">${m.arms || '—'}</Data></Cell>
+     <Cell><Data ss:Type="${m.thighs ? 'Number' : 'String'}">${m.thighs || '—'}</Data></Cell>
+     <Cell><Data ss:Type="${m.neck ? 'Number' : 'String'}">${m.neck || '—'}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(m.notes || '')}</Data></Cell>
+    </Row>`;
+        }).join('');
+
+        // 7. Habit Rows
+        const habitRows = (appData.habits || []).map(h => {
+          const count = h.logs ? Object.values(h.logs).filter(v => v === true).length : 0;
+          return `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(h.name)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(h.category)}</Data></Cell>
+     <Cell><Data ss:Type="Number">${h.targetFrequency || 7}</Data></Cell>
+     <Cell><Data ss:Type="Number">${h.streak || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${h.bestStreak || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${count}</Data></Cell>
+    </Row>`;
+        }).join('');
+
+        // 8. Goal Rows
+        const goalRows = (appData.goals || []).map(g => `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(g.title)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(g.category)}</Data></Cell>
+     <Cell><Data ss:Type="Number">${g.startValue || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${g.currentValue || 0}</Data></Cell>
+     <Cell><Data ss:Type="Number">${g.targetValue || 0}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(g.unit || '')}</Data></Cell>
+     <Cell><Data ss:Type="Number">${g.progress || 0}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(g.progress >= 100 ? 'Achieved' : 'In Progress')}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(g.deadline || '—')}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(g.notes || '')}</Data></Cell>
+    </Row>`).join('');
+
+        // 9. Achievement Rows
+        const achievementRows = (appData.achievements || []).map(a => `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(a.icon || '🏆')}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(a.title)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(a.description)}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(a.category || 'System Milestone')}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(a.unlocked ? 'Unlocked' : 'In Progress')}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(a.unlockedAt || '—')}</Data></Cell>
+     <Cell><Data ss:Type="Number">${a.progress || (a.unlocked ? 100 : 0)}</Data></Cell>
+    </Row>`).join('');
+
+        // 10. Wellness Rows
+        const wellnessRows = (appData.wellnessLogs || []).map(w => `
+    <Row>
+     <Cell><Data ss:Type="String">${escapeXml(w.date)}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.overallScore || 80}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.mood || 4}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.energy || 4}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.stress || 2}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.focus || 4}</Data></Cell>
+     <Cell><Data ss:Type="Number">${w.motivation || 4}</Data></Cell>
+     <Cell><Data ss:Type="String">${escapeXml(w.notes || '')}</Data></Cell>
+    </Row>`).join('');
+
         let excelXml = `<?xml version="1.0"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
@@ -12026,43 +13127,189 @@
  xmlns:x="urn:schemas-microsoft-com:office:excel"
  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:html="http://www.w3.org/TR/REC-html40">
- <Worksheet ss:Name="Profile">
+ <Styles>
+  <Style ss:ID="Header">
+   <Font ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#2563EB" ss:Pattern="Solid"/>
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+  </Style>
+  <Style ss:ID="SubHeader">
+   <Font ss:Bold="1" ss:Color="#0F172A"/>
+   <Interior ss:Color="#F1F5F9" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="Bold">
+   <Font ss:Bold="1"/>
+  </Style>
+ </Styles>
+
+ <!-- 1. PROFILE & SETTINGS -->
+ <Worksheet ss:Name="Profile & Overview">
   <Table>
-   <Row><Cell><Data ss:Type="String">Name</Data></Cell><Cell><Data ss:Type="String">${appData.profile.name}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">Current Weight</Data></Cell><Cell><Data ss:Type="Number">${appData.profile.currentWeight}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">Goal Weight</Data></Cell><Cell><Data ss:Type="Number">${appData.profile.goalWeight}</Data></Cell></Row>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Metric / Property</Data></Cell>
+    <Cell><Data ss:Type="String">Current Value</Data></Cell>
+    <Cell><Data ss:Type="String">Target / Unit</Data></Cell>
+   </Row>
+   ${profileRows}
   </Table>
  </Worksheet>
+
+ <!-- 2. WORKOUTS -->
  <Worksheet ss:Name="Workouts">
   <Table>
-   <Row>
+   <Row ss:StyleID="Header">
     <Cell><Data ss:Type="String">Date</Data></Cell>
     <Cell><Data ss:Type="String">Workout Name</Data></Cell>
     <Cell><Data ss:Type="String">Category</Data></Cell>
     <Cell><Data ss:Type="String">Duration (min)</Data></Cell>
-    <Cell><Data ss:Type="String">Calories</Data></Cell>
+    <Cell><Data ss:Type="String">Sets</Data></Cell>
+    <Cell><Data ss:Type="String">Reps</Data></Cell>
+    <Cell><Data ss:Type="String">Weight (kg)</Data></Cell>
+    <Cell><Data ss:Type="String">Distance (km)</Data></Cell>
+    <Cell><Data ss:Type="String">Calories Burned</Data></Cell>
+    <Cell><Data ss:Type="String">Notes</Data></Cell>
    </Row>
-   ${appData.workouts.map(w => `
-   <Row>
-    <Cell><Data ss:Type="String">${w.date}</Data></Cell>
-    <Cell><Data ss:Type="String">${w.name}</Data></Cell>
-    <Cell><Data ss:Type="String">${w.category}</Data></Cell>
-    <Cell><Data ss:Type="Number">${w.duration}</Data></Cell>
-    <Cell><Data ss:Type="Number">${w.calories}</Data></Cell>
-   </Row>`).join('')}
+   ${workoutRows}
+  </Table>
+ </Worksheet>
+
+ <!-- 3. NUTRITION & MEALS -->
+ <Worksheet ss:Name="Nutrition & Meals">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Date</Data></Cell>
+    <Cell><Data ss:Type="String">Meal Slot</Data></Cell>
+    <Cell><Data ss:Type="String">Food Name</Data></Cell>
+    <Cell><Data ss:Type="String">Portion / Quantity</Data></Cell>
+    <Cell><Data ss:Type="String">Calories (kcal)</Data></Cell>
+    <Cell><Data ss:Type="String">Protein (g)</Data></Cell>
+    <Cell><Data ss:Type="String">Carbs (g)</Data></Cell>
+    <Cell><Data ss:Type="String">Fat (g)</Data></Cell>
+    <Cell><Data ss:Type="String">Fiber (g)</Data></Cell>
+    <Cell><Data ss:Type="String">Notes</Data></Cell>
+   </Row>
+   ${mealRows}
+  </Table>
+ </Worksheet>
+
+ <!-- 4. HYDRATION -->
+ <Worksheet ss:Name="Hydration Logs">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Date</Data></Cell>
+    <Cell><Data ss:Type="String">Time Logged</Data></Cell>
+    <Cell><Data ss:Type="String">Water Volume (ml)</Data></Cell>
+    <Cell><Data ss:Type="String">Daily Target (ml)</Data></Cell>
+   </Row>
+   ${waterRows}
+  </Table>
+ </Worksheet>
+
+ <!-- 5. SLEEP & RECOVERY -->
+ <Worksheet ss:Name="Sleep & Recovery">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Date</Data></Cell>
+    <Cell><Data ss:Type="String">Bedtime</Data></Cell>
+    <Cell><Data ss:Type="String">Wake Time</Data></Cell>
+    <Cell><Data ss:Type="String">Duration (hours)</Data></Cell>
+    <Cell><Data ss:Type="String">Quality (1-5)</Data></Cell>
+    <Cell><Data ss:Type="String">Interruptions</Data></Cell>
+    <Cell><Data ss:Type="String">Sleep Notes</Data></Cell>
+   </Row>
+   ${sleepRows}
+  </Table>
+ </Worksheet>
+
+ <!-- 6. WEIGHT & BODY MEASUREMENTS -->
+ <Worksheet ss:Name="Body Measurements">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Date</Data></Cell>
+    <Cell><Data ss:Type="String">Weight (${escapeXml(unit)})</Data></Cell>
+    <Cell><Data ss:Type="String">BMI</Data></Cell>
+    <Cell><Data ss:Type="String">Waist (cm)</Data></Cell>
+    <Cell><Data ss:Type="String">Chest (cm)</Data></Cell>
+    <Cell><Data ss:Type="String">Hips (cm)</Data></Cell>
+    <Cell><Data ss:Type="String">Arms (cm)</Data></Cell>
+    <Cell><Data ss:Type="String">Thighs (cm)</Data></Cell>
+    <Cell><Data ss:Type="String">Neck (cm)</Data></Cell>
+    <Cell><Data ss:Type="String">Notes</Data></Cell>
+   </Row>
+   ${measurementRows}
+  </Table>
+ </Worksheet>
+
+ <!-- 7. HABITS TRACKER -->
+ <Worksheet ss:Name="Habits Tracker">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Habit Name</Data></Cell>
+    <Cell><Data ss:Type="String">Category</Data></Cell>
+    <Cell><Data ss:Type="String">Target Freq / Week</Data></Cell>
+    <Cell><Data ss:Type="String">Current Streak (days)</Data></Cell>
+    <Cell><Data ss:Type="String">Best Streak (days)</Data></Cell>
+    <Cell><Data ss:Type="String">Total Completed Days</Data></Cell>
+   </Row>
+   ${habitRows}
+  </Table>
+ </Worksheet>
+
+ <!-- 8. SMART GOALS -->
+ <Worksheet ss:Name="SMART Goals">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Goal Title</Data></Cell>
+    <Cell><Data ss:Type="String">Category</Data></Cell>
+    <Cell><Data ss:Type="String">Start Value</Data></Cell>
+    <Cell><Data ss:Type="String">Current Value</Data></Cell>
+    <Cell><Data ss:Type="String">Target Value</Data></Cell>
+    <Cell><Data ss:Type="String">Unit</Data></Cell>
+    <Cell><Data ss:Type="String">Progress (%)</Data></Cell>
+    <Cell><Data ss:Type="String">Status</Data></Cell>
+    <Cell><Data ss:Type="String">Deadline</Data></Cell>
+    <Cell><Data ss:Type="String">Notes</Data></Cell>
+   </Row>
+   ${goalRows}
+  </Table>
+ </Worksheet>
+
+ <!-- 9. ACHIEVEMENTS -->
+ <Worksheet ss:Name="Achievements & Badges">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Badge</Data></Cell>
+    <Cell><Data ss:Type="String">Achievement Title</Data></Cell>
+    <Cell><Data ss:Type="String">Description</Data></Cell>
+    <Cell><Data ss:Type="String">Category</Data></Cell>
+    <Cell><Data ss:Type="String">Status</Data></Cell>
+    <Cell><Data ss:Type="String">Unlocked Date</Data></Cell>
+    <Cell><Data ss:Type="String">Progress (%)</Data></Cell>
+   </Row>
+   ${achievementRows}
+  </Table>
+ </Worksheet>
+
+ <!-- 10. WELLNESS CHECK-INS -->
+ <Worksheet ss:Name="Wellness & Mood">
+  <Table>
+   <Row ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Date</Data></Cell>
+    <Cell><Data ss:Type="String">Overall Vitality Score</Data></Cell>
+    <Cell><Data ss:Type="String">Mood (1-5)</Data></Cell>
+    <Cell><Data ss:Type="String">Energy (1-5)</Data></Cell>
+    <Cell><Data ss:Type="String">Stress (1-5)</Data></Cell>
+    <Cell><Data ss:Type="String">Focus (1-5)</Data></Cell>
+    <Cell><Data ss:Type="String">Motivation (1-5)</Data></Cell>
+    <Cell><Data ss:Type="String">Notes</Data></Cell>
+   </Row>
+   ${wellnessRows}
   </Table>
  </Worksheet>
 </Workbook>`;
 
-        const blob = new Blob([excelXml], { type: 'application/vnd.ms-excel' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `PulseWellness-Workbook-${new Date().toISOString().split('T')[0]}.xls`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        showToast('Excel Workbook exported successfully.', 'success');
+        downloadBlob(excelXml, `PulseWellness-Workbook-${todayStr}.xls`, 'application/vnd.ms-excel');
+        showToast('Full multi-sheet Excel Workbook exported successfully.', 'success');
       }
 
       // --- EVENT LISTENERS & SETUP ---
@@ -12597,7 +13844,53 @@
           renderReports();
         });
 
-        // Backup & Data Export Buttons
+        // Report Period Selection Live Synchronization
+        const reportPeriodSel = document.getElementById('report-type-select');
+        if (reportPeriodSel) {
+          reportPeriodSel.addEventListener('change', () => {
+            renderReports();
+          });
+        }
+
+        // Reports Screen Header Export Buttons
+        const rptExportCsv = document.getElementById('btn-report-export-csv');
+        if (rptExportCsv) rptExportCsv.addEventListener('click', () => exportCSVData('all'));
+
+        const rptExportExcel = document.getElementById('btn-report-export-excel');
+        if (rptExportExcel) rptExportExcel.addEventListener('click', exportExcelWorkbook);
+
+        // Reports Screen Quick Export Toolbar Buttons
+        const quickCsvAll = document.getElementById('btn-quick-csv-all');
+        if (quickCsvAll) quickCsvAll.addEventListener('click', () => exportCSVData('all'));
+
+        const quickExcelAll = document.getElementById('btn-quick-excel-all');
+        if (quickExcelAll) quickExcelAll.addEventListener('click', exportExcelWorkbook);
+
+        const quickCsvWorkouts = document.getElementById('btn-quick-csv-workouts');
+        if (quickCsvWorkouts) quickCsvWorkouts.addEventListener('click', () => exportCSVData('workouts'));
+
+        const quickCsvNutrition = document.getElementById('btn-quick-csv-nutrition');
+        if (quickCsvNutrition) quickCsvNutrition.addEventListener('click', () => exportCSVData('nutrition'));
+
+        const quickCsvWater = document.getElementById('btn-quick-csv-water');
+        if (quickCsvWater) quickCsvWater.addEventListener('click', () => exportCSVData('water'));
+
+        const quickCsvSleep = document.getElementById('btn-quick-csv-sleep');
+        if (quickCsvSleep) quickCsvSleep.addEventListener('click', () => exportCSVData('sleep'));
+
+        const quickCsvWeight = document.getElementById('btn-quick-csv-weight');
+        if (quickCsvWeight) quickCsvWeight.addEventListener('click', () => exportCSVData('weight'));
+
+        const quickCsvHabits = document.getElementById('btn-quick-csv-habits');
+        if (quickCsvHabits) quickCsvHabits.addEventListener('click', () => exportCSVData('habits'));
+
+        const quickCsvGoals = document.getElementById('btn-quick-csv-goals');
+        if (quickCsvGoals) quickCsvGoals.addEventListener('click', () => exportCSVData('goals'));
+
+        const quickCsvAchievements = document.getElementById('btn-quick-csv-achievements');
+        if (quickCsvAchievements) quickCsvAchievements.addEventListener('click', () => exportCSVData('achievements'));
+
+        // Backup & Data Export Buttons in Settings
         const exportJsonBtn = document.getElementById('btn-export-json');
         if (exportJsonBtn) exportJsonBtn.addEventListener('click', exportBackupJSON);
 
@@ -12611,7 +13904,7 @@
         }
 
         const exportCsvBtn = document.getElementById('btn-export-csv');
-        if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportCSVData);
+        if (exportCsvBtn) exportCsvBtn.addEventListener('click', () => exportCSVData('all'));
 
         const exportExcelBtn = document.getElementById('btn-export-excel');
         if (exportExcelBtn) exportExcelBtn.addEventListener('click', exportExcelWorkbook);
@@ -13064,9 +14357,14 @@
             const editId = document.getElementById('goal-edit-id')?.value;
             const start = Number(document.getElementById('goal-start').value);
             const target = Number(document.getElementById('goal-target').value);
+            let chosenCategory = document.getElementById('goal-category').value;
+            if (chosenCategory === 'Custom') {
+              const customName = document.getElementById('goal-custom-cat-name')?.value?.trim();
+              chosenCategory = customName || 'Custom';
+            }
             const gData = {
               title: document.getElementById('goal-name').value,
-              category: document.getElementById('goal-category').value,
+              category: chosenCategory,
               startValue: start,
               targetValue: target,
               unit: document.getElementById('goal-unit').value,
@@ -13094,6 +14392,214 @@
             }
             closeModal();
             formGoal.reset();
+            const customGroup = document.getElementById('goal-custom-cat-group');
+            if (customGroup) customGroup.style.display = 'none';
+          });
+        }
+
+        // Category-Adaptive Goal Form Preset Engine
+        function updateGoalFormForCategory(cat) {
+          const customGroup = document.getElementById('goal-custom-cat-group');
+          const customNameInput = document.getElementById('goal-custom-cat-name');
+          const unitInput = document.getElementById('goal-unit');
+          const startInput = document.getElementById('goal-start');
+          const targetInput = document.getElementById('goal-target');
+          const nameInput = document.getElementById('goal-name');
+
+          if (cat === 'Custom') {
+            if (customGroup) customGroup.style.display = 'block';
+            if (customNameInput) {
+              customNameInput.required = true;
+              setTimeout(() => customNameInput.focus(), 50);
+            }
+            if (unitInput) {
+              unitInput.value = '';
+              unitInput.placeholder = 'e.g. sessions, km, pages, pts';
+            }
+            if (startInput) startInput.value = '0';
+            if (targetInput) targetInput.placeholder = '100';
+            if (nameInput) nameInput.placeholder = 'e.g. Read 20 Pages Daily, Complete 100km Cycling';
+          } else {
+            if (customGroup) customGroup.style.display = 'none';
+            if (customNameInput) {
+              customNameInput.required = false;
+              customNameInput.value = '';
+            }
+
+            const isImperial = appData?.profile?.units === 'imperial';
+            switch (cat) {
+              case 'Weight': {
+                const curWeight = (appData.weightLogs && appData.weightLogs.length > 0)
+                  ? appData.weightLogs[appData.weightLogs.length - 1].weight
+                  : ((appData.profile && appData.profile.weight) || 74.5);
+                if (unitInput) unitInput.value = isImperial ? 'lb' : 'kg';
+                if (startInput) startInput.value = curWeight;
+                if (targetInput) targetInput.placeholder = String(Math.round((curWeight - 5) * 10) / 10);
+                if (nameInput) nameInput.placeholder = `e.g. Reach ${Math.round((curWeight - 5) * 10) / 10} ${isImperial ? 'lb' : 'kg'} Target Weight`;
+                break;
+              }
+              case 'Fitness': {
+                if (unitInput) unitInput.value = 'workouts';
+                if (startInput) startInput.value = '0';
+                if (targetInput) targetInput.placeholder = '20';
+                if (nameInput) nameInput.placeholder = 'e.g. Complete 20 Strength Sessions This Month';
+                break;
+              }
+              case 'Nutrition': {
+                const curCal = (appData.profile && appData.profile.calorieGoal) || 2200;
+                if (unitInput) unitInput.value = 'kcal';
+                if (startInput) startInput.value = curCal;
+                if (targetInput) targetInput.placeholder = '2000';
+                if (nameInput) nameInput.placeholder = 'e.g. Maintain 2,000 kcal Daily Intake';
+                break;
+              }
+              case 'Hydration': {
+                if (unitInput) unitInput.value = 'days';
+                if (startInput) startInput.value = '0';
+                if (targetInput) targetInput.placeholder = '30';
+                if (nameInput) nameInput.placeholder = 'e.g. Hit 2,500ml Daily Water Goal for 30 Days';
+                break;
+              }
+              case 'Sleep': {
+                let avgSleep = 7.5;
+                if (appData.sleepLogs && appData.sleepLogs.length > 0) {
+                  avgSleep = Math.round((appData.sleepLogs.reduce((s, x) => s + (Number(x.durationHours) || 0), 0) / appData.sleepLogs.length) * 10) / 10;
+                }
+                if (unitInput) unitInput.value = 'hours';
+                if (startInput) startInput.value = avgSleep;
+                if (targetInput) targetInput.placeholder = '8.0';
+                if (nameInput) nameInput.placeholder = 'e.g. Average 8.0 Hours of Restful Sleep Nightly';
+                break;
+              }
+              case 'Steps': {
+                let avgSteps = 8000;
+                if (appData.stepsLogs && appData.stepsLogs.length > 0) {
+                  avgSteps = Math.round(appData.stepsLogs.reduce((s, x) => s + (Number(x.steps) || 0), 0) / appData.stepsLogs.length);
+                }
+                if (unitInput) unitInput.value = 'steps';
+                if (startInput) startInput.value = avgSteps;
+                if (targetInput) targetInput.placeholder = '10000';
+                if (nameInput) nameInput.placeholder = 'e.g. Achieve 10,000 Daily Steps Consistency';
+                break;
+              }
+              case 'Habits': {
+                if (unitInput) unitInput.value = 'days';
+                if (startInput) startInput.value = '0';
+                if (targetInput) targetInput.placeholder = '21';
+                if (nameInput) nameInput.placeholder = 'e.g. Maintain 21-Day Habit Streak';
+                break;
+              }
+            }
+          }
+        }
+        window.updateGoalFormForCategory = updateGoalFormForCategory;
+
+        const goalCatSelect = document.getElementById('goal-category');
+        if (goalCatSelect) {
+          goalCatSelect.addEventListener('change', (e) => {
+            updateGoalFormForCategory(e.target.value);
+          });
+        }
+
+        // Custom Achievement Helper & Preset Engine
+        function updateAchievementFormForCategory(cat) {
+          const unitInput = document.getElementById('ach-unit');
+          const targetInput = document.getElementById('ach-target');
+          const descInput = document.getElementById('ach-desc');
+          const titleInput = document.getElementById('ach-title');
+
+          const map = {
+            'Workouts': { unit: 'workouts', target: '25', desc: 'Complete 25 workout sessions', title: 'Workout Warrior' },
+            'WorkoutDuration': { unit: 'mins', target: '1000', desc: 'Log 1,000 total active workout minutes', title: 'Endurance Beast' },
+            'Hydration': { unit: 'days', target: '14', desc: 'Hit daily water target for 14 days', title: 'Hydration Dynamo' },
+            'WaterVolume': { unit: 'ml', target: '50000', desc: 'Drink 50,000 ml total water', title: 'Aquatic Master' },
+            'Steps': { unit: 'days', target: '15', desc: 'Reach 10,000 steps on 15 different days', title: 'Step Champion' },
+            'TotalSteps': { unit: 'steps', target: '100000', desc: 'Accumulate 100,000 total steps', title: 'Centurion Strider' },
+            'Weight': { unit: (appData?.profile?.units === 'imperial' ? 'lb' : 'kg'), target: '5.0', desc: 'Lose 5.0 kg from starting body weight', title: 'Transformation Hero' },
+            'Sleep': { unit: 'nights', target: '14', desc: 'Get 8+ hours of restful sleep for 14 nights', title: 'Rest Recovery King' },
+            'Habits': { unit: 'check-ins', target: '50', desc: 'Complete 50 daily habit check-in logs', title: 'Habit Machine' },
+            'HabitStreak': { unit: 'days', target: '21', desc: 'Maintain an unbroken 21-day habit streak', title: 'Unbroken Discipline' },
+            'Nutrition': { unit: 'meals', target: '30', desc: 'Track 30 balanced, healthy meals', title: 'Clean Eater' },
+            'ProteinGoal': { unit: 'days', target: '14', desc: 'Hit daily protein target on 14 days', title: 'Protein Powerhouse' },
+            'Journal': { unit: 'reflections', target: '10', desc: 'Write 10 mindful journal entries', title: 'Mindful Soul' },
+            'Custom': { unit: 'pts', target: '100', desc: 'Complete custom wellness milestone', title: 'Elite Challenger' }
+          };
+
+          const config = map[cat] || map['Custom'];
+          if (unitInput && !unitInput.value) unitInput.value = config.unit;
+          if (targetInput && !targetInput.value) targetInput.placeholder = config.target;
+          if (descInput && !descInput.value) descInput.placeholder = config.desc;
+          if (titleInput && !titleInput.value) titleInput.placeholder = `e.g. ${config.title}`;
+        }
+        window.updateAchievementFormForCategory = updateAchievementFormForCategory;
+
+        const achCatSelect = document.getElementById('ach-category');
+        if (achCatSelect) {
+          achCatSelect.addEventListener('change', (e) => {
+            updateAchievementFormForCategory(e.target.value);
+          });
+        }
+
+        document.querySelectorAll('.ach-quick-icon').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const input = document.getElementById('ach-icon');
+            if (input) input.value = btn.textContent.trim();
+          });
+        });
+
+        // Form Submit: Custom Achievement
+        const formAch = document.getElementById('form-achievement');
+        if (formAch) {
+          formAch.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('ach-edit-id')?.value;
+            const title = document.getElementById('ach-title').value.trim();
+            const desc = document.getElementById('ach-desc').value.trim();
+            const category = document.getElementById('ach-category').value;
+            const icon = document.getElementById('ach-icon').value.trim() || '🏆';
+            const target = Number(document.getElementById('ach-target').value) || 1;
+            const unit = document.getElementById('ach-unit').value.trim() || 'units';
+
+            if (editId) {
+              updateState(d => {
+                const item = (d.achievements || []).find(x => x.id === editId);
+                if (item) {
+                  item.title = title;
+                  item.description = desc;
+                  item.category = category;
+                  item.icon = icon;
+                  item.targetValue = target;
+                  item.unit = unit;
+                }
+              });
+              if (document.getElementById('ach-edit-id')) document.getElementById('ach-edit-id').value = '';
+              const titleEl = document.getElementById('modal-achievement-title');
+              if (titleEl) titleEl.textContent = 'Create Custom Achievement';
+              showToast(`Custom Achievement "${title}" updated!`, 'success');
+            } else {
+              const newAch = {
+                id: 'ach-custom-' + Date.now(),
+                key: 'custom_' + Date.now(),
+                title,
+                description: desc,
+                category,
+                icon,
+                targetValue: target,
+                currentValue: 0,
+                unit,
+                isCustom: true,
+                unlocked: false,
+                unlockedAt: null,
+                progress: 0
+              };
+              updateState(d => {
+                d.achievements = d.achievements || [];
+                d.achievements.push(newAch);
+              });
+              showToast(`Custom Achievement "${title}" created!`, 'success');
+            }
+            closeModal();
+            formAch.reset();
           });
         }
 
@@ -13297,6 +14803,8 @@
         window.getBlankData = getBlankData;
         window.renderActiveView = renderActiveView;
         window.renderReports = renderReports;
+        window.exportCSVData = exportCSVData;
+        window.exportExcelWorkbook = exportExcelWorkbook;
         window.renderAnalytics = renderAnalytics;
         window.renderWeight = renderWeight;
         window.renderDashboardKPIs = renderDashboardKPIs;
